@@ -372,10 +372,10 @@ function drawGenome() {
     ctx.fillText(fitText(ctx, narrow ? (x < 0 ? "joint" : D.crosses.code[x]) : xlabel(x), L - 8), L - 8, y + ivH / 2); });
   const q = Q(); const hits = [];
   for (let i = 0; i < NQ; i++) { if (!S.traits.has(q.t[i]) || !qv(i)) continue;
-    const r = q.m[i] === "j" ? 0 : ivRows.indexOf(q.x[i]); if (r < 0) continue;
+    const r = q.x[i] < 0 ? 0 : ivRows.indexOf(q.x[i]); if (r < 0) continue;
     const y = ivTop + r * ivH, g0 = CHSTART[q.c[i]];
     ctx.globalAlpha = qAlpha(i); ctx.fillStyle = tcol(q.t[i]);
-    if (q.m[i] === "j") { const xm = X(g0 + q.p[i]), lw = 1 + 2 * Math.min(1, Math.abs(q.ef[i]) / 0.5); ctx.fillRect(xm - lw / 2, y + 1, lw, ivH - 2); hits.push({ i, x0: xm - 2, x1: xm + 2, y, h: ivH }); }
+    if (q.a[i] === q.e[i]) { const xm = X(g0 + q.p[i]), lw = 1 + 2 * Math.min(1, Math.abs(q.ef[i]) / 0.5); ctx.fillRect(xm - lw / 2, y + 1, lw, ivH - 2); hits.push({ i, x0: xm - 2, x1: xm + 2, y, h: ivH }); }
     else { const x0 = X(g0 + q.a[i]), x1 = Math.max(X(g0 + q.e[i]), x0 + 2); ctx.fillRect(x0, y + 2, x1 - x0, ivH - 4); hits.push({ i, x0, x1, y, h: ivH }); }
     ctx.globalAlpha = 1; }
   // axis labels
@@ -512,11 +512,11 @@ function drawLocus() {
     if (i === focus) { ctx.fillStyle = band; ctx.fillRect(0, y, w, rowH); }
     const col = S.traits.has(t) ? tcol(t) : (q.m[i] === "j" ? css("--contrast") : css("--accent"));
     ctx.globalAlpha = qAlpha(i); ctx.fillStyle = col;
-    if (q.m[i] === "j") { const xm = X(q.p[i]); if (xm >= L - 2 && xm <= w - R + 2) { ctx.beginPath(); ctx.moveTo(xm, y + 1); ctx.lineTo(xm + Math.max(3, rowH / 2), y + rowH / 2); ctx.lineTo(xm, y + rowH - 1); ctx.lineTo(xm - Math.max(3, rowH / 2), y + rowH / 2); ctx.fill(); } }
+    if (q.a[i] === q.e[i]) { const xm = X(q.p[i]); if (xm >= L - 2 && xm <= w - R + 2) { ctx.beginPath(); ctx.moveTo(xm, y + 1); ctx.lineTo(xm + Math.max(3, rowH / 2), y + rowH / 2); ctx.lineTo(xm, y + rowH - 1); ctx.lineTo(xm - Math.max(3, rowH / 2), y + rowH / 2); ctx.fill(); } }
     else { const x0 = Math.max(L, X(q.a[i])), x1 = Math.min(w - R, X(q.e[i])); ctx.fillRect(x0, y + 1, Math.max(1.5, x1 - x0), rowH - 2);
       const xs = X(q.p[i]); if (xs >= L && xs <= w - R) { ctx.globalAlpha = 1; ctx.fillStyle = fg; ctx.fillRect(xs - .75, y + 1, 1.5, rowH - 2); } }
     ctx.globalAlpha = 1;
-    if (i === S.q) { const x0 = q.m[i] === "j" ? X(q.p[i]) - 5 : Math.max(L, X(q.a[i])), x1 = q.m[i] === "j" ? X(q.p[i]) + 5 : Math.min(w - R, X(q.e[i])); ctx.strokeStyle = fg; ctx.lineWidth = 1.5; ctx.strokeRect(x0 - 2, y - 1, Math.max(2, x1 - x0) + 4, rowH + 2); }
+    if (i === S.q) { const pt = q.a[i] === q.e[i], x0 = pt ? X(q.p[i]) - 5 : Math.max(L, X(q.a[i])), x1 = pt ? X(q.p[i]) + 5 : Math.min(w - R, X(q.e[i])); ctx.strokeStyle = fg; ctx.lineWidth = 1.5; ctx.strokeRect(x0 - 2, y - 1, Math.max(2, x1 - x0) + 4, rowH + 2); }
     if (!narrow && rowH >= 11) { ctx.fillStyle = faint; ctx.textAlign = "right"; ctx.font = "10px " + css("--sans"); ctx.fillText(q.m[i] === "j" ? "joint" : D.crosses.code[q.x[i]], L - 4, y + rowH / 2); }
     rr.push({ i, y, h: rowH });
   });
