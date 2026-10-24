@@ -126,3 +126,14 @@ Figure 1-source data 1 lists 951 segregants for BY×RM (cross A), and the 13,950
 it. `mapping.R` drops plate A11 from cross A for within-cross mapping "so statistical power
 is similar to other crosses", so fewer segregants entered that model. The atlas reports 951
 as the source does.
+
+## Blocked steps
+
+### B1. Push and GitHub Pages
+`git push` to `brunig/kruglyak-qtl-atlas` returned 403: the Claude GitHub App has no access
+to the repository from the build session. All work is committed locally on branch
+`claude/focused-albattani-bvuv83`. Once access is granted (connect GitHub at
+https://claude.ai/connect-github and install the Claude GitHub App on the repository),
+push the branch, merge it to `main`, and enable Pages from `/docs` (Settings → Pages →
+Deploy from a branch → `main` / `docs`). `docs/.nojekyll` is already present. The site would
+then be at https://brunig.github.io/kruglyak-qtl-atlas/.
