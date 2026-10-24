@@ -129,11 +129,9 @@ as the source does.
 
 ## Blocked steps
 
-### B1. Push and GitHub Pages
-`git push` to `brunig/kruglyak-qtl-atlas` returned 403: the Claude GitHub App has no access
-to the repository from the build session. All work is committed locally on branch
-`claude/focused-albattani-bvuv83`. Once access is granted (connect GitHub at
-https://claude.ai/connect-github and install the Claude GitHub App on the repository),
-push the branch, merge it to `main`, and enable Pages from `/docs` (Settings → Pages →
-Deploy from a branch → `main` / `docs`). `docs/.nojekyll` is already present. The site would
-then be at https://brunig.github.io/kruglyak-qtl-atlas/.
+### B1. GitHub Pages
+The first push was refused (403) until GitHub access was connected; the branch
+`claude/focused-albattani-bvuv83` is now pushed and is the repository's only branch.
+Enabling Pages is a repository setting the build session cannot change: Settings → Pages →
+Deploy from a branch → this branch (or `main` after a merge), folder `/docs`.
+`docs/.nojekyll` is present. The site will be at https://brunig.github.io/kruglyak-qtl-atlas/.
