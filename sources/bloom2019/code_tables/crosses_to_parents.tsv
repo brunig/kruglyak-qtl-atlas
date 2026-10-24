@@ -1,0 +1,20 @@
+# Parent labels used by the analysis code (e.g. the shared.parent column of the Causal_Genes sheet).
+# source: https://github.com/joshsbloom/yeast-16-parents commit c913c9ae7fd237329f639de02e7ec511b048730f, genotyping/code/segregants_hmm_fx.R lines 75-92 (identical copy in analysis/QTL_causality.R lines 195-212)
+# Order within a row matches Parent 1 / Parent 2 of Figure 1-source data 1.
+cross	parent1_code	parent2_code
+375	M22	BYa
+A	BYa	RMx
+376	RMx	YPS163a
+B	YPS163a	YJM145x
+377	YJM145x	CLIB413a
+393	CLIB413a	YJM978x
+381	YJM978x	YJM454a
+3008	YJM454a	YPS1009x
+2999	YPS1009x	I14a
+3000	I14a	Y10x
+3001	Y10x	PW5a
+3049	PW5a	273614xa
+3003	273614xa	YJM981x
+3004	YJM981x	CBS2888a
+3043	CBS2888a	CLIB219x
+3028	CLIB219x	M22

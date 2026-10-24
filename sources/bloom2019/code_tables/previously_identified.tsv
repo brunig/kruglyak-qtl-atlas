@@ -1,0 +1,32 @@
+# Genes the Bloom 2019 analysis code treats as previously identified causal genes ("pm2").
+# source: https://github.com/joshsbloom/yeast-16-parents commit c913c9ae7fd237329f639de02e7ec511b048730f, analysis/QTL_causality.R
+# lines 438-441: pm = genes from Table S1 of NIHMS544073 (file not in the bundle), minus HO ("HO is not segregating here").
+# lines 442-445: R output pasted as a comment, listing the pm genes found among the local-FDR<0.2 candidate genes; HO is dropped here as at line 441.
+# lines 446-454: eight genes added by hand to form pm2, with the comments shown in the note column.
+# This is NOT the full list of previously validated genes (pm genes absent from the candidate list are not recoverable from the bundle or the code).
+name	source_lines	note
+PCA1	443-444	pm gene printed among QTGsorted.resolved names
+RPI1	443-444	pm gene printed among QTGsorted.resolved names
+CYS4	443-444	pm gene printed among QTGsorted.resolved names
+PHO84	443-444	pm gene printed among QTGsorted.resolved names
+PDR5	443-444	pm gene printed among QTGsorted.resolved names
+GAL3	443-444	pm gene printed among QTGsorted.resolved names
+CAT5	443-444	pm gene printed among QTGsorted.resolved names
+IRA2	443-444	pm gene printed among QTGsorted.resolved names
+IRA1	443-444	pm gene printed among QTGsorted.resolved names
+MKT1	443-444	pm gene printed among QTGsorted.resolved names
+END3	443-444	pm gene printed among QTGsorted.resolved names
+FLO11	443-444	pm gene printed among QTGsorted.resolved names
+SAL1	443-444	pm gene printed among QTGsorted.resolved names
+CYR1	443-444	pm gene printed among QTGsorted.resolved names
+TAO3	443-444	pm gene printed among QTGsorted.resolved names
+RGA1	443-444	pm gene printed among QTGsorted.resolved names
+HAP1	443-444	pm gene printed among QTGsorted.resolved names
+SWH1	446-454	added to pm2; code comment: Wang et al.
+TOR1	446-454	added to pm2; code comment: Treusch et al.
+WHI2	446-454	added to pm2; code comment: Treusch et al.
+ENA1	446-454	added to pm2; code comment: Steinmetz ???
+ENA5	446-454	added to pm2; code comment: (?)
+KRE33	446-454	added to pm2; code comment: desai
+PMR1	446-454	added to pm2; code comment: us
+MAL11	446-454	added to pm2; code comment: Lit ???

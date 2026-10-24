@@ -1,0 +1,20 @@
+# S288C reference chromosome lengths (bp), R64 / UCSC sacCer3 coordinates
+# source 1: https://github.com/joshsbloom/yeast-16-parents commit c913c9ae7fd237329f639de02e7ec511b048730f, genotyping/code/segregants_hmm_fx.R line 74 (genome.chr.lengths, used by the Bloom 2019 analysis)
+# source 2: https://github.com/brunig/microscale-xqtl commit a7b40bd97405a63b9d8a69efffa8a47a17eea7fd, browser/scripts/export.R line 10 (CHRLEN, used with the R64-5-1 annotation). The two lists are identical.
+chrom	length
+chrI	230218
+chrII	813184
+chrIII	316620
+chrIV	1531933
+chrV	576874
+chrVI	270161
+chrVII	1090940
+chrVIII	562643
+chrIX	439888
+chrX	745751
+chrXI	666816
+chrXII	1078177
+chrXIII	924431
+chrXIV	784333
+chrXV	1091291
+chrXVI	948066
