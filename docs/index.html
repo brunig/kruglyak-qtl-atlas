@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Every QTL the Kruglyak lab has mapped in yeast, in one browser. First dataset: the 16-parent round-robin segregant panel (Bloom et al. 2019), 4,552 joint-model and 7,751 within-cross QTL for 38 traits.">
+<title>Kruglyak Lab QTL Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+html, body { margin: 0; } img { max-width: 100%; } [hidden] { display: none !important; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+/* Layout: one sticky control bar; a genome canvas, a region canvas with its QTL card and tables, or the QTL table. */
+:root {
+  --bg: #f6f7f8; --panel: #ffffff; --fg: #1c2127; --muted: #5d6874; --faint: #9aa3ad;
+  --rule: #dde1e5; --band: #eef0f2; --nopeak: #e3e6e9;
+  --accent: #1f5fa8; --contrast: #c4530a; --thresh: #c62828; --mask: #ece3cf; --mask-fg: #b8a77c;
+  --glu: #9aa0a6; --ace: #8a3ffc; --caf: #9c4f1c; --nacl: #15191d;
+  --t-dam: #d99a00; --t-mis: #2f7fc1; --t-cnv: #16936a;
+  --sans: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161a; --panel: #181d22; --fg: #e4e8ec; --muted: #9aa5b1; --faint: #66717c;
+  --rule: #2a3138; --band: #1d2329; --nopeak: #262d34;
+  --accent: #7fb2f0; --contrast: #f0894a; --thresh: #ff6b6b; --mask: #3a3528; --mask-fg: #8f8566;
+  --glu: #7b838c; --ace: #b47cff; --caf: #c9763a; --nacl: #f4f5f6;
+  --t-dam: #f2c230; --t-mis: #5fa8e8; --t-cnv: #34c08f; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161a; --panel: #181d22; --fg: #e4e8ec; --muted: #9aa5b1; --faint: #66717c;
+  --rule: #2a3138; --band: #1d2329; --nopeak: #262d34;
+  --accent: #7fb2f0; --contrast: #f0894a; --thresh: #ff6b6b; --mask: #3a3528; --mask-fg: #8f8566;
+  --glu: #7b838c; --ace: #b47cff; --caf: #c9763a; --nacl: #f4f5f6;
+  --t-dam: #f2c230; --t-mis: #5fa8e8; --t-cnv: #34c08f; color-scheme: dark }
+html, body { background: var(--bg); color: var(--fg); }
+body { font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+* { box-sizing: border-box; }
+button, input, select { font: inherit; color: inherit; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--panel); border-bottom: 1px solid var(--rule); }
+.bar-in { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 10px 16px; max-width: 1480px; margin: 0 auto; }
+.brand { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.brand b { font-weight: 600; font-size: 15px; letter-spacing: .01em; }
+.brand span { color: var(--muted); font-size: 12px; }
+.search { position: relative; flex: 1 1 260px; max-width: 420px; min-width: 0; }
+.search input { width: 100%; padding: 7px 10px 7px 30px; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); }
+.search input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+.search svg { position: absolute; left: 9px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 2; }
+.sugg { position: absolute; left: 0; right: 0; top: calc(100% + 4px); background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.12); max-height: 320px; overflow-y: auto; z-index: 30; }
+.sugg button { display: flex; width: 100%; justify-content: space-between; gap: 12px; padding: 7px 10px; background: none; border: 0; text-align: left; cursor: pointer; }
+.sugg button[aria-selected="true"], .sugg button:hover { background: var(--band); }
+.sugg .k { color: var(--muted); font-size: 12px; white-space: nowrap; }
+.sugg .empty { padding: 8px 10px; color: var(--muted); }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.seg button { padding: 5px 10px; background: none; border: 0; cursor: pointer; font-size: 13px; }
+.btn[aria-pressed="true"], .seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); }
+.chips { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border: 1px solid var(--rule); border-radius: 999px; background: none; cursor: pointer; font-size: 13px; }
+.chip i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); display: inline-block; }
+.chip[aria-pressed="false"] { color: var(--faint); }
+.chip[aria-pressed="false"] i { background: transparent; box-shadow: inset 0 0 0 1.5px var(--c); }
+.toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; }
+.toggle input { accent-color: var(--accent); }
+.crossfilter { display: inline-flex; align-items: center; gap: 6px; padding: 3px 4px 3px 10px; border-radius: 999px; background: var(--fg); color: var(--bg); font-size: 13px; }
+.crossfilter button { background: none; border: 0; color: inherit; cursor: pointer; padding: 0 6px; font-size: 15px; line-height: 1; }
+.btn { padding: 5px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); cursor: pointer; font-size: 13px; }
+.btn:hover { border-color: var(--faint); }
+button:focus-visible, .chip:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.popwrap { position: relative; }
+.pop { position: absolute; left: 0; top: calc(100% + 4px); z-index: 30; background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 8px 24px rgba(0,0,0,.12); padding: 10px 12px; width: min(560px, calc(100vw - 32px)); max-height: 60vh; overflow-y: auto; }
+.pop h4 { margin: 8px 0 4px; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.pop h4:first-child { margin-top: 0; }
+.pop .opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 2px 12px; }
+.pop label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; padding: 2px 0; min-width: 0; }
+.pop label span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pop input { accent-color: var(--accent); }
+.pop .acts { display: flex; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+
+main { max-width: 1480px; margin: 0 auto; padding-inline: 16px; padding-block: 16px 40px; }
+.card { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; }
+.head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; padding: 12px 14px 4px; }
+.head h2 { margin: 0; font-size: 15px; font-weight: 600; text-wrap: balance; }
+.head .meta { color: var(--muted); font-size: 13px; }
+.pill { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 12px; border: 1px solid currentColor; }
+.canvas-wrap { position: relative; padding: 4px 6px 8px; }
+canvas { display: block; width: 100%; touch-action: pan-y; }
+#lcan { cursor: grab; }
+#lcan.dragging { cursor: grabbing; }
+#gcan { cursor: crosshair; }
+.tip { position: absolute; pointer-events: none; background: var(--fg); color: var(--bg); font-size: 12px; padding: 6px 8px; border-radius: 5px; white-space: nowrap; z-index: 10; line-height: 1.4; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 0 14px 12px; color: var(--muted); font-size: 12.5px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw { width: 18px; height: 0; border-top: 2px solid var(--c); display: inline-block; }
+.sw.box { height: 10px; border: 0; background: var(--c); width: 12px; }
+.sw.tick { width: 3px; height: 12px; border: 0; background: var(--c); }
+.ramp { width: 90px; height: 10px; border-radius: 2px; display: inline-block; }
+
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: 16px; margin-top: 16px; }
+@media (max-width: 900px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+.section-title { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+.pad { padding: 14px; }
+.tablewrap { overflow-x: auto; max-height: 520px; overflow-y: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { padding: 5px 8px; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { position: sticky; top: 0; background: var(--panel); font-weight: 600; color: var(--muted); font-size: 12px; cursor: pointer; user-select: none; }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+tr.row { cursor: pointer; }
+tr.row:hover td { background: var(--band); }
+tr.row.sel td { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 6px; vertical-align: 1px; }
+.list { display: flex; flex-direction: column; gap: 2px; font-size: 13px; max-height: 260px; overflow-y: auto; }
+.list a { color: var(--fg); text-decoration: none; display: flex; justify-content: space-between; gap: 10px; padding: 3px 4px; border-radius: 4px; }
+.list a:hover { background: var(--band); }
+.list .k { color: var(--muted); font-family: var(--mono); font-size: 12px; }
+.note { color: var(--muted); font-size: 12.5px; max-width: 70ch; }
+
+.loc-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 12px 14px 4px; }
+.loc-head h2 { margin: 0; font-size: 16px; font-weight: 600; }
+.loc-head .sp { flex: 1; }
+.genecard { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 6px; font-size: 13px; }
+.genecard a { color: var(--accent); }
+.pk-head { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 12px 14px 6px; }
+.pk-head h2 { margin: 0; font-size: 15px; font-weight: 600; }
+.pk-head .sp { flex: 1; }
+.pk-sub { padding: 0 14px 8px; color: var(--muted); font-size: 13px; }
+.tier { display: inline-block; min-width: 1.6em; text-align: center; padding: 0 5px; border-radius: 4px; font-size: 11.5px; font-weight: 600; color: var(--bg); background: var(--c); }
+.flag { font-size: 11px; color: var(--muted); border: 1px solid var(--rule); border-radius: 3px; padding: 0 4px; margin-left: 4px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px 22px; padding: 4px 14px 14px; }
+.facts dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 3px 12px; font-size: 13px; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.facts h3 { grid-column: 1 / -1; margin: 0 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+.subtable { padding: 0 14px 12px; }
+.subtable .tablewrap { max-height: 260px; }
+.tfilters { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 4px 14px 10px; }
+.tfilters label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.tfilters select, .tfilters input { padding: 4px 6px; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg); max-width: 220px; }
+.tfilters input { width: 80px; }
+footer { max-width: 1480px; margin: 0 auto; padding-inline: 16px; padding-block: 0 40px; color: var(--muted); font-size: 12.5px; }
+footer p { max-width: 90ch; margin: 6px 0; }
+footer a { color: var(--muted); }
+.loading { padding: 60px 14px; color: var(--muted); text-align: center; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand"><b>Kruglyak Lab QTL Atlas</b><span id="brand-sub">yeast QTL from every lab paper, one browser</span></div>
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Gene, chrIV:509600, trait, cross, strain" aria-label="Search">
+      <div class="sugg" id="sugg" hidden></div>
+    </div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="View">
+        <button id="v-genome" aria-pressed="true">Genome</button>
+        <button id="v-locus" aria-pressed="false">Region</button>
+        <button id="v-table" aria-pressed="false">Table</button>
+      </div>
+      <div class="chips" id="dschips" aria-label="Datasets"></div>
+      <div class="seg" role="group" aria-label="Model">
+        <button id="m-both" aria-pressed="true" title="Joint-model and within-cross QTL">Both</button>
+        <button id="m-j" aria-pressed="false" title="Joint model: all crosses mapped together; one lead variant per QTL">Joint</button>
+        <button id="m-w" aria-pressed="false" title="Within-cross model: each cross mapped on its own; 1.5-LOD intervals">Within-cross</button>
+      </div>
+      <div class="popwrap"><button class="btn" id="b-traits" aria-expanded="false">Traits</button><div class="pop" id="p-traits" hidden></div></div>
+      <div class="popwrap"><button class="btn" id="b-crosses" aria-expanded="false">Crosses</button><div class="pop" id="p-crosses" hidden></div></div>
+      <span id="crossf"></span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="loading" class="card loading">Loading the atlas…</div>
+
+  <section id="gview" hidden>
+    <div class="card">
+      <div class="head">
+        <h2 id="g-title">Genome</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="shuffle">Show another trait</button>
+          <button class="btn" id="copy-g">Copy link</button>
+        </div>
+      </div>
+      <div class="head" style="padding-top:0"><div class="meta" id="g-meta"></div></div>
+      <div class="canvas-wrap"><canvas id="gcan" height="600"></canvas><div class="tip" id="gtip" hidden></div></div>
+      <div class="legend" id="g-legend"></div>
+    </div>
+    <div class="card pad" style="margin-top:16px">
+      <p class="section-title">Datasets</p>
+      <div id="dsinfo"></div>
+    </div>
+  </section>
+
+  <section id="lview" hidden>
+    <div class="card">
+      <div class="loc-head">
+        <button class="btn" id="back">← Genome</button>
+        <h2 class="mono" id="l-title"></h2>
+        <span class="sp"></span>
+        <label class="toggle"><input type="checkbox" id="only"> Selected traits only</label>
+        <button class="btn" id="zout" title="Zoom out (−)">−</button>
+        <button class="btn" id="zin" title="Zoom in (+)">+</button>
+        <button class="btn" id="pl" title="Pan left (←)">◀</button>
+        <button class="btn" id="pr" title="Pan right (→)">▶</button>
+        <button class="btn" id="copy-l">Copy link</button>
+      </div>
+      <div class="head" style="padding-top:2px"><div class="meta" id="l-meta"></div></div>
+      <div class="canvas-wrap"><canvas id="lcan" height="600"></canvas><div class="tip" id="ltip" hidden></div></div>
+      <div class="legend" id="l-legend"></div>
+    </div>
+    <div class="card" id="qcard" hidden style="margin-top:16px"></div>
+    <div class="grid2">
+      <div class="card pad">
+        <p class="section-title" id="t-title">QTL in view</p>
+        <div class="tablewrap"><table id="ltable"></table></div>
+      </div>
+      <div class="card pad">
+        <p class="section-title">Candidate genes in view</p>
+        <div class="list" id="candlist"></div>
+        <p class="section-title" style="margin-top:16px">Genes in view</p>
+        <div class="list" id="genelist"></div>
+        <div id="genecard"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tview" hidden>
+    <div class="card">
+      <div class="head">
+        <h2 id="tv-title">QTL table</h2>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="tsv">Download filtered rows (TSV)</button>
+          <button class="btn" id="copy-t">Copy link</button>
+        </div>
+      </div>
+      <div class="tfilters" id="tfilters"></div>
+      <div class="subtable"><div class="tablewrap" style="max-height:70vh"><table id="ttable"></table></div></div>
+      <p class="note" id="tmore" style="padding:0 14px 12px"></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p><b>What this shows.</b> The atlas shows what the papers reported, row for row, with every original column kept and a provenance key (file, sheet, row) on each QTL. Candidate genes carry the paper's evidence tier (previously identified, local FDR 5%, local FDR 20%) and are not claimed as causal beyond it. Nothing here is re-mapped or re-estimated.</p>
+  <p><b>Bloom et al. 2019.</b> Within-cross QTL are drawn as their 1.5-LOD intervals; joint-model QTL as their lead variant, because the paper reports no interval for them. Effects are in standard deviations of colony radius per standard deviation of genotype; positive joint effects mean the non-reference allele makes larger colonies. Which parent is genotype 1 in each cross is inferred (the alphabetically first strain label, which reproduces the candidate-gene table's effect labels in all 16 crosses); see <a href="https://github.com/brunig/kruglyak-qtl-atlas/blob/main/OPEN_QUESTIONS.md">open questions</a>.</p>
+  <p><b>Coordinates.</b> S288C reference, R64 (sacCer3). <b>Genes.</b> SGD annotation R64-5-1, for display. <b>Heatmap.</b> QTL per 50 kb bin, counting each interval in every bin it touches.</p>
+</footer>
+
+<script>
+"use strict";
+const ARTIFACT_URL = "";
+const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI"];
+const CAT_ORDER = ["drug/chemical", "osmotic stress", "carbon source", "temperature", "pH", "reference medium"];
+const TRAIT_COLS = ["--accent", "--contrast", "--ace", "--t-cnv", "--t-dam", "--thresh", "--caf", "--nacl"];
+const TIER = { v: ["Previously identified", "--t-cnv", "P"], "5": ["Local FDR < 5%", "--accent", "5%"], "20": ["Local FDR < 20%", "--faint", "20%"] };
+const TIER_RANK = { v: 0, "5": 1, "20": 2 };
+const CHGAP = 120000;
+const DEFAULT_TRAIT = "Cadmium_Chloride;75uM;2";
+let D, CH, CHL, CHSTART = {}, GLEN = 0, NQ = 0, HB = 50000;
+let TORDER = [], XORDER = [], JB = {}, QBYCH = {}, CBYG = {}, CANDG = {}, GENE_BY_ID = {}, TBYID = {}, XBYID = {}, QBYID = {};
+const S = { view: "genome", ds: new Set(), traits: new Set(), crosses: new Set(), model: "both", chrom: "chrIV", start: 400000, end: 620000, q: null, gene: null, only: false,
+  hover: null, tf: { t: "", x: "", c: "", lod: "", ef: "", m: "" }, tsort: { k: null, d: 1 }, tlimit: 500, src: false };
+
+function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
+function fmtkb(n) { return n >= 1e6 ? (n / 1e6).toFixed(n % 1e6 ? 2 : 0) + " Mb" : n >= 1000 ? (n / 1e3).toFixed(n % 1e3 ? 1 : 0).replace(/\.0$/, "") + " kb" : n + " bp"; }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function sgn(v, d) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d == null ? 3 : d); }
+function num(v, d) { return v == null ? "" : (+v).toFixed(d); }
+function pct(v) { return v == null ? "" : (100 * v).toFixed(1) + "%"; }
+
+/* ---------- table access ---------- */
+const Q = () => D.qtl;
+function pname(i) { return i == null || i < 0 ? "" : D.parents.name[i]; }
+function xlabel(x) { return x < 0 ? "Joint model" : pname(D.crosses.p1[x]) + " × " + pname(D.crosses.p2[x]); }
+function xshort(x) { return x < 0 ? "joint" : D.crosses.code[x]; }
+function tname(t) { return D.traits.name[t]; }
+function tcol(t) { const arr = [...S.traits]; const k = arr.indexOf(t); return k >= 0 && k < TRAIT_COLS.length ? css(TRAIT_COLS[k]) : css("--muted"); }
+function gname(g) { return g < 0 || g == null ? "" : D.genes.n[g] || D.genes.id[g]; }
+function tierPill(t) { return t ? '<span class="tier" style="--c:var(' + TIER[t][1] + ')" title="' + esc(TIER[t][0]) + '">' + TIER[t][2] + '</span>' : ""; }
+
+/* ---------- visibility ---------- */
+function qv(i) {
+  const q = Q(); if (!S.ds.has(q.ds[i])) return false;
+  const m = q.m[i]; if (S.model !== "both" && S.model !== m) return false;
+  if (S.crosses.size) {
+    if (m === "w") { if (!S.crosses.has(q.x[i])) return false; }
+    else { const js = JB[i] || []; if (!js.some(j => S.crosses.has(D.jeff.x[j]))) return false; }
+  }
+  return true;
+}
+function visTraits() { return TORDER.filter(t => S.ds.has(D.traits.ds[t])); }
+function visCrosses() { return XORDER.filter(x => S.ds.has(D.crosses.ds[x]) && (!S.crosses.size || S.crosses.has(x))); }
+
+/* ---------- heatmap: QTL per 50 kb bin per trait ---------- */
+const heatCache = {};
+function heat() {
+  const key = [...S.ds].join(",") + S.model + [...S.crosses].join(",");
+  if (heatCache[key]) return heatCache[key];
+  const out = {}; const q = Q();
+  for (const t of TORDER) { out[t] = {}; for (const ch of CH) out[t][ch] = new Uint16Array(Math.ceil(CHL[ch] / HB)); }
+  let max = 1;
+  for (let i = 0; i < NQ; i++) { if (!qv(i)) continue; const row = out[q.t[i]][q.c[i]];
+    for (let b = Math.floor(q.a[i] / HB); b <= Math.min(row.length - 1, Math.floor(q.e[i] / HB)); b++) { row[b]++; if (row[b] > max) max = row[b]; } }
+  out.max = max;
+  return (heatCache[key] = out);
+}
+const MAKO = ["#def5e5", "#a7e0bf", "#60cead", "#3aaeac", "#348fa7", "#37709f", "#3f5194", "#40336f", "#2b1d42", "#0b0405"];
+function lerpHex(a, b, t) { const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+  const r = Math.round(((pa >> 16) & 255) * (1 - t) + ((pb >> 16) & 255) * t), g = Math.round(((pa >> 8) & 255) * (1 - t) + ((pb >> 8) & 255) * t), bl = Math.round((pa & 255) * (1 - t) + (pb & 255) * t);
+  return "rgb(" + r + "," + g + "," + bl + ")"; }
+function isDark() { const t = document.documentElement.getAttribute("data-theme"); return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+function mako(t) { t = Math.max(0, Math.min(1, t)); t = isDark() ? 0.72 * (1 - t) : 0.2 + 0.8 * t; const x = t * (MAKO.length - 1), i = Math.min(MAKO.length - 2, Math.floor(x)); return lerpHex(MAKO[i], MAKO[i + 1], x - i); }
+function heatColor(n, max) { return mako(Math.sqrt((n - 1) / Math.max(1, max - 1))); }
+
+/* ---------- encodings ---------- */
+function lodAlpha(lod) { return 0.3 + 0.7 * Math.min(1, Math.log10(Math.max(1, lod)) / 2); }   // LOD 1 → .3, LOD ≥ 100 → 1
+function efAlpha(ef) { return 0.3 + 0.7 * Math.min(1, Math.abs(ef) / 0.5); }                   // |β| ≥ 0.5 SD → 1
+function qAlpha(i) { const q = Q(); return q.m[i] === "w" ? lodAlpha(q.lod[i]) : efAlpha(q.ef[i]); }
+
+/* ---------- canvas helpers ---------- */
+function sizeCanvas(cv, h) {
+  const dpr = window.devicePixelRatio || 1, w = cv.parentElement.clientWidth - 12;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); cv.style.height = h + "px";
+  const ctx = cv.getContext("2d"); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); return { ctx, w, h };
+}
+function fitText(ctx, s, w) { if (ctx.measureText(s).width <= w) return s; while (s.length > 1 && ctx.measureText(s + "…").width > w) s = s.slice(0, -1); return s + "…"; }
+
+/* ---------- genome view ---------- */
+let G = null;
+function drawGenome() {
+  const cv = document.getElementById("gcan");
+  const narrow = cv.parentElement.clientWidth < 640;
+  const L = narrow ? 74 : 168, R = 10, hTop = 22;
+  const traits = visTraits(), crosses = visCrosses();
+  const rowH = narrow ? 8 : 12, heatH = rowH * traits.length;
+  const ivTop = hTop + heatH + 40, ivRows = [-1, ...crosses], ivH = narrow ? 11 : 14, axY = ivTop + ivRows.length * ivH + 8;
+  const { ctx, w, h } = sizeCanvas(cv, axY + 26);
+  const X = g => L + (g / GLEN) * (w - L - R);
+  ctx.clearRect(0, 0, w, h);
+  ctx.textBaseline = "middle";
+  const H = heat(), muted = css("--muted"), band = css("--band"), nopeak = css("--nopeak"), fg = css("--fg");
+  ctx.font = "11px " + css("--sans"); ctx.fillStyle = muted; ctx.textAlign = "left";
+  ctx.fillText("QTL per 50 kb bin, by trait" + (S.model === "both" ? " (joint and within-cross)" : S.model === "j" ? " (joint model)" : " (within-cross)") + (S.crosses.size ? ", selected crosses" : ""), L, hTop - 11);
+  // heatmap
+  ctx.font = (narrow ? "9px " : "10.5px ") + css("--sans");
+  let lastCat = null;
+  traits.forEach((t, r) => {
+    const y = hTop + r * rowH, sel = S.traits.has(t);
+    if (!narrow && D.traits.cat[t] !== lastCat && r > 0) { ctx.fillStyle = css("--rule"); ctx.fillRect(L, y, w - L - R, 0.6); }
+    lastCat = D.traits.cat[t];
+    ctx.fillStyle = sel ? tcol(t) : muted; ctx.font = (sel ? "600 " : "") + (narrow ? "9px " : "10.5px ") + css("--sans");
+    ctx.textAlign = "right"; ctx.fillText(fitText(ctx, tname(t), L - 12), L - 8, y + rowH / 2);
+    if (sel) { ctx.fillRect(L - 5, y + 1, 3, rowH - 2); }
+    for (const ch of CH) { const row = H[t][ch];
+      for (let b = 0; b < row.length; b++) { const x0 = X(CHSTART[ch] + b * HB), x1 = X(CHSTART[ch] + Math.min(CHL[ch], (b + 1) * HB));
+        ctx.fillStyle = row[b] ? heatColor(row[b], H.max) : nopeak; ctx.fillRect(x0, y + 0.5, Math.max(0.6, x1 - x0 - 0.3), rowH - 1); } }
+  });
+  // interval panel
+  ctx.font = "11px " + css("--sans"); ctx.fillStyle = muted; ctx.textAlign = "left";
+  const selT = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
+  ctx.fillText(selT.length ? "QTL of the selected trait" + (selT.length > 1 ? "s" : "") + " by cross; joint-model lead variants on the top row" : "Select a trait (click its name above, or Traits) to draw its QTL", L, ivTop - 12);
+  CH.forEach((ch, i) => { if (i % 2 === 0) { ctx.fillStyle = band; ctx.fillRect(X(CHSTART[ch]), ivTop, X(CHSTART[ch] + CHL[ch]) - X(CHSTART[ch]), ivRows.length * ivH); } });
+  ctx.font = (narrow ? "9.5px " : "11px ") + css("--sans");
+  ivRows.forEach((x, r) => { const y = ivTop + r * ivH; ctx.fillStyle = x < 0 ? fg : muted; ctx.textAlign = "right";
+    ctx.fillText(fitText(ctx, narrow ? (x < 0 ? "joint" : D.crosses.code[x]) : xlabel(x), L - 8), L - 8, y + ivH / 2); });
+  const q = Q(); const hits = [];
+  for (let i = 0; i < NQ; i++) { if (!S.traits.has(q.t[i]) || !qv(i)) continue;
+    const r = q.m[i] === "j" ? 0 : ivRows.indexOf(q.x[i]); if (r < 0) continue;
+    const y = ivTop + r * ivH, g0 = CHSTART[q.c[i]];
+    ctx.globalAlpha = qAlpha(i); ctx.fillStyle = tcol(q.t[i]);
+    if (q.m[i] === "j") { const xm = X(g0 + q.p[i]), lw = 1 + 2 * Math.min(1, Math.abs(q.ef[i]) / 0.5); ctx.fillRect(xm - lw / 2, y + 1, lw, ivH - 2); hits.push({ i, x0: xm - 2, x1: xm + 2, y, h: ivH }); }
+    else { const x0 = X(g0 + q.a[i]), x1 = Math.max(X(g0 + q.e[i]), x0 + 2); ctx.fillRect(x0, y + 2, x1 - x0, ivH - 4); hits.push({ i, x0, x1, y, h: ivH }); }
+    ctx.globalAlpha = 1; }
+  // axis labels
+  ctx.textAlign = "center"; ctx.fillStyle = muted; ctx.font = "11px " + css("--sans");
+  CH.forEach((ch, i) => { const xm = X(CHSTART[ch] + CHL[ch] / 2); if (!narrow || i % 2 === 0 || CHL[ch] > 700000) ctx.fillText(ch.slice(3), xm, axY + 8); });
+  G = { L, R, w, X, hTop, rowH, heatH, traits, ivTop, ivH, ivRows, hits };
+}
+function renderGenome() {
+  const sel = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
+  const q = Q(); let nj = 0, nw = 0;
+  for (let i = 0; i < NQ; i++) if (S.traits.has(q.t[i]) && qv(i)) { if (q.m[i] === "j") nj++; else nw++; }
+  document.getElementById("g-title").textContent = sel.length === 0 ? "Genome" : sel.length === 1 ? tname(sel[0]) : sel.length + " traits";
+  const bits = [];
+  if (sel.length) bits.push(sel.map(t => '<span class="dot" style="--c:' + tcol(t) + '"></span>' + esc(tname(t))).join(" · "));
+  if (sel.length) bits.push(fmt(nj) + " joint-model and " + fmt(nw) + " within-cross QTL drawn");
+  bits.push("click a trait name to add or remove it · click a QTL or the heatmap to open the region");
+  document.getElementById("g-meta").innerHTML = bits.join(" · ");
+  document.getElementById("g-legend").innerHTML = rampLegend() + '<span><i class="sw box" style="--c:var(--accent)"></i>within-cross 1.5-LOD interval, opacity by LOD</span><span><i class="sw tick" style="--c:var(--accent)"></i>joint-model lead variant, width and opacity by |effect|</span>';
+  drawGenome(); renderDsInfo();
+}
+function rampLegend() { const H = heat(); const stops = [0, .25, .5, .75, 1].map(t => mako(t)).join(","); return '<span>1 <i class="ramp" style="background:linear-gradient(90deg,' + stops + ')"></i> ' + H.max + ' QTL</span><span><i class="sw box" style="--c:var(--nopeak)"></i>none</span>'; }
+function renderDsInfo() {
+  const d = D.datasets; let h = "";
+  for (let i = 0; i < d.id.length; i++) {
+    const nj = Q().m.filter((m, k) => m === "j" && Q().ds[k] === i).length, nw = Q().m.filter((m, k) => m === "w" && Q().ds[k] === i).length;
+    h += '<div style="margin-bottom:10px' + (S.ds.has(i) ? "" : ";opacity:.55") + '"><b>' + esc(d.label[i]) + '</b> <span style="color:var(--muted)">· ' + esc(d.cite[i]) + ' · <a style="color:var(--accent)" href="https://doi.org/' + esc(d.doi[i]) + '" target="_blank" rel="noopener">doi:' + esc(d.doi[i]) + '</a></span>' +
+      '<p class="note" style="margin:4px 0">' + esc(d.notes[i]) + ' ' + fmt(nj) + ' joint-model QTL and ' + fmt(nw) + ' within-cross QTL at FDR ' + (100 * d.fdr[i]) + '%.</p>' +
+      '<p class="note" style="margin:4px 0"><b>Design.</b> ' + esc(d.design[i]) + '. <b>Build.</b> ' + esc(d.build[i]) + '</p>' +
+      '<p class="note" style="margin:4px 0"><b>Method.</b> ' + esc(d.method[i]) + '</p>' +
+      '<p class="note" style="margin:4px 0"><b>Intervals.</b> ' + esc(d.interval[i]) + ' <b>Effects.</b> ' + esc(d.effect[i]) + '</p></div>';
+  }
+  document.getElementById("dsinfo").innerHTML = h;
+}
+const gcan = document.getElementById("gcan"), gtip = document.getElementById("gtip");
+function gPos(ev) { const r = gcan.getBoundingClientRect(); const x = ev.clientX - r.left, y = ev.clientY - r.top;
+  const g = (x - G.L) / (G.w - G.L - G.R) * GLEN; let ch = null, pos = null;
+  if (g >= 0 && g < GLEN) { ch = CH[0]; for (const c of CH) if (CHSTART[c] <= g) ch = c; if (g - CHSTART[ch] > CHL[ch]) ch = null; else pos = Math.round(g - CHSTART[ch]); }
+  return { x, y, ch, pos }; }
+function gHit(p) {
+  if (p.y >= G.hTop && p.y < G.hTop + G.heatH) { const t = G.traits[Math.floor((p.y - G.hTop) / G.rowH)]; return { kind: p.x < G.L ? "tlabel" : "heat", t }; }
+  if (p.y >= G.ivTop && p.y < G.ivTop + G.ivRows.length * G.ivH && p.x >= G.L) {
+    const r = Math.floor((p.y - G.ivTop) / G.ivH); let best = null, bd = 6;
+    for (const h of G.hits) { if (h.y !== G.ivTop + r * G.ivH) continue; const d = p.x < h.x0 ? h.x0 - p.x : p.x > h.x1 ? p.x - h.x1 : 0; if (d < bd || (d === 0 && best && h.x1 - h.x0 < best.x1 - best.x0)) { bd = d; best = h; } }
+    return best ? { kind: "qtl", i: best.i } : { kind: "row" };
+  }
+  return { kind: "none" };
+}
+gcan.addEventListener("mousemove", ev => {
+  const p = gPos(ev); const h = gHit(p); let lines = [];
+  if (h.kind === "tlabel") lines = ["<b>" + esc(tname(h.t)) + "</b>", esc(D.traits.cat[h.t]) + " · " + esc(D.traits.raw[h.t]), S.traits.has(h.t) ? "click to remove" : "click to draw its QTL below"];
+  else if (h.kind === "heat" && p.ch) { const n = heat()[h.t][p.ch][Math.floor(p.pos / HB)] || 0; lines = ["<b>" + esc(tname(h.t)) + "</b>", '<span class="mono">' + p.ch + ":" + fmt(p.pos) + "</span>", n + " QTL in this 50 kb bin", "click to open this region"]; }
+  else if (h.kind === "qtl") lines = qtlTip(h.i).concat(["click to open this QTL"]);
+  else if (p.ch) lines = ['<span class="mono">' + p.ch + ":" + fmt(p.pos) + "</span>", "click to open this region"];
+  if (!lines.length) { gtip.hidden = true; return; }
+  gtip.innerHTML = lines.join("<br>"); gtip.hidden = false;
+  const tw = gtip.offsetWidth; gtip.style.left = Math.max(0, Math.min(p.x + 14, gcan.clientWidth - tw)) + "px"; gtip.style.top = (p.y + 14) + "px";
+});
+gcan.addEventListener("mouseleave", () => gtip.hidden = true);
+gcan.addEventListener("click", ev => {
+  const p = gPos(ev); const h = gHit(p);
+  if (h.kind === "tlabel") { toggleTrait(h.t); return; }
+  if (h.kind === "qtl") { openQTL(h.i); return; }
+  if (p.ch) openLocus(p.ch, p.pos - 110000, p.pos + 110000);
+});
+function toggleTrait(t) { if (S.traits.has(t)) S.traits.delete(t); else S.traits.add(t); go(); }
+function qtlTip(i) {
+  const q = Q(); const out = ["<b>" + esc(tname(q.t[i])) + "</b> · " + esc(xlabel(q.x[i]))];
+  if (q.m[i] === "w") out.push('<span class="mono">' + q.c[i] + ":" + fmt(q.a[i]) + "–" + fmt(q.e[i]) + "</span> · LOD " + num(q.lod[i], 1) + " · β " + sgn(q.ef[i], 2));
+  else out.push('<span class="mono">' + esc(q.lv[i]) + "</span> · mean β " + sgn(q.ef[i], 2) + " · " + q.cc[i] + " crosses");
+  if (q.g[i] >= 0) out.push("candidate gene " + esc(gname(q.g[i])) + " (" + TIER[q.gt[i]][0].toLowerCase() + ")");
+  return out;
+}
+
+/* ---------- region view ---------- */
+let LV = null;
+function clampRegion() {
+  const len = CHL[S.chrom]; let w = Math.max(5000, Math.min(len, S.end - S.start));
+  let c = (S.start + S.end) / 2; S.start = Math.round(Math.max(0, Math.min(len - w, c - w / 2))); S.end = S.start + Math.round(w);
+}
+function openLocus(ch, a, e) { S.chrom = ch; S.start = a; S.end = e; S.view = "locus"; clampRegion(); go(); window.scrollTo(0, 0); }
+function openQTL(i, scroll) {
+  const q = Q(); S.q = i; S.src = false; const w = Math.max(q.e[i] - q.a[i], 0), pad = Math.max(40000, w * 0.6);
+  if (!S.ds.has(q.ds[i])) S.ds.add(q.ds[i]);
+  openLocus(q.c[i], q.a[i] - pad, q.e[i] + pad);
+  if (scroll) setTimeout(() => document.getElementById("qcard").scrollIntoView({ block: "start" }), 0);
+}
+function packLanes(items, gap) { const lanes = []; for (const it of items) { let l = 0; while (lanes[l] != null && lanes[l] > it.x0 - gap) l++; lanes[l] = it.x1; it.lane = l; } return lanes.length; }
+function qtlInView() {
+  const res = []; const q = Q();
+  for (const i of QBYCH[S.chrom] || []) { if (q.e[i] < S.start || q.a[i] > S.end) continue; if (!qv(i)) continue; if (S.only && !S.traits.has(q.t[i])) continue; res.push(i); }
+  const tpos = {}; TORDER.forEach((t, k) => tpos[t] = k); const xpos = {}; XORDER.forEach((x, k) => xpos[x] = k);
+  res.sort((A, B) => tpos[q.t[A]] - tpos[q.t[B]] || (q.m[A] === q.m[B] ? 0 : q.m[A] === "j" ? -1 : 1) || (xpos[q.x[A]] ?? -1) - (xpos[q.x[B]] ?? -1) || q.a[A] - q.a[B]);
+  return res;
+}
+function candInView() {
+  const out = new Map(); const c = D.causal;
+  for (let k = 0; k < c.g.length; k++) { if (!S.ds.has(c.ds[k])) continue; const g = c.g[k]; if (D.genes.c[g] !== S.chrom || D.genes.e[g] < S.start || D.genes.a[g] > S.end) continue;
+    if (!out.has(g)) out.set(g, []); out.get(g).push(k); }
+  return out;
+}
+function bestTier(g) { const ks = (CBYG[g] || []).filter(k => S.ds.has(D.causal.ds[k])); if (!ks.length) return null; return ks.map(k => D.causal.tier[k]).sort((a, b) => TIER_RANK[a] - TIER_RANK[b])[0]; }
+function drawLocus() {
+  const cv = document.getElementById("lcan"); const narrow = cv.parentElement.clientWidth < 640;
+  const L = narrow ? 64 : 200, R = 10;
+  const rows = qtlInView(); const cands = candInView();
+  const genes = []; for (let i = 0; i < D.genes.c.length; i++) if (D.genes.c[i] === S.chrom && D.genes.e[i] >= S.start && D.genes.a[i] <= S.end) genes.push(i);
+  const w0 = cv.parentElement.clientWidth - 12, span = S.end - S.start;
+  const X = pos => L + (pos - S.start) / span * (w0 - L - R);
+  const candItems = [...cands.keys()].map(g => ({ g, x0: X(D.genes.a[g]), x1: Math.max(X(D.genes.e[g]), X(D.genes.a[g]) + 2) + 6 + 6.5 * gname(g).length }));
+  const nCL = Math.max(1, packLanes(candItems.sort((a, b) => a.x0 - b.x0), 4));
+  const geneItems = genes.map(i => ({ i, x0: X(D.genes.a[i]), x1: X(D.genes.e[i]) + (span < 400000 ? 6 + 6.5 * gname(i).length : 2) }));
+  const nGL = Math.max(1, packLanes(geneItems, 2));
+  const rowH = rows.length > 400 ? 3 : rows.length > 140 ? 5 : 11;
+  const axH = 22, qTop = axH + 22, qH = Math.max(16, rows.length * rowH);
+  const cTop = qTop + qH + 26, cLH = 16, gTop = cTop + nCL * cLH + 26, gLH = 18;
+  const Hh = gTop + nGL * gLH + 8;
+  const { ctx, w, h } = sizeCanvas(cv, Hh);
+  ctx.clearRect(0, 0, w, h); ctx.font = "11px " + css("--sans"); ctx.textBaseline = "middle";
+  const fg = css("--fg"), muted = css("--muted"), faint = css("--faint"), rule = css("--rule"), band = css("--band");
+  const step = [1e3, 2e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 5e5].find(s => span / s <= (narrow ? 4 : 10)) || 1e6;
+  ctx.strokeStyle = rule; ctx.fillStyle = muted; ctx.textAlign = "center"; ctx.lineWidth = 1;
+  for (let t = Math.ceil(S.start / step) * step; t <= S.end; t += step) { const x = X(t); ctx.beginPath(); ctx.moveTo(x, axH - 4); ctx.lineTo(x, Hh - 4); ctx.globalAlpha = .5; ctx.stroke(); ctx.globalAlpha = 1; ctx.fillText(fmtkb(t), x, axH / 2); }
+  const lbl = (t, y) => { ctx.textAlign = "left"; ctx.fillStyle = muted; ctx.font = "600 11px " + css("--sans"); ctx.fillText(t, 4, y); ctx.font = "11px " + css("--sans"); };
+  lbl("QTL · " + rows.length, qTop - 12); lbl("Candidate genes", cTop - 12); lbl("Genes", gTop - 12);
+  // QTL rows, grouped by trait
+  const q = Q(); const rr = []; let lastT = -1; const focus = S.hover != null ? S.hover : S.q;
+  ctx.font = (narrow ? "9.5px " : "11px ") + css("--sans");
+  rows.forEach((i, j) => {
+    const y = qTop + j * rowH, t = q.t[i];
+    if (t !== lastT) { if (j > 0) { ctx.fillStyle = rule; ctx.fillRect(0, y - 0.5, w, 1); }
+      const cnt = rows.filter(k => q.t[k] === t).length;
+      if (rowH >= 11 || cnt * rowH >= 11) { ctx.fillStyle = S.traits.has(t) ? tcol(t) : muted; ctx.textAlign = "left"; ctx.font = (S.traits.has(t) ? "600 " : "") + (narrow ? "9px " : "10.5px ") + css("--sans");
+        ctx.fillText(fitText(ctx, tname(t) + (narrow ? "" : " · " + cnt), L - (rowH >= 11 && !narrow ? 44 : 10)), 4, y + 5.5); } lastT = t; }
+    if (i === focus) { ctx.fillStyle = band; ctx.fillRect(0, y, w, rowH); }
+    const col = S.traits.has(t) ? tcol(t) : (q.m[i] === "j" ? css("--contrast") : css("--accent"));
+    ctx.globalAlpha = qAlpha(i); ctx.fillStyle = col;
+    if (q.m[i] === "j") { const xm = X(q.p[i]); if (xm >= L - 2 && xm <= w - R + 2) { ctx.beginPath(); ctx.moveTo(xm, y + 1); ctx.lineTo(xm + Math.max(3, rowH / 2), y + rowH / 2); ctx.lineTo(xm, y + rowH - 1); ctx.lineTo(xm - Math.max(3, rowH / 2), y + rowH / 2); ctx.fill(); } }
+    else { const x0 = Math.max(L, X(q.a[i])), x1 = Math.min(w - R, X(q.e[i])); ctx.fillRect(x0, y + 1, Math.max(1.5, x1 - x0), rowH - 2);
+      const xs = X(q.p[i]); if (xs >= L && xs <= w - R) { ctx.globalAlpha = 1; ctx.fillStyle = fg; ctx.fillRect(xs - .75, y + 1, 1.5, rowH - 2); } }
+    ctx.globalAlpha = 1;
+    if (i === S.q) { const x0 = q.m[i] === "j" ? X(q.p[i]) - 5 : Math.max(L, X(q.a[i])), x1 = q.m[i] === "j" ? X(q.p[i]) + 5 : Math.min(w - R, X(q.e[i])); ctx.strokeStyle = fg; ctx.lineWidth = 1.5; ctx.strokeRect(x0 - 2, y - 1, Math.max(2, x1 - x0) + 4, rowH + 2); }
+    if (!narrow && rowH >= 11) { ctx.fillStyle = faint; ctx.textAlign = "right"; ctx.font = "10px " + css("--sans"); ctx.fillText(q.m[i] === "j" ? "joint" : D.crosses.code[q.x[i]], L - 4, y + rowH / 2); }
+    rr.push({ i, y, h: rowH });
+  });
+  if (!rows.length) { ctx.fillStyle = muted; ctx.textAlign = "left"; ctx.fillText("No QTL matching the current filters overlaps this region.", L, qTop + 7); }
+  // candidate genes
+  const candR = [];
+  candItems.forEach(it => { const g = it.g, y = cTop + it.lane * cLH, tr = bestTier(g); const col = css(TIER[tr][1]);
+    const x0 = Math.max(L, X(D.genes.a[g])), x1 = Math.min(w - R, X(D.genes.e[g]));
+    ctx.fillStyle = col; ctx.fillRect(x0, y + 3, Math.max(2, x1 - x0), cLH - 7);
+    ctx.fillStyle = S.gene === g ? css("--accent") : fg; ctx.textAlign = "left"; const lx = Math.max(L, x1 + 4); if (lx < w - R - 20) ctx.fillText(gname(g), lx, y + cLH / 2 - 1);
+    candR.push({ x0, x1: Math.max(x1, x0 + 2) + 6 * gname(g).length, y, h: cLH, g }); });
+  if (!cands.size) { ctx.fillStyle = faint; ctx.textAlign = "left"; ctx.fillText("none in this region", L, cTop + 6); }
+  // genes
+  const geneR = []; const showNames = span < 400000;
+  geneItems.forEach(it => { const i = it.i, y = gTop + it.lane * gLH; const x0 = Math.max(L, X(D.genes.a[i])), x1 = Math.min(w - R, X(D.genes.e[i]));
+    const dub = D.genes.k[i] === "D", sel = S.gene === i, tr = bestTier(i);
+    ctx.fillStyle = sel ? css("--accent") : tr ? css(TIER[tr][1]) : dub ? faint : fg; ctx.globalAlpha = dub && !sel && !tr ? .55 : 1;
+    const gh = 7; ctx.fillRect(x0, y + 2, Math.max(1, x1 - x0), gh);
+    if (x1 - x0 > 8) { ctx.fillStyle = css("--panel"); const dir = D.genes.s[i] === "-" ? -1 : 1; const ax = dir > 0 ? x1 - 3 : x0 + 3; ctx.beginPath(); ctx.moveTo(ax, y + 2 + gh / 2); ctx.lineTo(ax - dir * 4, y + 3); ctx.lineTo(ax - dir * 4, y + 1 + gh); ctx.fill(); }
+    if (showNames) { ctx.fillStyle = sel ? css("--accent") : tr ? fg : dub ? faint : muted; ctx.textAlign = "left"; ctx.font = (tr ? "600 " : "") + "11px " + css("--sans"); ctx.fillText(gname(i), x1 + 3, y + 2 + gh / 2); ctx.font = "11px " + css("--sans"); }
+    ctx.globalAlpha = 1; geneR.push({ x0, x1: Math.max(x1, x0 + 3), y, h: gLH, i }); });
+  LV = { L, R, w, X, rr, candR, geneR, rows, cands, genes, qTop };
+}
+function renderLocus() {
+  document.getElementById("l-title").textContent = S.chrom + ":" + fmt(S.start) + "–" + fmt(S.end);
+  document.getElementById("only").checked = S.only;
+  document.getElementById("l-meta").innerHTML = fmtkb(S.end - S.start) + (S.only ? " · selected traits only" : " · every trait") +
+    (S.model === "both" ? "" : S.model === "j" ? " · joint model" : " · within-cross") + (S.crosses.size ? " · " + S.crosses.size + " crosses" : "") +
+    " · click a QTL for its card · drag to pan · double-click or ctrl-scroll to zoom";
+  document.getElementById("l-legend").innerHTML = '<span><i class="sw box" style="--c:var(--accent)"></i>within-cross 1.5-LOD interval, opacity by LOD, dark tick at the peak</span>' +
+    '<span><i class="sw box" style="--c:var(--contrast);width:9px;height:9px;transform:rotate(45deg)"></i>joint-model lead variant, opacity by |effect|</span>' +
+    '<span>selected traits in their own colours</span>' +
+    Object.keys(TIER).map(k => '<span><i class="sw box" style="--c:var(' + TIER[k][1] + ')"></i>' + TIER[k][0].toLowerCase() + '</span>').join("");
+  drawLocus(); renderLocusTables(); renderCard();
+}
+function renderLocusTables() {
+  const rows = LV.rows, q = Q(), t = document.getElementById("ltable");
+  document.getElementById("t-title").textContent = "QTL in view · " + rows.length + " from " + new Set(rows.map(i => q.t[i])).size + " traits";
+  let h = '<thead><tr><th>Trait</th><th>Model</th><th>Cross</th><th class="num">Peak</th><th class="num">Interval</th><th class="num">LOD</th><th class="num">Effect</th><th>Increased by</th><th>Candidate</th></tr></thead><tbody>';
+  const lim = Math.min(rows.length, 400);
+  for (let k = 0; k < lim; k++) { const i = rows[k];
+    h += '<tr class="row' + (i === S.q ? " sel" : "") + '" data-q="' + i + '"><td><span class="dot" style="--c:' + (S.traits.has(q.t[i]) ? tcol(q.t[i]) : "var(--faint)") + '"></span>' + esc(tname(q.t[i])) + '</td><td>' + (q.m[i] === "j" ? "joint" : "within") + '</td><td>' + esc(q.m[i] === "j" ? "all" : xlabel(q.x[i])) + '</td><td class="num">' + fmt(q.p[i]) + '</td><td class="num">' + (q.m[i] === "j" ? "lead variant" : fmtkb(q.e[i] - q.a[i])) + '</td><td class="num">' + num(q.lod[i], 1) + '</td><td class="num">' + sgn(q.ef[i], 2) + '</td><td>' + esc(favours(i)) + '</td><td>' + (q.g[i] >= 0 ? esc(gname(q.g[i])) + " " + tierPill(q.gt[i]) : "") + '</td></tr>'; }
+  if (lim < rows.length) h += '<tr><td colspan="9" style="color:var(--muted)">' + (rows.length - lim) + ' more; zoom in or use the Table view.</td></tr>';
+  if (!rows.length) h += '<tr><td colspan="9" style="color:var(--muted)">No QTL matching the current filters overlaps this region.</td></tr>';
+  t.innerHTML = h + "</tbody>";
+  const cl = document.getElementById("candlist"); const cs = [...LV.cands.keys()].sort((a, b) => D.genes.a[a] - D.genes.a[b]);
+  cl.innerHTML = cs.length ? cs.map(g => '<a href="#" data-gene="' + g + '"><span>' + tierPill(bestTier(g)) + ' ' + esc(gname(g)) + '</span><span class="k">' + LV.cands.get(g).length + ' row' + (LV.cands.get(g).length === 1 ? "" : "s") + '</span></a>').join("") : '<span class="note">None in this region.</span>';
+  const gl = document.getElementById("genelist"); const gs = LV.genes.slice().sort((a, b) => D.genes.a[a] - D.genes.a[b]);
+  gl.innerHTML = gs.length ? gs.slice(0, 400).map(i => '<a href="#" data-gene="' + i + '"><span' + (D.genes.k[i] === "D" ? ' style="color:var(--faint)"' : "") + '>' + esc(gname(i)) + '</span><span class="k">' + esc(D.genes.id[i]) + '</span></a>').join("") + (gs.length > 400 ? '<span class="note">' + (gs.length - 400) + ' more</span>' : "") : '<span class="note">None.</span>';
+  renderGeneCard();
+}
+function favours(i) {
+  const q = Q();
+  if (q.m[i] === "w") return pname(q.up[i]);
+  return q.ef[i] > 0 ? "alt allele" : q.ef[i] < 0 ? "ref allele" : "";
+}
+function renderGeneCard() {
+  const el = document.getElementById("genecard"); const i = S.gene;
+  if (i == null) { el.innerHTML = ""; return; }
+  const nm = gname(i), cls = { V: "verified ORF", U: "uncharacterized ORF", D: "dubious ORF" }[D.genes.k[i]] || "gene";
+  const q = Q(); let nq = 0; const ts = new Set();
+  for (const k of QBYCH[D.genes.c[i]] || []) if (qv(k) && q.a[k] <= D.genes.e[i] && q.e[k] >= D.genes.a[i]) { nq++; ts.add(q.t[k]); }
+  const ks = (CBYG[i] || []).filter(k => S.ds.has(D.causal.ds[k]));
+  let cand = "";
+  if (ks.length) { cand = '<br><b>Candidate gene</b> ' + tierPill(bestTier(i)) + ' for ' + [...new Set(ks.map(k => D.causal.t[k]))].map(t => esc(tname(t))).join(", ") +
+    '; lowest local FDR ' + Math.min(...ks.map(k => D.causal.fdr[k])).toFixed(3) + ' (' + esc(D.datasets.label[D.causal.ds[ks[0]]]) + ').'; }
+  el.innerHTML = '<div class="genecard"><b>' + esc(nm) + '</b> <span class="mono" style="color:var(--muted)">' + esc(D.genes.id[i]) + '</span><br>' + cls + ' · ' + D.genes.c[i] + ':' + fmt(D.genes.a[i]) + '–' + fmt(D.genes.e[i]) + ' (' + D.genes.s[i] + ')<br>' +
+    'Inside <b>' + nq + '</b> shown QTL interval' + (nq === 1 ? "" : "s") + ' from <b>' + ts.size + '</b> trait' + (ts.size === 1 ? "" : "s") + '.' + cand + '<br><a href="https://www.yeastgenome.org/locus/' + encodeURIComponent(D.genes.id[i]) + '" target="_blank" rel="noopener">SGD page</a></div>';
+}
+document.getElementById("ltable").addEventListener("click", e => { const r = e.target.closest("tr.row"); if (!r) return; S.q = +r.dataset.q; S.src = false; writeHash(); renderLocus(); document.getElementById("qcard").scrollIntoView({ block: "start", behavior: smooth() }); });
+document.getElementById("ltable").addEventListener("mouseover", e => { const r = e.target.closest("tr.row"); const id = r ? +r.dataset.q : null; if (id !== S.hover) { S.hover = id; drawLocus(); } });
+document.getElementById("ltable").addEventListener("mouseleave", () => { S.hover = null; drawLocus(); });
+for (const id of ["genelist", "candlist"]) document.getElementById(id).addEventListener("click", e => { const a = e.target.closest("a[data-gene]"); if (!a) return; e.preventDefault(); S.gene = +a.dataset.gene; drawLocus(); renderGeneCard(); });
+function smooth() { return matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"; }
+
+/* ---------- QTL card ---------- */
+const VFILE = {};
+function loadV(sc, ch) { const k = sc + "_" + ch; if (!VFILE[k]) VFILE[k] = fetch("v/" + k + ".json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }); return VFILE[k]; }
+function crossFacts(x) {
+  if (x < 0) return "";
+  const p = [D.crosses.p1[x], D.crosses.p2[x]];
+  const pr = j => '<b>' + esc(pname(j)) + '</b>' + (D.parents.p18[j] ? ' <span class="mono" style="color:var(--muted)">' + esc(D.parents.p18[j]) + '</span>' : "") +
+    ' · origin: ' + (D.parents.org[j] ? esc(D.parents.org[j]) : '<span style="color:var(--muted)">not in the source</span>');
+  return '<dl><h3>Cross</h3><dt>Cross</dt><dd>' + esc(xlabel(x)) + ' <span class="mono" style="color:var(--muted)">(' + esc(D.crosses.code[x]) + ')</span></dd>' +
+    '<dt>Parent 1</dt><dd>' + pr(p[0]) + '</dd><dt>Parent 2</dt><dd>' + pr(p[1]) + '</dd>' +
+    '<dt>Segregants</dt><dd>' + fmt(D.crosses.n[x]) + '</dd><dt>Strains</dt><dd style="color:var(--muted)">' + esc(D.parents.s1[p[0]]) + ' × ' + esc(D.parents.s2[p[1]]) + '</dd></dl>';
+}
+function overlapping(i) {
+  const q = Q(); const out = [];
+  const lo = q.m[i] === "j" ? q.p[i] - 10000 : q.a[i], hi = q.m[i] === "j" ? q.p[i] + 10000 : q.e[i];
+  for (const k of QBYCH[q.c[i]] || []) { if (k === i || q.ds[k] !== q.ds[i]) continue;
+    if (q.m[k] === "w" ? (q.a[k] <= hi && q.e[k] >= lo) && (q.m[i] === "w" || (q.a[k] <= q.p[i] && q.e[k] >= q.p[i])) : (q.p[k] >= lo && q.p[k] <= hi)) out.push(k); }
+  return out;
+}
+async function renderCard() {
+  const el = document.getElementById("qcard"); const i = S.q;
+  if (i == null || S.view !== "locus") { el.hidden = true; return; }
+  el.hidden = false; const q = Q(), x = q.x[i], ds = q.ds[i], isJ = q.m[i] === "j";
+  const parts = q.lv[i].split("_"), ref = parts[2], alt = parts[3];
+  let h = '<div class="pk-head"><h2>' + esc(tname(q.t[i])) + ' · ' + (isJ ? "joint model" : "within " + esc(xlabel(x))) + '</h2><span class="sp"></span>' +
+    '<button class="btn" id="qc-src">' + (S.src ? "Hide source row" : "Show source row") + '</button><button class="btn" id="qc-copy">Copy link</button><button class="btn" id="qc-close">Close</button></div>';
+  h += '<div class="pk-sub"><span class="mono">' + q.c[i] + ':' + (isJ ? fmt(q.p[i]) : fmt(q.a[i]) + '–' + fmt(q.e[i])) + '</span> · ' + esc(D.datasets.label[ds]) + ' · ' + esc(D.traits.cat[q.t[i]]) + ' · <span class="mono">' + esc(q.id[i]) + '</span> · source <span class="mono">' + esc(q.pv[i]) + '</span></div>';
+  // facts
+  let pos = '<dl><h3>Position</h3><dt>Chromosome</dt><dd>' + q.c[i] + '</dd>';
+  if (isJ) pos += '<dt>Lead variant</dt><dd class="mono">' + esc(q.lv[i]) + '</dd><dt>Interval</dt><dd>none reported; the joint model gives the lead variant only</dd>';
+  else pos += '<dt>1.5-LOD interval</dt><dd class="mono">' + fmt(q.a[i]) + '–' + fmt(q.e[i]) + '</dd><dt>Width</dt><dd>' + fmtkb(q.e[i] - q.a[i]) + '</dd><dt>Peak</dt><dd class="mono">' + fmt(q.p[i]) + '</dd><dt>Lead variant</dt><dd class="mono">' + esc(q.lv[i]) + '</dd>';
+  pos += '</dl>';
+  let st = '<dl><h3>Strength and effect</h3>';
+  if (!isJ) {
+    const g1 = D.crosses.g1[x], g2 = D.crosses.p1[x] === g1 ? D.crosses.p2[x] : D.crosses.p1[x];
+    st += '<dt>LOD</dt><dd>' + num(q.lod[i], 2) + '</dd><dt>q-value</dt><dd>' + (q.q[i] < 0.001 ? q.q[i].toExponential(1) : num(q.q[i], 4)) + '</dd><dt>Variance explained</dt><dd>' + pct(q.ve[i]) + ' within the cross</dd>';
+    st += '<dt>Effect β</dt><dd>' + sgn(q.ef[i]) + ' SD</dd><dt>Increased by</dt><dd><b>' + esc(pname(q.up[i])) + '</b> allele (larger colonies). β &gt; 0 favours ' + esc(pname(g2)) + ', β &lt; 0 favours ' + esc(pname(g1)) + '; which parent is genotype 1 is inferred.</dd>';
+  } else {
+    const js = JB[i] || [];
+    st += '<dt>LOD, q</dt><dd>not reported for joint QTL (passed FDR ' + (100 * D.datasets.fdr[ds]) + '%)</dd><dt>Mean effect β</dt><dd>' + sgn(q.ef[i]) + ' SD over ' + js.length + ' cross' + (js.length === 1 ? "" : "es") + '</dd>';
+    st += '<dt>Increased by</dt><dd>the <b>' + (q.ef[i] > 0 ? "alternate allele " + esc(alt) : "reference (S288C) allele " + esc(ref)) + '</b> (' + esc(ref) + ' → ' + esc(alt) + ')</dd>';
+  }
+  st += '</dl>';
+  let al = '';
+  if (isJ) {
+    al = '<dl><h3>Lead variant among parents</h3><dt>Segregates in</dt><dd>' + q.cc[i] + ' of 16 crosses</dd><dt>Parents with minor allele</dt><dd>≈ ' + q.pa[i] + ' of 16 (crosses / 2, as the paper approximates)</dd>' +
+      '<dt>Frequency, 1,011 isolates</dt><dd>' + (q.af[i] == null ? "not in the panel table" : 'MAF ' + q.af[i].toFixed(4) + ' · ' + (q.af[i] > 0.01 ? "common (> 1%)" : "rare (≤ 1%)")) + '</dd>' +
+      '<dt>Ancestral state</dt><dd>' + (q.anc[i] == null ? "not determined" : q.anc[i] === 1 ? "reference ancestral, alternate derived" : "reference derived, alternate ancestral") + (q.daf[i] != null ? ' · derived allele frequency ' + q.daf[i].toFixed(4) : "") + '</dd></dl>';
+  }
+  let cg = '<dl><h3>Candidate gene</h3>';
+  if (q.g[i] >= 0) {
+    const g = q.g[i];
+    cg += '<dt>Gene</dt><dd><a style="color:var(--accent)" href="https://www.yeastgenome.org/locus/' + encodeURIComponent(D.genes.id[g]) + '" target="_blank" rel="noopener">' + esc(gname(g)) + '</a> <span class="mono" style="color:var(--muted)">' + esc(D.genes.id[g]) + '</span></dd>' +
+      '<dt>Evidence</dt><dd>' + tierPill(q.gt[i]) + ' ' + esc(TIER[q.gt[i]][0]) + ' · local FDR ' + q.gf[i].toFixed(4) + '</dd>';
+    const links = (CBYG[g] || []).filter(k => D.causal.t[k] === q.t[i] && (D.causal.q1[k] === i || D.causal.q2[k] === i));
+    if (links.length) { const k = links[0], other = D.causal.q1[k] === i ? D.causal.q2[k] : D.causal.q1[k];
+      cg += '<dt>Paired with</dt><dd>' + (other >= 0 ? '<a href="#" data-openq="' + other + '" style="color:var(--accent)">' + esc(xlabel(Q().x[other])) + '</a>' : "a QTL not in the within-cross table (q ≥ 0.05)") + '; shared parent <b>' + esc(pname(D.causal.sp[k])) + '</b>, whose allele ' + (D.causal.eff[k] === "increase" ? "increases" : "decreases") + ' the trait in both crosses</dd>' +
+        '<dt>PPC summed over gene</dt><dd>' + D.causal.pcs[k].toFixed(3) + ' · top variant <span class="mono">' + esc(D.causal.jv[k]) + '</span></dd>'; }
+    else if (isJ) cg += '<dt>How</dt><dd>the lead variant is among the fine-mapped variants of a resolved QTL pair for this trait</dd>';
+  } else cg += '<dt>Assigned</dt><dd style="color:var(--muted)">none by the paper</dd>';
+  cg += '</dl>';
+  h += '<div class="facts">' + pos + st + (isJ ? al : crossFacts(x)) + cg + '</div>';
+  // per-cross effects for joint QTL
+  if (isJ) {
+    const js = (JB[i] || []).slice().sort((a, b) => XORDER.indexOf(D.jeff.x[a]) - XORDER.indexOf(D.jeff.x[b]));
+    h += '<div class="subtable"><p class="section-title">Effect in each cross where the lead variant segregates</p><div class="tablewrap"><table><thead><tr><th>Cross</th><th>Parents</th><th class="num">β</th><th class="num">Variance explained</th></tr></thead><tbody>' +
+      js.map(j => '<tr><td class="mono">' + esc(D.crosses.code[D.jeff.x[j]]) + '</td><td>' + esc(xlabel(D.jeff.x[j])) + '</td><td class="num">' + sgn(D.jeff.b[j]) + '</td><td class="num">' + pct(D.jeff.ve[j]) + '</td></tr>').join("") + '</tbody></table></div></div>';
+  }
+  // genes in interval
+  const lo = isJ ? q.p[i] - 10000 : q.a[i], hi = isJ ? q.p[i] + 10000 : q.e[i];
+  const gs = []; for (let g = 0; g < D.genes.c.length; g++) if (D.genes.c[g] === q.c[i] && D.genes.a[g] <= hi && D.genes.e[g] >= lo) gs.push(g);
+  const within = isJ ? gs.filter(g => D.genes.a[g] <= q.p[i] && D.genes.e[g] >= q.p[i]) : [];
+  h += '<div class="subtable"><p class="section-title">' + (isJ ? "Genes within 10 kb of the lead variant (orientation only; no interval is reported)" : "Genes in the interval") + ' · ' + gs.length + '</p><div class="list" style="max-height:180px">' +
+    (gs.length ? gs.map(g => '<a href="#" data-gene="' + g + '"><span>' + (bestTier(g) ? tierPill(bestTier(g)) + " " : "") + esc(gname(g)) + (within.includes(g) ? ' <span class="flag">contains lead variant</span>' : "") + '</span><span class="k">' + esc(D.genes.id[g]) + '</span></a>').join("") : '<span class="note">None.</span>') + '</div></div>';
+  // overlapping QTL
+  const ov = overlapping(i);
+  h += '<div class="subtable"><p class="section-title">Overlapping QTL in this dataset · ' + ov.length + (isJ ? " (within-cross intervals containing the lead variant; joint lead variants within 10 kb)" : "") + '</p><div class="tablewrap"><table><thead><tr><th>Trait</th><th>Model</th><th>Cross</th><th class="num">Position</th><th class="num">LOD</th><th class="num">Effect</th><th>Candidate</th></tr></thead><tbody>' +
+    ov.slice(0, 300).map(k => '<tr class="row" data-openq="' + k + '"><td>' + esc(tname(q.t[k])) + '</td><td>' + (q.m[k] === "j" ? "joint" : "within") + '</td><td>' + esc(q.m[k] === "j" ? "all" : xlabel(q.x[k])) + '</td><td class="num">' + (q.m[k] === "j" ? fmt(q.p[k]) : fmt(q.a[k]) + "–" + fmt(q.e[k])) + '</td><td class="num">' + num(q.lod[k], 1) + '</td><td class="num">' + sgn(q.ef[k], 2) + '</td><td>' + (q.g[k] >= 0 ? esc(gname(q.g[k])) + " " + tierPill(q.gt[k]) : "") + '</td></tr>').join("") +
+    (ov.length > 300 ? '<tr><td colspan="7" style="color:var(--muted)">' + (ov.length - 300) + ' more</td></tr>' : "") + (ov.length ? "" : '<tr><td colspan="7" style="color:var(--muted)">None.</td></tr>') + '</tbody></table></div></div>';
+  h += '<div class="subtable" id="qc-srcbox"' + (S.src ? "" : " hidden") + '><p class="note">Loading the source row…</p></div>';
+  el.innerHTML = h;
+  if (S.src) {
+    const token = i;
+    try { const V = await loadV(D.datasets.sc[ds], q.c[i]); if (S.q !== token) return; el.querySelector("#qc-srcbox").innerHTML = sourceHTML(V, i); }
+    catch (err) { el.querySelector("#qc-srcbox").innerHTML = '<p class="note">The source file for ' + q.c[i] + ' did not load (' + esc(err.message) + ').</p>'; }
+  }
+}
+function sourceHTML(V, i) {
+  const q = Q(), code = q.pv[i].split("#")[0], sidx = D.sources.code.indexOf(code);
+  const cols = V.cols[code], row = V.rows[code][q.id[i]];
+  const desc = '<b>' + esc(D.sources.file[sidx]) + '</b>, sheet <b>' + esc(D.sources.sheet[sidx]) + '</b>, row ' + q.pv[i].split("#")[1];
+  let h = '<p class="section-title">Source row, verbatim</p><p class="note">' + desc + '</p><div class="tablewrap" style="max-height:320px"><table><tbody>' +
+    cols.map((c, k) => '<tr><td style="color:var(--muted)">' + esc(c || "(col " + (k + 1) + ")") + '</td><td class="mono">' + esc(row[k] == null ? "" : row[k]) + '</td></tr>').join("") + '</tbody></table></div>';
+  if (q.m[i] === "j" && V.rows["F3D1:pc"] && V.rows["F3D1:pc"][q.id[i]]) {
+    const pc = V.rows["F3D1:pc"][q.id[i]], pcc = V.cols["F3D1:pc"];
+    h += '<p class="note" style="margin-top:10px">Per-cross rows from sheet <b>joint model (effect per cross)</b></p><div class="tablewrap" style="max-height:260px"><table><thead><tr>' + pcc.map(c => '<th>' + esc(c) + '</th>').join("") + '</tr></thead><tbody>' +
+      pc.map(r => '<tr>' + r.map(v => '<td class="mono">' + esc(v == null ? "" : v) + '</td>').join("") + '</tr>').join("") + '</tbody></table></div>';
+  }
+  return h;
+}
+document.getElementById("qcard").addEventListener("click", e => {
+  const t = e.target;
+  if (t.id === "qc-close") { S.q = null; writeHash(); renderLocus(); return; }
+  if (t.id === "qc-src") { S.src = !S.src; renderCard(); return; }
+  if (t.id === "qc-copy") { copyLink(t); return; }
+  const o = t.closest("[data-openq]"); if (o) { e.preventDefault(); openQTL(+o.dataset.openq, true); return; }
+  const g = t.closest("a[data-gene]"); if (g) { e.preventDefault(); S.gene = +g.dataset.gene; drawLocus(); renderGeneCard(); }
+});
+
+/* ---------- region interaction ---------- */
+const lcan = document.getElementById("lcan"), ltip = document.getElementById("ltip");
+let drag = null;
+function lxy(ev) { const r = lcan.getBoundingClientRect(); return { x: ev.clientX - r.left, y: ev.clientY - r.top }; }
+function posAt(x) { return S.start + (x - LV.L) / (LV.w - LV.L - LV.R) * (S.end - S.start); }
+function lHit(x, y) {
+  for (const r of LV.rr) if (y >= r.y && y < r.y + r.h) return { kind: "qtl", i: r.i };
+  for (const r of LV.candR) if (x >= r.x0 - 2 && x <= r.x1 + 2 && y >= r.y && y < r.y + r.h) return { kind: "gene", i: r.g };
+  for (const r of LV.geneR) if (x >= r.x0 - 1 && x <= r.x1 + 1 && y >= r.y && y < r.y + r.h) return { kind: "gene", i: r.i };
+  return { kind: "none" };
+}
+lcan.addEventListener("pointerdown", ev => { if (ev.button !== 0) return; drag = { x: ev.clientX, s: S.start, e: S.end, moved: false }; lcan.setPointerCapture(ev.pointerId); });
+lcan.addEventListener("pointermove", ev => {
+  const { x, y } = lxy(ev);
+  if (drag) { const dx = ev.clientX - drag.x; if (Math.abs(dx) > 3) drag.moved = true;
+    if (drag.moved) { lcan.classList.add("dragging"); const bp = dx / (LV.w - LV.L - LV.R) * (drag.e - drag.s); S.start = drag.s - bp; S.end = drag.e - bp; clampRegion(); ltip.hidden = true; drawLocus(); return; } }
+  const h = lHit(x, y); let html = null, hov = null;
+  if (h.kind === "qtl") { hov = h.i; html = qtlTip(h.i).join("<br>") + "<br>click for the QTL card"; }
+  else if (h.kind === "gene") { const i = h.i, tr = bestTier(i); html = "<b>" + esc(gname(i)) + "</b> " + esc(D.genes.id[i]) + "<br>" + fmt(D.genes.a[i]) + "–" + fmt(D.genes.e[i]) + (tr ? "<br>candidate gene: " + TIER[tr][0].toLowerCase() : "") + "<br>click for details"; }
+  else if (x >= LV.L) html = '<span class="mono">' + S.chrom + ":" + fmt(posAt(x)) + "</span>";
+  if (hov !== S.hover) { S.hover = hov; drawLocus(); }
+  if (html) { ltip.innerHTML = html; ltip.hidden = false; const tw = ltip.offsetWidth; ltip.style.left = Math.max(0, Math.min(x + 14, lcan.clientWidth - tw)) + "px"; ltip.style.top = (y + 16) + "px"; } else ltip.hidden = true;
+});
+lcan.addEventListener("pointerup", ev => {
+  lcan.classList.remove("dragging"); const d = drag; drag = null;
+  if (d && d.moved) { writeHash(); renderLocus(); return; }
+  const { x, y } = lxy(ev); const h = lHit(x, y);
+  if (h.kind === "qtl") { S.q = h.i; S.src = false; writeHash(); renderLocus(); }
+  else if (h.kind === "gene") { S.gene = h.i; drawLocus(); renderGeneCard(); }
+});
+lcan.addEventListener("mouseleave", () => { ltip.hidden = true; if (S.hover != null) { S.hover = null; drawLocus(); } });
+lcan.addEventListener("wheel", ev => { if (!(ev.ctrlKey || ev.metaKey || ev.altKey || Math.abs(ev.deltaX) > Math.abs(ev.deltaY))) return; ev.preventDefault();
+  if (Math.abs(ev.deltaX) > Math.abs(ev.deltaY)) { const bp = ev.deltaX / (LV.w - LV.L - LV.R) * (S.end - S.start); S.start += bp; S.end += bp; }
+  else zoomAt(posAt(lxy(ev).x), Math.exp(ev.deltaY * 0.004));
+  clampRegion(); drawLocus(); schedule(); }, { passive: false });
+lcan.addEventListener("dblclick", ev => { zoomAt(posAt(lxy(ev).x), 0.5); clampRegion(); writeHash(); renderLocus(); });
+let tmr = null; function schedule() { clearTimeout(tmr); tmr = setTimeout(() => { writeHash(); renderLocus(); }, 180); }
+function zoomAt(c, f) { const a = c - (c - S.start) * f, b = c + (S.end - c) * f; S.start = a; S.end = b; }
+function zoom(f) { zoomAt((S.start + S.end) / 2, f); clampRegion(); writeHash(); renderLocus(); }
+function pan(fr) { const d = (S.end - S.start) * fr; S.start += d; S.end += d; clampRegion(); writeHash(); renderLocus(); }
+document.getElementById("zin").onclick = () => zoom(0.5);
+document.getElementById("zout").onclick = () => zoom(2);
+document.getElementById("pl").onclick = () => pan(-0.4);
+document.getElementById("pr").onclick = () => pan(0.4);
+document.getElementById("only").onchange = e => { S.only = e.target.checked; go(); };
+document.getElementById("back").onclick = () => { S.view = "genome"; go(); };
+document.addEventListener("keydown", e => {
+  if (e.target.closest("input, textarea, select")) return;
+  if (e.key === "/") { e.preventDefault(); document.getElementById("q").focus(); return; }
+  if (S.view !== "locus") return;
+  if (e.key === "ArrowLeft") pan(-0.25); else if (e.key === "ArrowRight") pan(0.25);
+  else if (e.key === "+" || e.key === "=") zoom(0.5); else if (e.key === "-" || e.key === "_") zoom(2);
+  else if (e.key === "Escape") { S.view = "genome"; go(); }
+});
+
+/* ---------- table view ---------- */
+const TCOLS = [
+  ["ds", "Dataset", i => D.datasets.label[Q().ds[i]]],
+  ["t", "Trait", i => tname(Q().t[i])],
+  ["m", "Model", i => Q().m[i] === "j" ? "joint" : "within"],
+  ["x", "Cross", i => Q().x[i] < 0 ? "all" : xlabel(Q().x[i])],
+  ["c", "Chr", i => Q().c[i]],
+  ["a", "Start", i => Q().a[i], 1],
+  ["e", "End", i => Q().e[i], 1],
+  ["p", "Peak", i => Q().p[i], 1],
+  ["wd", "Width", i => Q().e[i] - Q().a[i], 1],
+  ["lod", "LOD", i => Q().lod[i], 1],
+  ["q", "q", i => Q().q[i], 1],
+  ["ef", "Effect", i => Q().ef[i], 1],
+  ["up", "Increased by", i => favours(i)],
+  ["ve", "Var. expl.", i => Q().ve[i], 1],
+  ["lv", "Lead variant", i => Q().lv[i]],
+  ["af", "MAF (1,011)", i => Q().af[i], 1],
+  ["cc", "Crosses", i => Q().cc[i], 1],
+  ["g", "Candidate", i => gname(Q().g[i])],
+  ["gt", "Tier", i => Q().gt[i] ? TIER[Q().gt[i]][2] : ""],
+  ["pv", "Source", i => Q().pv[i]],
+];
+function tFiltered() {
+  const q = Q(), f = S.tf, lod = parseFloat(f.lod), ef = parseFloat(f.ef); const out = [];
+  for (let i = 0; i < NQ; i++) {
+    if (!qv(i)) continue;
+    if (f.t !== "" && q.t[i] !== +f.t) continue;
+    if (f.x !== "" && q.x[i] !== +f.x) continue;
+    if (f.c && q.c[i] !== f.c) continue;
+    if (!isNaN(lod) && !(q.lod[i] != null && q.lod[i] >= lod)) continue;
+    if (!isNaN(ef) && !(Math.abs(q.ef[i]) >= ef)) continue;
+    out.push(i);
+  }
+  const s = S.tsort; if (s.k) { const col = TCOLS.find(c => c[0] === s.k); const v = col[2];
+    out.sort((a, b) => { const x = v(a), y = v(b); if (x == null || x === "") return 1; if (y == null || y === "") return -1; return (x < y ? -1 : x > y ? 1 : 0) * s.d; }); }
+  return out;
+}
+function renderTableFilters() {
+  const f = S.tf, opt = (v, l, sel) => '<option value="' + esc(v) + '"' + (String(sel) === String(v) ? " selected" : "") + '>' + esc(l) + '</option>';
+  const ts = visTraits(), xs = XORDER.filter(x => S.ds.has(D.crosses.ds[x]));
+  document.getElementById("tfilters").innerHTML =
+    '<label>Trait <select id="tf-t">' + opt("", "all", f.t) + ts.map(t => opt(t, tname(t), f.t)).join("") + '</select></label>' +
+    '<label>Cross <select id="tf-x">' + opt("", "all", f.x) + opt(-1, "joint model", f.x) + xs.map(x => opt(x, xlabel(x) + " (" + D.crosses.code[x] + ")", f.x)).join("") + '</select></label>' +
+    '<label>Chromosome <select id="tf-c">' + opt("", "all", f.c) + CH.map(c => opt(c, c, f.c)).join("") + '</select></label>' +
+    '<label>LOD ≥ <input id="tf-lod" type="number" min="0" step="1" value="' + esc(f.lod) + '" inputmode="decimal"></label>' +
+    '<label>|Effect| ≥ <input id="tf-ef" type="number" min="0" step="0.05" value="' + esc(f.ef) + '" inputmode="decimal"></label>' +
+    '<span class="note">Dataset, model and crosses follow the controls above.</span>';
+}
+let TROWS = [];
+function renderTable() {
+  TROWS = tFiltered(); const q = Q();
+  document.getElementById("tv-title").textContent = "QTL table · " + fmt(TROWS.length) + " of " + fmt(NQ) + " rows";
+  const lim = Math.min(TROWS.length, S.tlimit);
+  let h = '<thead><tr>' + TCOLS.map(c => '<th data-sort="' + c[0] + '"' + (c[3] ? ' class="num"' : "") + '>' + esc(c[1]) + (S.tsort.k === c[0] ? (S.tsort.d > 0 ? " ▲" : " ▼") : "") + '</th>').join("") + '</tr></thead><tbody>';
+  for (let k = 0; k < lim; k++) { const i = TROWS[k];
+    h += '<tr class="row" data-q="' + i + '">' + TCOLS.map(c => { let v = c[2](i);
+      if (c[0] === "ef") v = sgn(v); else if (c[0] === "lod" || c[0] === "af") v = v == null ? "" : (+v).toFixed(c[0] === "af" ? 4 : 1); else if (c[0] === "q") v = v == null ? "" : (+v).toExponential(1); else if (c[0] === "ve") v = pct(v); else if (c[3] && v != null) v = fmt(v);
+      return '<td' + (c[3] ? ' class="num"' : "") + (c[0] === "lv" || c[0] === "pv" ? ' style="font-family:var(--mono);font-size:12px"' : "") + '>' + (c[0] === "gt" && q.gt[i] ? tierPill(q.gt[i]) : esc(v)) + '</td>'; }).join("") + '</tr>'; }
+  if (!TROWS.length) h += '<tr><td colspan="' + TCOLS.length + '" style="color:var(--muted)">No QTL matches these filters.</td></tr>';
+  document.getElementById("ttable").innerHTML = h + '</tbody>';
+  document.getElementById("tmore").innerHTML = lim < TROWS.length ? 'Showing ' + fmt(lim) + ' of ' + fmt(TROWS.length) + ' rows. <button class="btn" id="tmore-b">Show ' + fmt(Math.min(2000, TROWS.length - lim)) + ' more</button> The download always has every filtered row.' : "Click a row to open its QTL card.";
+}
+document.getElementById("tfilters").addEventListener("change", e => { const id = e.target.id; if (!id.startsWith("tf-") || S.tf[id.slice(3)] === e.target.value) return; S.tf[id.slice(3)] = e.target.value; S.tlimit = 500; renderTable(); writeHash(); });
+document.getElementById("tfilters").addEventListener("input", e => { if (e.target.type !== "number") return; S.tf[e.target.id.slice(3)] = e.target.value; S.tlimit = 500; clearTimeout(tmr); tmr = setTimeout(() => { renderTable(); writeHash(); }, 200); });
+document.getElementById("ttable").addEventListener("click", e => {
+  const th = e.target.closest("th[data-sort]"); if (th) { const k = th.dataset.sort; if (S.tsort.k === k) S.tsort.d *= -1; else { S.tsort.k = k; S.tsort.d = ["lod", "ef", "ve", "cc", "wd"].includes(k) ? -1 : 1; } renderTable(); return; }
+  const r = e.target.closest("tr.row"); if (r) openQTL(+r.dataset.q, true);
+});
+document.getElementById("tmore").addEventListener("click", e => { if (e.target.id === "tmore-b") { S.tlimit += 2000; renderTable(); } });
+document.getElementById("tsv").onclick = () => {
+  const q = Q(), P = D.parents, X = D.crosses;
+  const head = ["id", "dataset", "trait", "trait_source", "category", "model", "cross", "parent1", "parent2", "chrom", "start", "end", "peak", "width", "lod", "q", "effect_sd", "increased_by", "var_explained", "lead_variant", "maf_1011", "cross_count", "candidate_orf", "candidate_name", "candidate_tier", "candidate_local_fdr", "provenance", "source_file", "source_sheet"];
+  const lines = [head.join("\t")];
+  for (const i of TROWS) { const x = q.x[i], s = D.sources.code.indexOf(q.pv[i].split("#")[0]);
+    lines.push([q.id[i], D.datasets.id[q.ds[i]], tname(q.t[i]), D.traits.raw[q.t[i]], D.traits.cat[q.t[i]], q.m[i] === "j" ? "joint" : "within-cross", x < 0 ? "joint" : X.code[x], x < 0 ? "" : P.name[X.p1[x]], x < 0 ? "" : P.name[X.p2[x]],
+      q.c[i], q.a[i], q.e[i], q.p[i], q.e[i] - q.a[i], q.lod[i] ?? "", q.q[i] ?? "", q.ef[i], favours(i), q.ve[i] ?? "", q.lv[i], q.af[i] ?? "", q.cc[i] ?? "",
+      q.g[i] >= 0 ? D.genes.id[q.g[i]] : "", q.g[i] >= 0 ? D.genes.n[q.g[i]] : "", q.gt[i] ? TIER[q.gt[i]][0] : "", q.gf[i] ?? "", q.pv[i], D.sources.file[s], D.sources.sheet[s]].join("\t")); }
+  const blob = new Blob([lines.join("\n") + "\n"], { type: "text/tab-separated-values" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "qtl_atlas_filtered.tsv"; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+};
+
+/* ---------- search ---------- */
+let INDEX = [];
+function buildIndex() {
+  for (let i = 0; i < D.genes.c.length; i++) { const n = D.genes.n[i]; const tr = CANDG[i] ? " · candidate" : ""; INDEX.push({ t: "gene", key: (n || "").toUpperCase(), alt: D.genes.id[i].toUpperCase(), label: n || D.genes.id[i], sub: (n ? D.genes.id[i] + " · " : "") + D.genes.c[i] + tr, i }); }
+  for (const t of TORDER) INDEX.push({ t: "trait", key: tname(t).toUpperCase(), alt: D.traits.raw[t].toUpperCase().replace(/_/g, " "), label: tname(t), sub: "trait · " + D.traits.cat[t] + " · " + D.datasets.label[D.traits.ds[t]], i: t });
+  for (const x of XORDER) { const a = pname(D.crosses.p1[x]), b = pname(D.crosses.p2[x]);
+    INDEX.push({ t: "cross", key: D.crosses.code[x].toUpperCase(), alt: (a + " X " + b).toUpperCase(), alt2: (a + "×" + b).toUpperCase(), alt3: (a + "X" + b).toUpperCase(), label: xlabel(x), sub: "cross " + D.crosses.code[x] + " · " + fmt(D.crosses.n[x]) + " segregants", i: x }); }
+  for (let p = 0; p < D.parents.id.length; p++) INDEX.push({ t: "parent", key: D.parents.name[p].toUpperCase(), alt: D.parents.code[p].toUpperCase(), alt2: (D.parents.p18[p] || "").toUpperCase(), label: D.parents.name[p], sub: "parent strain · in 2 crosses" + (D.parents.p18[p] ? " · " + D.parents.p18[p] : ""), i: p });
+  for (let d = 0; d < D.datasets.id.length; d++) INDEX.push({ t: "dataset", key: D.datasets.label[d].toUpperCase(), alt: D.datasets.id[d].toUpperCase(), alt2: "ROUND ROBIN", label: D.datasets.label[d], sub: "dataset · " + D.datasets.cite[d], i: d });
+}
+function parseCoord(s) {
+  const m = s.trim().match(/^(?:chr)?\s*([ivx]+|\d{1,2})\s*[:\s]\s*([\d,.]+)\s*(k|kb|m|mb)?(?:\s*[-–]\s*([\d,.]+)\s*(k|kb|m|mb)?)?$/i);
+  if (!m) { const c = s.trim().match(/^chr\s*([ivx]+|\d{1,2})$/i); if (c) { const ch = toChr(c[1]); if (ch) return { ch, a: 0, e: CHL[ch] }; } return null; }
+  const ch = toChr(m[1]); if (!ch) return null;
+  const num = (v, u) => { let x = parseFloat(v.replace(/,/g, "")); if (u) x *= /^m/i.test(u) ? 1e6 : 1e3; return x; };
+  const a = num(m[2], m[3]); if (m[4]) { const e = num(m[4], m[5] || m[3]); return { ch, a: Math.min(a, e), e: Math.max(a, e) }; }
+  return { ch, a: a - 50000, e: a + 50000, center: a };
+}
+function toChr(t) { t = t.toUpperCase(); if (/^\d+$/.test(t)) t = ROMAN[+t - 1]; return CH.includes("chr" + t) ? "chr" + t : null; }
+let suggs = [], sIdx = 0;
+function suggest(qs) {
+  const box = document.getElementById("sugg"); const q = qs.trim().toUpperCase();
+  if (!q) { box.hidden = true; suggs = []; return; }
+  const co = parseCoord(qs); suggs = [];
+  if (co) suggs.push({ t: "coord", label: co.ch + ":" + fmt(Math.max(0, co.a)) + "–" + fmt(Math.min(CHL[co.ch], co.e)), sub: "region", co });
+  const scored = [];
+  for (const it of INDEX) { let s = -1; const keys = [it.key, it.alt, it.alt2, it.alt3].filter(Boolean);
+    if (keys.some(k => k === q)) s = 0; else if (keys.some(k => k.startsWith(q))) s = 1; else if (q.length > 2 && keys.some(k => k.includes(q))) s = 2;
+    if (s >= 0) scored.push([s + ({ dataset: 0, cross: .05, parent: .1, trait: .15, gene: .2 }[it.t]), it]); }
+  scored.sort((a, b) => a[0] - b[0] || a[1].label.length - b[1].label.length);
+  suggs = suggs.concat(scored.slice(0, 12).map(x => x[1])); sIdx = 0;
+  box.innerHTML = suggs.length ? suggs.map((s, j) => '<button role="option" aria-selected="' + (j === 0) + '" data-j="' + j + '"><span>' + esc(s.label) + '</span><span class="k">' + esc(s.sub) + '</span></button>').join("") : '<div class="empty">No gene, trait, cross, strain or region matches. Try IRA2, chrIV:509600, caffeine, M22 or 375.</div>';
+  box.hidden = false;
+}
+function choose(s) {
+  document.getElementById("sugg").hidden = true; const q = document.getElementById("q"); q.value = ""; q.blur();
+  if (s.t === "coord") openLocus(s.co.ch, s.co.a, s.co.e);
+  else if (s.t === "gene") { const i = s.i, len = D.genes.e[i] - D.genes.a[i], half = Math.max(40000, len * 3); S.gene = i; S.q = null; openLocus(D.genes.c[i], (D.genes.a[i] + D.genes.e[i]) / 2 - half, (D.genes.a[i] + D.genes.e[i]) / 2 + half); }
+  else if (s.t === "trait") { S.ds.add(D.traits.ds[s.i]); S.traits = new Set([s.i]); S.view = "genome"; go(); }
+  else if (s.t === "cross") { S.ds.add(D.crosses.ds[s.i]); S.crosses = new Set([s.i]); S.view = "genome"; go(); }
+  else if (s.t === "parent") { const xs = XORDER.filter(x => D.crosses.p1[x] === s.i || D.crosses.p2[x] === s.i); S.ds.add(D.parents.ds[s.i]); S.crosses = new Set(xs); S.view = "genome"; go(); }
+  else if (s.t === "dataset") { S.ds = new Set([s.i]); S.view = "genome"; go(); }
+}
+const qin = document.getElementById("q");
+qin.addEventListener("input", () => suggest(qin.value));
+qin.addEventListener("keydown", e => { const box = document.getElementById("sugg");
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (!suggs.length) return; sIdx = (sIdx + (e.key === "ArrowDown" ? 1 : -1) + suggs.length) % suggs.length; [...box.querySelectorAll("button")].forEach((b, j) => b.setAttribute("aria-selected", j === sIdx)); }
+  else if (e.key === "Enter") { e.preventDefault(); if (suggs[sIdx]) choose(suggs[sIdx]); }
+  else if (e.key === "Escape") { box.hidden = true; qin.blur(); } });
+document.getElementById("sugg").addEventListener("mousedown", e => { const b = e.target.closest("button[data-j]"); if (b) { e.preventDefault(); choose(suggs[+b.dataset.j]); } });
+qin.addEventListener("blur", () => setTimeout(() => document.getElementById("sugg").hidden = true, 120));
+
+/* ---------- controls ---------- */
+function renderControls() {
+  document.getElementById("dschips").innerHTML = D.datasets.id.map((id, d) => '<button class="chip" data-ds="' + d + '" aria-pressed="' + S.ds.has(d) + '" style="--c:var(--accent)" title="' + esc(D.datasets.cite[d]) + '"><i></i>' + esc(D.datasets.label[d]) + '</button>').join("");
+  for (const m of ["both", "j", "w"]) document.getElementById("m-" + m).setAttribute("aria-pressed", S.model === m);
+  for (const v of ["genome", "locus", "table"]) document.getElementById("v-" + v).setAttribute("aria-pressed", S.view === v);
+  const nt = [...S.traits].filter(t => S.ds.has(D.traits.ds[t])).length;
+  document.getElementById("b-traits").textContent = "Traits (" + nt + ")";
+  document.getElementById("b-crosses").textContent = S.crosses.size ? "Crosses (" + S.crosses.size + ")" : "Crosses (all)";
+  const cf = document.getElementById("crossf");
+  cf.innerHTML = S.crosses.size ? '<span class="crossfilter">' + esc(S.crosses.size === 1 ? xlabel([...S.crosses][0]) : S.crosses.size + " crosses") + ' only<button aria-label="Show all crosses" id="clrx">×</button></span>' : "";
+  const nds = S.ds.size; let nq = 0; for (let i = 0; i < NQ; i++) if (S.ds.has(Q().ds[i])) nq++;
+  document.getElementById("brand-sub").textContent = nds + " of " + D.datasets.id.length + " dataset" + (D.datasets.id.length === 1 ? "" : "s") + " · " + fmt(nq) + " QTL · " + visTraits().length + " traits";
+}
+function renderPops() {
+  const pt = document.getElementById("p-traits");
+  if (!pt.hidden) {
+    let h = '<div class="acts"><button class="btn" data-act="tnone">None</button><button class="btn" data-act="tall">All</button><span class="note">Selected traits are drawn by cross in the genome view and coloured in the region view.</span></div>';
+    for (const cat of CAT_ORDER) { const ts = visTraits().filter(t => D.traits.cat[t] === cat); if (!ts.length) continue;
+      h += '<h4>' + esc(cat) + '</h4><div class="opts">' + ts.map(t => '<label title="' + esc(D.traits.raw[t]) + '"><input type="checkbox" data-t="' + t + '"' + (S.traits.has(t) ? " checked" : "") + '><span>' + esc(tname(t)) + '</span></label>').join("") + '</div>'; }
+    pt.innerHTML = h;
+  }
+  const pc = document.getElementById("p-crosses");
+  if (!pc.hidden) {
+    let h = '<div class="acts"><button class="btn" data-act="xall">All crosses</button><span class="note">Joint-model QTL stay visible when their lead variant segregates in a selected cross.</span></div>';
+    for (let d = 0; d < D.datasets.id.length; d++) { if (!S.ds.has(d)) continue;
+      h += '<h4>' + esc(D.datasets.label[d]) + '</h4><div class="opts">' + XORDER.filter(x => D.crosses.ds[x] === d).map(x => '<label><input type="checkbox" data-x="' + x + '"' + (S.crosses.has(x) ? " checked" : "") + '><span>' + esc(xlabel(x)) + ' <span class="mono" style="color:var(--muted)">' + esc(D.crosses.code[x]) + '</span></span></label>').join("") + '</div>'; }
+    pc.innerHTML = h;
+  }
+}
+function togglePop(which) {
+  for (const w of ["traits", "crosses"]) { const p = document.getElementById("p-" + w), b = document.getElementById("b-" + w); const open = w === which ? p.hidden : false; p.hidden = !open; b.setAttribute("aria-expanded", open); }
+  renderPops();
+}
+document.getElementById("b-traits").onclick = e => { e.stopPropagation(); togglePop("traits"); };
+document.getElementById("b-crosses").onclick = e => { e.stopPropagation(); togglePop("crosses"); };
+document.addEventListener("click", e => { if (!e.target.closest(".popwrap")) { for (const w of ["traits", "crosses"]) { document.getElementById("p-" + w).hidden = true; document.getElementById("b-" + w).setAttribute("aria-expanded", false); } } });
+document.getElementById("p-traits").addEventListener("change", e => { const t = e.target.dataset.t; if (t == null) return; if (e.target.checked) S.traits.add(+t); else S.traits.delete(+t); go(); });
+document.getElementById("p-traits").addEventListener("click", e => { const a = e.target.dataset.act; if (a === "tnone") { S.traits.clear(); go(); renderPops(); } else if (a === "tall") { S.traits = new Set(visTraits()); go(); renderPops(); } });
+document.getElementById("p-crosses").addEventListener("change", e => { const x = e.target.dataset.x; if (x == null) return; if (e.target.checked) S.crosses.add(+x); else S.crosses.delete(+x); go(); });
+document.getElementById("p-crosses").addEventListener("click", e => { if (e.target.dataset.act === "xall") { S.crosses.clear(); go(); renderPops(); } });
+document.getElementById("dschips").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; const d = +b.dataset.ds;
+  if (S.ds.has(d)) { if (S.ds.size > 1) S.ds.delete(d); } else S.ds.add(d); go(); });
+document.getElementById("crossf").addEventListener("click", e => { if (e.target.id === "clrx") { S.crosses.clear(); go(); } });
+for (const m of ["both", "j", "w"]) document.getElementById("m-" + m).onclick = () => { S.model = m; go(); };
+document.getElementById("v-genome").onclick = () => { S.view = "genome"; go(); };
+document.getElementById("v-locus").onclick = () => { S.view = "locus"; clampRegion(); go(); };
+document.getElementById("v-table").onclick = () => { S.view = "table"; go(); };
+document.getElementById("shuffle").onclick = () => { const ts = visTraits(); let t; do { t = ts[Math.floor(Math.random() * ts.length)]; } while (ts.length > 1 && S.traits.size === 1 && S.traits.has(t)); S.traits = new Set([t]); go(); };
+function copyLink(btn) {
+  const base = (ARTIFACT_URL || location.href.split("#")[0]); const url = base + "#" + token();
+  const done = ok => { const old = btn.textContent; btn.textContent = ok ? "Link copied" : url; setTimeout(() => btn.textContent = old, ok ? 1400 : 6000); };
+  try { navigator.clipboard.writeText(url).then(() => done(true), () => done(false)); } catch (e) { done(false); }
+}
+for (const id of ["copy-g", "copy-l", "copy-t"]) document.getElementById(id).onclick = e => copyLink(e.currentTarget);
+
+/* ---------- state <-> hash (bare token: letters digits . _ ~ -) ---------- */
+function token() {
+  let t = S.view === "locus" ? S.chrom + "." + Math.round(S.start) + "-" + Math.round(S.end) : S.view;
+  const tr = [...S.traits].map(i => D.traits.id[i]); if (tr.length) t += "~t" + tr.join("_"); else t += "~t";
+  if (S.crosses.size) t += "~x" + [...S.crosses].map(i => D.crosses.id[i]).join("_");
+  if (S.model !== "both") t += "~m" + S.model;
+  if (S.ds.size < D.datasets.id.length) t += "~d" + [...S.ds].map(i => D.datasets.sc[i]).join("_");
+  if (S.view === "locus" && S.q != null) t += "~q" + Q().id[S.q];
+  if (S.view === "locus" && S.only) t += "~o";
+  if (S.view === "table") { const f = S.tf; if (f.t !== "") t += "~ft" + D.traits.id[+f.t]; if (f.x !== "") t += "~fx" + (+f.x < 0 ? "joint" : D.crosses.id[+f.x]); if (f.c) t += "~fc" + f.c;
+    if (f.lod !== "") t += "~fl" + f.lod; if (f.ef !== "") t += "~fe" + f.ef; }
+  return t;
+}
+function writeHash() { try { history.replaceState(null, "", "#" + token()); } catch (e) {} }
+function readHash() {
+  const h = decodeURIComponent((location.hash || "").slice(1)); if (!h) return false;
+  const parts = h.split("~"); const head = parts.shift();
+  // a link carries the full state: start from the defaults, then apply what it names
+  S.crosses = new Set(); S.model = "both"; S.only = false; S.q = null; S.src = false; S.tf = { t: "", x: "", c: "", lod: "", ef: "", m: "" };
+  S.ds = new Set(D.datasets.id.map((_, i) => i));
+  for (const p of parts) {
+    if (p[0] === "t" && p.length >= 1 && !p.startsWith("tf")) { S.traits = new Set(p.slice(1).split("_").map(id => TBYID[id]).filter(v => v != null)); }
+    else if (p.startsWith("fx")) { const v = p.slice(2); S.tf.x = v === "joint" ? "-1" : XBYID[v] != null ? String(XBYID[v]) : ""; }
+    else if (p.startsWith("ft")) { const v = TBYID[p.slice(2)]; S.tf.t = v != null ? String(v) : ""; }
+    else if (p.startsWith("fc")) S.tf.c = CH.includes(p.slice(2)) ? p.slice(2) : "";
+    else if (p.startsWith("fl")) S.tf.lod = p.slice(2);
+    else if (p.startsWith("fe")) S.tf.ef = p.slice(2);
+    else if (p[0] === "x") S.crosses = new Set(p.slice(1).split("_").map(id => XBYID[id]).filter(v => v != null));
+    else if (p[0] === "m" && ["j", "w"].includes(p.slice(1))) S.model = p.slice(1);
+    else if (p[0] === "d") { const ds = new Set(p.slice(1).split("_").map(sc => D.datasets.sc.indexOf(sc)).filter(v => v >= 0)); if (ds.size) S.ds = ds; }
+    else if (p[0] === "q") { const v = QBYID[p.slice(1)]; S.q = v != null ? v : null; }
+    else if (p === "o") S.only = true;
+  }
+  const m = head.match(/^(chr[IVX]+)\.(\d+)-(\d+)$/);
+  if (m && CHL[m[1]]) { S.view = "locus"; S.chrom = m[1]; S.start = +m[2]; S.end = +m[3]; clampRegion(); }
+  else if (head === "table" || head === "genome") S.view = head;
+  return true;
+}
+function go() {
+  renderControls(); renderPops();
+  document.getElementById("gview").hidden = S.view !== "genome"; document.getElementById("lview").hidden = S.view !== "locus"; document.getElementById("tview").hidden = S.view !== "table";
+  if (S.view === "genome") renderGenome(); else if (S.view === "locus") renderLocus(); else { renderTableFilters(); renderTable(); }
+  writeHash();
+}
+let rz = null; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => S.view === "genome" ? drawGenome() : S.view === "locus" ? drawLocus() : null, 120); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => go());
+new MutationObserver(() => go()).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+fetch("data.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => {
+  D = d; CH = Object.keys(d.chroms); CHL = d.chroms; HB = d.hb; NQ = d.qtl.id.length;
+  for (const ch of CH) { CHSTART[ch] = GLEN; GLEN += CHL[ch] + CHGAP; } GLEN -= CHGAP;
+  for (let i = 0; i < d.datasets.id.length; i++) S.ds.add(i);
+  TORDER = d.traits.id.map((_, i) => i).sort((a, b) => a === b ? 0 : (d.traits.ds[a] - d.traits.ds[b]) || (CAT_ORDER.indexOf(d.traits.cat[a]) - CAT_ORDER.indexOf(d.traits.cat[b])) || d.traits.name[a].localeCompare(d.traits.name[b]));
+  XORDER = d.crosses.id.map((_, i) => i);
+  d.traits.id.forEach((id, i) => TBYID[id] = i); d.crosses.id.forEach((id, i) => XBYID[id] = i); d.qtl.id.forEach((id, i) => QBYID[id] = i); d.genes.id.forEach((id, i) => GENE_BY_ID[id] = i);
+  d.jeff.q.forEach((q, j) => (JB[q] = JB[q] || []).push(j));
+  for (let i = 0; i < NQ; i++) (QBYCH[d.qtl.c[i]] = QBYCH[d.qtl.c[i]] || []).push(i);
+  d.causal.g.forEach((g, k) => (CBYG[g] = CBYG[g] || []).push(k));
+  d.cand.g.forEach((g, k) => CANDG[g] = k);
+  const def = d.traits.raw.indexOf(DEFAULT_TRAIT); S.traits.add(def >= 0 ? def : TORDER[0]);
+  buildIndex(); readHash();
+  document.getElementById("loading").hidden = true; go();
+}).catch(err => { document.getElementById("loading").textContent = "The data file did not load (" + err.message + "). Reload the page to try again."; console.error(err); });
+addEventListener("hashchange", () => { if (readHash()) go(); });
+</script>
+</body>
+</html>
