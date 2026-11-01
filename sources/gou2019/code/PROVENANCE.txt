@@ -1,0 +1,5 @@
+Copied from https://github.com/gouliangke/Mutation-rate at commit bcaf987e24f376401be6254deaac450ee64ce7ea:
+- qtl_mapping/mutation rate qtl mapping.ipynb
+- qtl_mapping/correlation plot for mutagens and mutation rate.ipynb
+- README.md
+The genotype/phenotype .Rdata files in that repo (31 MB) are not copied.
