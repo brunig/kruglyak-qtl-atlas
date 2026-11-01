@@ -12,10 +12,13 @@ below). Locally: `python3 -m http.server --directory docs` and open http://local
 ## What it shows
 
 - **Genome view.** A heatmap of QTL per 50 kb bin for every trait, so hotspots stand out,
-  and the selected traits' QTL by cross, with the joint model's lead variants on their own
-  row. Within-cross intervals are shaded by LOD; joint lead variants are sized by |effect|.
-- **Region view.** Every QTL from every trait and cross overlapping a region (or only the
-  selected traits), the paper's candidate genes coloured by evidence tier, and the SGD gene
+  and one lollipop track per cross for the selected traits, with the joint model on its own
+  track: a stem at each reported peak over a strip for its 1.5-LOD interval. Stem height is
+  the LOD (log scale) or the signed effect, switchable; up means the second-named parent's
+  allele (joint track: the alternate allele) makes larger colonies. These are the paper's
+  reported QTL, not LOD curves: the bundle has no genome-wide scans.
+- **Region view.** The same per-cross tracks for the selected traits, then every QTL from
+  every trait and cross overlapping the region (or only the selected traits), the paper's candidate genes coloured by evidence tier, and the SGD gene
   track.
 - **QTL card.** Click a QTL: trait, cross with parents, position and interval width, LOD,
   q, effect with its sign explained (which parent's or which allele increases colony size),
