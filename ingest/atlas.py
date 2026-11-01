@@ -18,7 +18,7 @@ BUILD = "S288C R64 (UCSC sacCer3)"
 HEAT_BIN = 50000
 
 # Table order in data.json, and which columns of each table point into which table.
-TABLES = ["datasets", "sources", "parents", "crosses", "traits", "qtl", "jeff", "causal", "cand", "vexp"]
+TABLES = ["datasets", "sources", "parents", "crosses", "traits", "qtl", "jeff", "causal", "cand", "vexp", "dens", "lazy"]
 REFS = {
     "sources": {"ds": "datasets"},
     "parents": {"ds": "datasets"},
@@ -29,6 +29,8 @@ REFS = {
     "causal": {"ds": "datasets", "t": "traits", "sp": "parents", "q1": "qtl", "q2": "qtl"},
     "cand": {"ds": "datasets"},
     "vexp": {"t": "traits", "x": "crosses"},
+    "dens": {"ds": "datasets"},
+    "lazy": {"ds": "datasets"},
 }
 
 

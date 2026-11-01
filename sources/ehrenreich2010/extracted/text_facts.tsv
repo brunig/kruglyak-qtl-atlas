@@ -1,0 +1,12 @@
+kind	trait	gene	value	source	location	quote
+design			17 chemical resistance traits and mitochondrial function	article.html	Abstract	We applied the method to 17 chemical resistance traits and mitochondrial function, and identified loci for each of these phenotypes.
+design			cross between two strains; pools genotyped	article.html	Abstract	The method involves generating very large numbers of progeny from a cross between two Saccharomyces cerevisiae strains and then phenotyping and genotyping pools of these offspring.
+design			complexity range	article.html	Abstract	We show that the level of genetic complexity underlying these quantitative traits is highly variable, with some traits influenced by one major locus and others by at least 20 loci.
+design			pool size more than 10^5 (superscript lost in extraction)	raw/41586_2010_BFnature08923_MOESM285_ESM.pdf	page 3	X-QTL can be conducted in yeast with segregating pools containing more than 105 haploid individuals
+genotyping			BY and RM allele-specific microarray probes	raw/41586_2010_BFnature08923_MOESM285_ESM.pdf	page 11, Figure S3 legend	Such SNPs will have a value of 0 on an array when the BY and RM allele-specific probes are compared.
+threshold	4-NQO		global FDR 0.05	raw/41586_2010_BFnature08923_MOESM285_ESM.pdf	page 13, Figure S5A legend	Figure S5A. Loci detected for 4-NQO at a global FDR of 0.05.
+count	4-NQO		14 loci	raw/41586_2010_BFnature08923_MOESM285_ESM.pdf	page 12, Figure S4 legend	Figure S4. Effect sizes and p-values for the 14 4-NQO loci in a population of 96 individually genotyped and phenotyped BYxRM segregants.
+count	4-NQO		9 of 14 significant in 96 segregants	raw/41586_2010_BFnature08923_MOESM285_ESM.pdf	page 12, Figure S4 legend	Nine loci exhibited significant effects (p < 0.05).
+effect	4-NQO	RAD5	~40% variance explained in 96 segregants	raw/41586_2010_BFnature08923_MOESM285_ESM.pdf	page 12, Figure S4 legend	All loci had effects below 10% explained variance except for RAD5, which explained ~40% of the variance.
+candidate	mitochondrial function	HAP1	functional HAP1 in BY raises Mitotracker Red staining	raw/41586_2010_BFnature08923_MOESM285_ESM.pdf	page 22, Figure S6 legend	BY with a functional HAP1exhibits increased Mitotracker Red staining relative to BY with a nonfunctional HAP1.
+strain			BY4716	raw/41586_2010_BFnature08923_MOESM285_ESM.pdf	page 22, Figure S6 legend	Fig S6. Mitotracker Red staining of BY4716 (red) versus BY4716 with a functional HAP1 (blue).

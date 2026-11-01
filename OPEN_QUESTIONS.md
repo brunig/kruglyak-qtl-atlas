@@ -350,6 +350,219 @@ Provenance keys for candidate genes, directions and the cross point to rows of
 article page rather than a file of the bundle. `sources.file` for it is
 `../extracted/text_facts.tsv` (relative to `raw/`), with its own SHA-256.
 
+## Bloom et al. 2013
+
+Sources: the four supplementary files in `sources/bloom2013/raw/` and the article page
+`sources/bloom2013/article.html`. The article is paywalled: the page carries the abstract,
+the supplement captions, references and change history, but not the main text or the Online
+Methods. The authors' data and code site named in the Supplementary Information
+(http://genomics-pubs.princeton.edu/YeastCross_BYxRM/) is not reachable from the build
+environment.
+
+### Q1. No methods in the bundle
+How QTL were detected (model, threshold, FDR or permutation level) and how intervals and
+variance explained were computed are in the paywalled Online Methods. **Atlas:** reports
+what Supplementary Table 3 states (1.5-LOD confidence interval, LOD, fraction of variance
+explained) and leaves `datasets.fdr` null.
+
+### Q2. The LOD column is not a detection LOD
+34 of 591 QTL have LOD < 2.5 and 5 have LOD < 1 (minimum 0.0001), yet the table calls them
+detected QTL and Table S1's per-trait QTL counts match its rows exactly. **Atlas (most
+defensible reading):** the column is each QTL's LOD in the trait's final multiple-QTL model,
+conditional on its other QTL, not the LOD at which it was detected. Stored as given.
+
+### Q3. No effect direction
+The caption of Supplementary Table 3 says it lists "effect sizes", but the only effect column
+is "Fraction of Phenotypic Variance Explained", which has no sign. Figure S3 plots absolute
+standardized differences in allelic means, as an image. **Atlas:** `qtl.ve` holds the
+fraction; `qtl.ef` and `qtl.up` are empty, so the QTL card cannot say which parent's allele
+increases the trait.
+
+### Q4. Doses stored as fractions with a percent format
+Table S1 stores eleven doses as numbers with the Excel format `0%` (0.02 displays as "2%").
+**Atlas:** uses the displayed value, so the carbon sources, ethanol and formamide read 2%.
+SDS is stored as 0.1 and therefore displays as "10%", which is unusually high for SDS
+(Bloom 2019 used 0.075%); the atlas shows "10%" as the table does and flags it here rather
+than guessing the intended dose.
+
+### Q5. Segregant count
+The bundle does not state the panel size (the abstract says "a large cross"). Table S1 gives,
+per trait, the number of segregants with at least one measurement (599 to 1,007).
+**Atlas:** `crosses.n` = 1,007, the largest of these, labelled as such in the dataset notes.
+
+### Q6. Genome build
+Not stated in the bundle. The coordinates agree with S288C R64: each of the 29,205 SGD
+systematic names listed under an interval lies within 5 kb of that interval on R64-5-1
+coordinates (28,189 lie entirely inside it); 4,018 listed names (tRNAs, Ty and LTR
+elements, centromeres, snoRNAs and similar) are not in the atlas's gene table. No transform.
+
+### Q7. Genes under each interval are not candidate genes
+Supplementary Table 3 lists every gene under each 1.5-LOD interval (up to hundreds per QTL).
+**Atlas:** keeps them in the verbatim source row and does not assign `qtl.g`; no `causal`
+rows for this dataset.
+
+### Q8. Trait categories and condition keys
+The bundle has no media table, so categories follow the Bloom 2019 assignment for the same
+compounds (carbon sources; sorbitol as osmotic stress) and are labelled "atlas assignment by
+analogy with Bloom 2019". Whether the 2% ethanol plates also contained glucose is not stated.
+Condition keys follow Bloom 2019's style, with "/ml" written "/mL"; 16 conditions then match
+Bloom 2019 exactly (e.g. 6-azauracil 50 µg/mL, zeocin 25 µg/mL, YPD 37 °C, YNB pH 8).
+Whether these are the same experiments is not established.
+
+### Q9. Interactions not listed
+Table S1 counts 78 pairs of interacting QTL and the additional variance they explain per
+trait, but the pairs themselves are not in the bundle. Not ingested as QTL.
+
+### Q10. "Nearly the entire additive contribution"
+The abstract's headline claim. From Table S1, the variance explained by the additive QTL
+divided by narrow-sense heritability (average of replicates) has median 0.88 across the 46
+traits (range 0.67 to 1.21; 38 traits at 0.8 or above). Reported here, not tested: the
+abstract gives no number to compare against.
+
+## Ehrenreich et al. 2010
+
+Sources: the Supplementary Information PDF in `sources/ehrenreich2010/raw/` and the article
+page `sources/ehrenreich2010/article.html`. The article body is behind Nature's paywall, so
+only the abstract, editorial summary and citation metadata are readable there. Statements the
+ingest uses are quoted verbatim, with location, in `sources/ehrenreich2010/extracted/text_facts.tsv`.
+
+### Q1. Almost none of the detected loci are tabulated
+The abstract reports loci for all 17 chemicals and mitochondrial function, "some traits
+influenced by one major locus and others by at least 20 loci", and the Figure S4 legend counts
+14 loci for 4-NQO alone. Figures S5A-S5Q draw the loci per chemical at a global FDR of 0.05,
+but no table gives their positions, LODs, intervals or directions, and the main text (which may
+hold a table) is not readable. Table S2 is the only table with coordinates: the two known 4-NQO
+loci, RAD5 and MKT1. **Atlas:** those two loci are ingested; nothing is read off the figures.
+The strict xfail `test_14_4nqo_loci` records the gap. Getting the rest needs the main text, or
+data the authors deposited elsewhere (none is linked from the files).
+
+### Q2. What the Table S2 coordinates are
+Columns: `Gene`, `Chromosome`, `Position (bp)` (a range), `Estimated Peak Location (bp)`,
+`Distance from Causal Gene (bp)`. The distance equals the gap from the peak to the nearest end of
+the gene range in both rows (1553 = 204992 - 203439; 1304 = 470929 - 469625), so `Position` is the
+causal gene's span and `Estimated Peak Location` the X-QTL summit. **Atlas:** each locus is a point
+at the peak (`a = e = p`; no interval is reported); the gene span is stored on the `causal` row.
+
+### Q3. Genome build
+Not stated. Both gene spans lie inside the R64-5-1 gene features of RAD5 (204970-208580) and MKT1
+(466813-469930), and both peaks are inside R64 chromosome lengths. The source spans are narrower
+than the R64-5-1 `gene` features (the SGD feature may include more than the ORF), so the exact
+release cannot be pinned from two genes. **Atlas (most defensible reading):** positions used as
+given, no transform; any offset is far below locus resolution.
+
+### Q4. Direction of effect
+Table S2 does not say which parent's allele confers resistance at RAD5 or MKT1, and Figure S4's
+allele effects are a plot. **Atlas:** `up` is unset; nothing read off the figure.
+
+### Q5. HAP1 and mitochondrial function
+Figure S6 compares BY4716 with "BY4716 with a functional HAP1": the strain carrying a functional
+HAP1 stains more with Mitotracker Red (p = 6 x 10^-7). The files give no locus row for
+mitochondrial function. **Atlas (most defensible reading):** a `causal` row for HAP1 on the trait
+"Mitochondrial function", tier `x` (confirmed by allele replacement, as the Figure S6 test swaps a
+nonfunctional for a functional HAP1 in BY), with SGD R64-5-1 gene bounds since the source gives no
+coordinate, and no QTL row. The trait gets the new category `cellular phenotype`, since none of the
+existing categories fits.
+
+### Q6. Tier for RAD5 and MKT1
+Table S2 calls them the "Causal Gene" of "known loci for 4-NQO resistance". **Atlas:** tier `v`
+(previously identified), the closest existing tier; the paper's files do not cite where they were
+first identified.
+
+### Q7. Doses that look misprinted
+Table S1 prints benomyl at "600 mg/ml" and cobalt chloride at "3 M", both implausible as selective
+doses (600 ug/ml and 3 mM would be ordinary). **Atlas:** kept exactly as printed, in `traits.cond`,
+the display name and `traits.ck`; not corrected.
+
+### Q8. 4-NQO naming
+Table S1 lists "4-nitroquinoline"; Figures S4-S5A call it 4-NQO (4-nitroquinoline 1-oxide by the
+usual abbreviation, which the files do not spell out). **Atlas:** display name "4-NQO 5 µg/mL",
+condition key `4-nqo 5ug/mL`, source name kept in `traits.raw`.
+
+### Q9. Strains and pool size
+Only BY4716 is named (Figure S6 legend); the RM isolate is not identified in the readable files.
+Pools held "more than 10^5 haploid individuals" (SI page 3; the superscript is lost in PDF text
+extraction, read as "105"). **Atlas:** `crosses.n` is null; RM's `code` is just "RM".
+
+### Q10. Effects in the 96 validation segregants
+Figure S4 reports, as a plot, the effects of the 14 4-NQO loci in 96 individually genotyped
+segregants; the legend says nine were significant and RAD5 explained ~40% of the variance. These
+are a different experiment from the X-QTL, so the atlas does not put them on the QTL rows; the
+legend text is in `text_facts.tsv` and the full SI text in `docs/v/e10_extra.json`.
+
+## Bloom et al. 2015
+
+Sources: Supplementary Information and Supplementary Data 1-5 in `sources/bloom2015/raw/`, the article
+page `sources/bloom2015/article.html`, and two extractions in `sources/bloom2015/extracted/`
+(`markers.tsv`, the genotype-matrix column names from Supplementary Data 5, and
+`supp_data_5_contents.tsv`). No analysis code is published with the paper ("custom R code").
+
+### Q1. Marker count: 28,220, 28,820 or 28,880
+The Methods say 28,220 SNPs were retained; the Introduction says 28,820 variant sites; the
+Supplementary Data 5 caption says a 4390x28880 genotype matrix. The matrix in the zip
+(`genotypes.RData`, object `gdata`) has 4,390 rows and 28,220 columns. **Atlas:** 28,220, the file.
+
+### Q2. Sign and units of `lm_coefficient`
+The paper defines the effect sizes of Fig. 4 by a per-trait multiple regression on all
+significant peak markers, and Supplementary Data 5 states genotypes are coded -1 (BY) and 1 (RM).
+**Most defensible reading:** `lm_coefficient` > 0 means the RM allele increases growth (larger
+colony radius); `qtl.up` follows it. The phenotypes in Supplementary Data 5 are centred near 0
+but not scaled to unit variance (raw SD 0.5-1.0 by trait), so the coefficient is in normalized
+growth units per genotype step (half the BY-RM allele difference), not SD units. Not checked
+against an independent statement (no example direction is given in the text).
+
+### Q3. Which peak, and what `max.lod` is
+Supplementary Data 3 has two peaks: `pos` (with `index`, the forward-search peak marker) and
+`pos.peak_refineqtl`, plus the 1.5-LOD interval from R/qtl. They differ for 460 QTL, and `pos`
+lies outside the interval for 11. **Atlas:** `qtl.p` = the refineqtl peak (inside the interval),
+`qtl.lv` = the forward-search marker named from `markers.tsv`. `max.lod` is read as the maximum of
+the refineqtl LOD profile used for the interval (most defensible reading); 125 of 797 values are
+below 3 and the smallest is about 0.00001, far below what a 5% FWER scan would call significant, so
+it is not the forward-search statistic, which is not reported. The browser's LOD stems for this
+dataset therefore show this refineqtl value, not the detection strength.
+
+### Q4. 31 vs 25 single-gene QTL
+The text says 31 QTL were refined to a single gene (Supplementary Data 3). The `systematic name`
+column lists exactly one gene for 25 QTL (13 distinct genes: COQ5, DPS1, HAP1, IMH1, IRA2, PMR1,
+RIM15, RPN3, SKY1, SNN1, SWH1, WHI2, ZPS1). **Atlas:** those 25, tier `c`.
+
+### Q5. "172 interactions detected by both approaches"
+No matching rule between the full and marginal scans is given. Same trait with both loci within
+50 kb matches 170 full-scan rows, within 100 kb 173, identical marker pairs 13, identical closest
+additive QTL pair 165. Not reproducible; kept as a strict xfail.
+
+### Q6. Variance-component ranges
+Supplementary Data 2 (y=Za+Zi+Zp+e) reproduces the additive range 8.6-70.4% (median 43.3%, mean
+43.7%) and the interaction median 9.2%, but gives an interaction range of 2.29-21.26% where the
+text says 2.2-21.2% (truncated rather than rounded), and a minimum residual repeatability of
+0.56% where the text says 0.05%.
+
+### Q7. Trait doses
+The 20 trait names carry no doses, and the article says phenotyping was "as described previously"
+(Bloom et al. 2013). Bloom 2013's Supplementary Table 1 (`sources/bloom2013/raw/41586_2013_BFnature11867_MOESM86_ESM.xls`)
+lists all 20 traits with doses, e.g. cobalt chloride 1.875 mM, copper 6 mM, diamide 1.5 mM, E6-berbamine
+100 uM, ethanol 0.02, formamide 0.02, hydroxyurea 200 mM, indoleacetic acid 100 uM, magnesium chloride
+100 mM, manganese sulfate 10 mM, menadione 100 uM, neomycin 5 mg/ml, zeocin 25 ug/ml, and 0.02 for the
+carbon sources. Whether the 2015 phenotyping used the same doses is not stated. **Atlas:** `traits.cond`
+is empty; `traits.ck` is the compound name only, which links to other datasets by compound.
+
+### Q8. Ethanol's category
+"Ethanol" could be ethanol replacing glucose (carbon source) or added to glucose (stress); Bloom 2019
+has both. Neither this paper nor Bloom 2013's table (dose 0.02) says which. **Atlas:** `carbon source`,
+labelled as an ambiguous atlas assignment.
+
+### Q9. QTL-QTL interactions have no home in the schema
+The 205 full-scan and 266 marginal-scan interactions (Supplementary Data 4) are pairs of loci with a
+LOD, coefficient and variance explained. The atlas tables have no pair type, so they are kept verbatim in
+`docs/v/b15_extra.json` and not drawn. A top-level `pairs` table (dataset, trait, two loci with
+positions and marker names, LOD, effect, VE, scan, provenance) would let the browser show them.
+
+### Q10. Genome-wide LOD profiles could be recomputed, but are not
+Supplementary Data 5 holds `gdata` (4,390 x 28,220, -1/1, R64 positions in the column names) and
+`pheno_raw` (20 traits, two replicates per segregant). These would allow genome-wide single-marker LOD
+scans for a future track clearly labelled "recomputed by the atlas", not reported by the paper. The
+paper's own scans used BLUP residuals from a mixed model, so a simple scan would not reproduce its
+statistics exactly.
+
 ## Blocked steps
 
 ### B1. GitHub Pages
@@ -359,10 +572,10 @@ when merged into `claude/main`.
 
 ### B2. Papers whose supplements could not be fetched
 From the build environment (network policy as of 2026-11-01):
-- **Nature / Nature Communications** (Bloom 2013, Bloom 2015, Ehrenreich 2010): `www.nature.com`
-  sends every article request through `idp.nature.com`, which is not an allowed host.
-- **eLife** (Albert 2018): `elifesciences.org` answers 406 to plain requests; disguising the
-  request as a browser was refused as bot-check circumvention and was not attempted further.
+- **Nature / Nature Communications**: resolved once `idp.nature.com` was allowed; Bloom 2013,
+  Bloom 2015 and Ehrenreich 2010 supplements fetched. Their main texts and Online Methods are
+  paywalled, so semantics come from tables, captions and supplements only.
+- **eLife** (Albert 2018): resolved; `elifesciences.org` and its CDN now answer plain requests.
 - **Genetics / OUP** (Gou 2019): `academic.oup.com` answers 403; `gsajournals.figshare.com`,
   `figshare.com` and `doi.org` are not allowed hosts.
 - **Dryad** (Treusch 2015 code and mapping data): not an allowed host.

@@ -1,0 +1,5 @@
+# Contents of Supplementary Data 5 (raw/41467_2015_BFncomms9712_MOESM729_ESM.zip), listed from the archive headers.
+# Objects and dimensions were read once with the R-data reader `rdata` (see extract_markers.py); no values are copied into the atlas.
+member	compressed_bytes	bytes	inner_member	inner_bytes	object	dimensions	note
+Supplementary_Data_5/genotypes.zip	12101477	12101477	genotypes.RData	30590385	gdata	4390 segregants x 28220 markers	numeric matrix coded -1 (BY) / 1 (RM); row names are segregant IDs (01_01 ...), column names cumulative_chr_pos_ref_alt (extracted/markers.tsv)
+Supplementary_Data_5/phenotypes.zip	1377417	1377417	phenotypes.RData	1524067	pheno_raw	20 traits x 4390 segregants x 2 replicates	named list (1_<Trait>_1); each entry maps a segregant ID to its two replicate end-point growth values (NaN where missing); values centred near 0, not scaled to unit variance

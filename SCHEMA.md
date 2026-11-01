@@ -228,6 +228,32 @@ From Figure 2-source data 1, `Additive QTL Model`.
 | `re`, `rese` | residual error and its standard error |
 | `pv` | provenance key |
 
+## `dens` — precomputed QTL density for datasets too large to load up front
+
+One row per (dataset, kind, chromosome, 50 kb bin) with a non-zero count. Used for the
+heatmap row of a dataset whose individual QTL live in a lazy file (Albert 2018 eQTL).
+
+| key | meaning |
+|---|---|
+| `ds` | dataset index |
+| `k` | kind, e.g. `local`, `distant` |
+| `c`, `b` | chromosome and bin index (bin = floor(position / `hb`)) |
+| `n` | number of QTL whose interval touches the bin |
+
+## `lazy` — per-dataset QTL tables loaded on demand
+
+| key | meaning |
+|---|---|
+| `ds` | dataset index |
+| `name` | what the table holds, e.g. `eqtl` |
+| `file` | path under `docs/`, e.g. `v/a18_eqtl.json` |
+| `n` | number of rows |
+| `desc` | one sentence for the page |
+
+A lazy QTL file is columnar like `qtl`: `id`, `g` (index into `genes`: the gene whose
+expression is the trait), `c`, `a`, `e`, `p`, `lod`, `ef` (as the source gives it; sign
+convention in `datasets.effect`), `loc` (1 local / cis, 0 distant / trans), `pv`.
+
 ## Lazy files in `docs/v/`
 
 - `<sc>_<chrom>.json` — the **original source rows**, every column verbatim, for all

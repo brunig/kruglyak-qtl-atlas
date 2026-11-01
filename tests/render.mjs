@@ -115,12 +115,14 @@ try {
     const nYJM = data.crosses.id.filter((_, x) => pYJM.includes(data.crosses.p1[x]) || pYJM.includes(data.crosses.p2[x])).length;
     check("search parent strain YJM454 (every dataset)", f.includes("YJM454") && (await page.textContent("#crossf")).includes(nYJM + " crosses"), nYJM + " crosses expected");
     f = await search(page, "round robin");
-    check("search dataset 'round robin'", f.includes("Bloom 2019") && (await page.getAttribute("#dschips .chip", "aria-pressed")) === "true");
-    f = await search(page, "Bloom");
-    check("search dataset 'Bloom'", f.includes("Bloom 2019"));
+    const rr = data.datasets.label.filter((l, d) => /round.robin/i.test(data.datasets.design[d] || ""));
+    check("search dataset 'round robin'", rr.some(l => f.includes(l)), f + " vs " + rr.join(", "));
+    f = await search(page, "Bloom 2019");
+    const b19 = data.datasets.id.indexOf("bloom2019");
+    check("search dataset 'Bloom 2019'", f.includes("Bloom 2019") && (await page.getAttribute(`#dschips .chip[data-ds="${b19}"]`, "aria-pressed")) === "true");
     // dataset chip toggling (single dataset cannot be switched off)
-    await page.click("#dschips .chip");
-    check("dataset chip stays on when it is the only one", (await page.getAttribute("#dschips .chip", "aria-pressed")) === "true");
+    await page.click(`#dschips .chip[data-ds="${b19}"]`);
+    check("dataset chip stays on when it is the only one", (await page.getAttribute(`#dschips .chip[data-ds="${b19}"]`, "aria-pressed")) === "true");
     // model control
     await load(page, "#genome");
     await page.click("#m-j"); await page.waitForTimeout(150);
@@ -154,7 +156,8 @@ try {
     const tsv = readFileSync(await dl.path(), "utf8").trim().split("\n");
     check("TSV download has header + filtered rows", tsv.length === nCaf20 + 1 && tsv[0].startsWith("id\tdataset\ttrait"), (tsv.length - 1) + " rows");
     // hash state round trip
-    await load(page, "#chrXV.500000-620000~mw~x" + data.crosses.id[0]);
+    const x375 = data.crosses.id.indexOf("b19-375");
+    await load(page, "#chrXV.500000-620000~mw~x" + data.crosses.id[x375]);
     check("hash restores region, model and cross", (await page.textContent("#l-title")).startsWith("chrXV:500,000") && (await page.getAttribute("#m-w", "aria-pressed")) === "true" && (await page.textContent("#crossf")).includes("M22 × BY"));
     check("no console errors (searches, table)", page.errors.length === 0, page.errors.join(" | "));
     await ctx.close();

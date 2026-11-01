@@ -259,7 +259,7 @@ footer a { color: var(--muted); }
 "use strict";
 const ARTIFACT_URL = "";
 const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI"];
-const CAT_ORDER = ["drug/chemical", "osmotic stress", "carbon source", "temperature", "pH", "reference medium", "metabolite"];
+const CAT_ORDER = ["drug/chemical", "osmotic stress", "carbon source", "temperature", "pH", "reference medium", "metabolite", "cellular phenotype", "expression"];
 const DS_COLS = ["--accent", "--contrast", "--ace", "--t-cnv", "--t-dam", "--caf"];
 const MODEL = { w: "Within-cross", j: "Joint model", x: "X-QTL" };
 const TRAIT_COLS = ["--accent", "--contrast", "--ace", "--t-cnv", "--t-dam", "--thresh", "--caf", "--nacl"];
@@ -325,6 +325,33 @@ function heat() {
   out.max = max;
   return (heatCache[key] = out);
 }
+/* ---------- lazily loaded per-gene QTL (eQTL): density rows, and one gene's eQTL on demand ---------- */
+const LZ = {};   // "ds:name" -> Promise of the columnar table, with .byG (gene -> row indices)
+function lazyRows(name) { const L = D.lazy; if (!L || !L.ds) return []; return L.ds.map((d, k) => k).filter(k => L.name[k] === name && S.ds.has(L.ds[k])); }
+function loadLazy(k) {
+  const key = D.lazy.ds[k] + ":" + D.lazy.name[k];
+  if (!LZ[key]) LZ[key] = fetch(D.lazy.file[k]).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(t => {
+    t.byG = {}; t.g.forEach((g, i) => { if (g >= 0) (t.byG[g] = t.byG[g] || []).push(i); }); t.ds = D.lazy.ds[k]; return t; });
+  return LZ[key];
+}
+const EQ = { g: null, rows: null, err: null };   // the gene whose eQTL are drawn, and its rows once loaded: [{t, i}]
+function setExprGene(g, quiet) {
+  S.eg = g; EQ.g = g; EQ.rows = null; EQ.err = null;
+  const ks = lazyRows("eqtl"); if (g == null || !ks.length) { if (!quiet) go(); return; }
+  Promise.all(ks.map(loadLazy)).then(ts => { if (S.eg !== g) return; EQ.rows = []; ts.forEach(t => (t.byG[g] || []).forEach(i => EQ.rows.push({ t, i }))); go(); })
+    .catch(err => { EQ.err = err.message; go(); });
+  if (!quiet) go();
+}
+const densCache = {};
+function dens() {
+  const key = [...S.ds].join(","); if (densCache[key]) return densCache[key];
+  const out = {}; const Dn = D.dens;
+  if (Dn && Dn.ds) for (let k = 0; k < Dn.ds.length; k++) { if (!S.ds.has(Dn.ds[k])) continue; const d = Dn.ds[k], kind = Dn.k[k];
+    const o = (out[d] = out[d] || { max: 1, kinds: {} }); const row = (o.kinds[kind] = o.kinds[kind] || {});
+    (row[Dn.c[k]] = row[Dn.c[k]] || {})[Dn.b[k]] = Dn.n[k]; if (Dn.n[k] > o.max) o.max = Dn.n[k]; }
+  return (densCache[key] = out);
+}
+
 const MAKO = ["#def5e5", "#a7e0bf", "#60cead", "#3aaeac", "#348fa7", "#37709f", "#3f5194", "#40336f", "#2b1d42", "#0b0405"];
 function lerpHex(a, b, t) { const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
   const r = Math.round(((pa >> 16) & 255) * (1 - t) + ((pb >> 16) & 255) * t), g = Math.round(((pa >> 8) & 255) * (1 - t) + ((pb >> 8) & 255) * t), bl = Math.round((pa & 255) * (1 - t) + (pb & 255) * t);
@@ -455,13 +482,22 @@ function drawGenome() {
   const L = narrow ? 74 : 168, R = 10, hTop = 22;
   const traits = visTraits(), multi = S.ds.size > 1 && new Set(traits.map(t => D.traits.ds[t])).size > 1;
   const hrows = []; let lastDs = -1;
-  const placedT = new Set(); for (let i = 0; i < NQ; i++) if (Q().p[i] != null) placedT.add(Q().t[i]);
-  const unplaced = {};
+  const placedT = new Set(), anyT = new Set(); for (let i = 0; i < NQ; i++) { anyT.add(Q().t[i]); if (Q().p[i] != null) placedT.add(Q().t[i]); }
+  const unplaced = {}, empty = {};
   for (const t of traits) { const d = D.traits.ds[t];
     if (multi && d !== lastDs) { hrows.push({ h: d }); lastDs = d; }
-    if (placedT.has(t)) hrows.push({ t }); else { if (!unplaced[d]) { unplaced[d] = 0; hrows.push({ u: d }); } unplaced[d]++; } }
+    if (placedT.has(t)) hrows.push({ t });
+    else if (anyT.has(t)) { if (!unplaced[d]) { unplaced[d] = 0; hrows.push({ u: d }); } unplaced[d]++; }
+    else { if (!empty[d]) { empty[d] = []; hrows.push({ z: d }); } empty[d].push(t); } }
+  const DZ = dens();
+  for (const d of Object.keys(DZ).map(Number).sort((a, b) => a - b)) {
+    // put a dataset's density rows right after its last trait row
+    let at = hrows.length; for (let r = hrows.length - 1; r >= 0; r--) if ((hrows[r].t != null && D.traits.ds[hrows[r].t] === d) || hrows[r].h === d) { at = r + 1; break; }
+    hrows.splice(at, 0, ...Object.keys(DZ[d].kinds).sort().map(k => ({ dz: d, k })));
+  }
   const rowH = narrow ? 8 : 12, heatH = rowH * hrows.length;
-  const ivRows = trackRows(), ivH = narrow ? 26 : 36, ivTop = hTop + heatH + 40, axY = ivTop + ivRows.length * ivH + 8;
+  const eqOn = S.eg != null && lazyRows("eqtl").length, eqH = narrow ? 34 : 46, eqTop = hTop + heatH + 40;
+  const ivRows = trackRows(), ivH = narrow ? 26 : 36, ivTop = eqTop + (eqOn ? eqH + 34 : 0), axY = ivTop + ivRows.length * ivH + 8;
   const { ctx, w, h } = sizeCanvas(cv, axY + 26);
   const X = g => L + (g / GLEN) * (w - L - R);
   ctx.clearRect(0, 0, w, h);
@@ -476,7 +512,15 @@ function drawGenome() {
     const y = hTop + r * rowH;
     if (hr.u != null) { ctx.fillStyle = muted; ctx.font = "italic " + (narrow ? "9px " : "10.5px ") + css("--sans"); ctx.textAlign = "left";
       ctx.fillText(unplaced[hr.u] + " trait" + (unplaced[hr.u] === 1 ? "" : "s") + " with genetic positions only (cM): not placed on the genome; listed in the Table view", L, y + rowH / 2); return; }
+    if (hr.z != null) { ctx.fillStyle = muted; ctx.font = "italic " + (narrow ? "9px " : "10.5px ") + css("--sans"); ctx.textAlign = "left";
+      ctx.fillText(fitText(ctx, empty[hr.z].length + " trait" + (empty[hr.z].length === 1 ? "" : "s") + " with no tabulated QTL (" + empty[hr.z].map(tname).join(", ") + ")", w - L - R), L, y + rowH / 2); return; }
     if (hr.h != null) { ctx.fillStyle = css("--fg"); ctx.font = "600 " + (narrow ? "9px " : "10.5px ") + css("--sans"); ctx.textAlign = "left"; ctx.fillText(fitText(ctx, D.datasets.label[hr.h], L + 200), 4, y + rowH / 2); ctx.fillStyle = css("--rule"); ctx.fillRect(0, y + rowH - 0.5, w, 0.8); lastCat = null; return; }
+    if (hr.dz != null) { const o = DZ[hr.dz], row = o.kinds[hr.k];
+      ctx.fillStyle = muted; ctx.font = (narrow ? "9px " : "10.5px ") + css("--sans"); ctx.textAlign = "right"; ctx.fillText(fitText(ctx, "eQTL, " + hr.k, L - 12), L - 8, y + rowH / 2);
+      for (const ch of CH) { const cr = row[ch] || {}, nb = Math.ceil(CHL[ch] / HB);
+        for (let b = 0; b < nb; b++) { const n = cr[b] || 0, x0 = X(CHSTART[ch] + b * HB), x1 = X(CHSTART[ch] + Math.min(CHL[ch], (b + 1) * HB));
+          ctx.fillStyle = n ? heatColor(n, o.max) : nopeak; ctx.fillRect(x0, y + 0.5, Math.max(0.6, x1 - x0 - 0.3), rowH - 1); } }
+      return; }
     const t = hr.t, sel = S.traits.has(t);
     if (!narrow && D.traits.cat[t] !== lastCat && lastCat != null) { ctx.fillStyle = css("--rule"); ctx.fillRect(L, y, w - L - R, 0.6); }
     lastCat = D.traits.cat[t];
@@ -487,6 +531,27 @@ function drawGenome() {
       for (let b = 0; b < row.length; b++) { const x0 = X(CHSTART[ch] + b * HB), x1 = X(CHSTART[ch] + Math.min(CHL[ch], (b + 1) * HB));
         ctx.fillStyle = row[b] ? heatColor(row[b], H.max) : nopeak; ctx.fillRect(x0, y + 0.5, Math.max(0.6, x1 - x0 - 0.3), rowH - 1); } }
   });
+  // one gene's eQTL, genome-wide
+  let EQH = null;
+  if (eqOn) {
+    const g = S.eg, rows = EQ.rows || [];
+    ctx.font = "11px " + css("--sans"); ctx.fillStyle = muted; ctx.textAlign = "left";
+    const nl = rows.filter(r => r.t.loc[r.i] === 1).length;
+    ctx.fillText(EQ.err ? "eQTL file did not load (" + EQ.err + ")" : EQ.rows == null ? "Loading eQTL for " + gname(g) + "…" :
+      "eQTL for the expression of " + gname(g) + ": " + rows.length + " (" + nl + " local, " + (rows.length - nl) + " distant); ▲ marks the gene itself; stem height = LOD", L, eqTop - 12);
+    CH.forEach((ch, k) => { if (k % 2 === 0) { ctx.fillStyle = band; ctx.fillRect(X(CHSTART[ch]), eqTop, X(CHSTART[ch] + CHL[ch]) - X(CHSTART[ch]), eqH); } });
+    ctx.fillStyle = fg; ctx.font = "600 11px " + css("--sans"); ctx.textAlign = "right"; ctx.fillText(fitText(ctx, gname(g) + " expression", L - 8), L - 8, eqTop + eqH / 2);
+    const yb = eqTop + eqH - 3; ctx.strokeStyle = css("--rule"); ctx.beginPath(); ctx.moveTo(L, yb); ctx.lineTo(w - R, yb); ctx.stroke();
+    const gx = X(CHSTART[D.genes.c[g]] + (D.genes.a[g] + D.genes.e[g]) / 2); ctx.fillStyle = fg; ctx.beginPath(); ctx.moveTo(gx, yb - 9); ctx.lineTo(gx - 5, yb); ctx.lineTo(gx + 5, yb); ctx.fill();
+    const hits = [];
+    for (const r of rows) { const t = r.t, i = r.i, col = css(t.loc[i] === 1 ? "--accent" : "--contrast");
+      const x0 = X(CHSTART[t.c[i]] + t.a[i]), x1 = Math.max(X(CHSTART[t.c[i]] + t.e[i]), x0 + 1), xp = X(CHSTART[t.c[i]] + t.p[i]);
+      const v = Math.max(0.05, Math.min(1, (Math.log10(Math.max(1, t.lod[i])) - LOD_LO) / (LOD_HI - LOD_LO))), yt = yb - v * (eqH - 8);
+      ctx.globalAlpha = 0.35; ctx.fillStyle = col; ctx.fillRect(x0, yb - 1.5, x1 - x0, 3); ctx.globalAlpha = 1;
+      ctx.strokeStyle = col; ctx.lineWidth = 1.25; ctx.beginPath(); ctx.moveTo(xp, yb); ctx.lineTo(xp, yt); ctx.stroke(); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(xp, yt, 2.6, 0, 7); ctx.fill();
+      hits.push({ r, xs: xp, ya: yt - 5, yb: yb + 4 }); }
+    EQH = { top: eqTop, h: eqH, hits };
+  }
   // interval panel
   ctx.font = "11px " + css("--sans"); ctx.fillStyle = muted; ctx.textAlign = "left";
   const selT = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
@@ -496,7 +561,7 @@ function drawGenome() {
   // axis labels
   ctx.textAlign = "center"; ctx.fillStyle = muted; ctx.font = "11px " + css("--sans");
   CH.forEach((ch, i) => { const xm = X(CHSTART[ch] + CHL[ch] / 2); if (!narrow || i % 2 === 0 || CHL[ch] > 700000) ctx.fillText(ch.slice(3), xm, axY + 8); });
-  G = { L, R, w, X, hTop, rowH, heatH, hrows, T };
+  G = { L, R, w, X, hTop, rowH, heatH, hrows, T, EQH };
 }
 function renderGenome() {
   const sel = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
@@ -532,7 +597,11 @@ function gPos(ev) { const r = gcan.getBoundingClientRect(); const x = ev.clientX
   if (g >= 0 && g < GLEN) { ch = CH[0]; for (const c of CH) if (CHSTART[c] <= g) ch = c; if (g - CHSTART[ch] > CHL[ch]) ch = null; else pos = Math.round(g - CHSTART[ch]); }
   return { x, y, ch, pos }; }
 function gHit(p) {
-  if (p.y >= G.hTop && p.y < G.hTop + G.heatH) { const hr = G.hrows[Math.floor((p.y - G.hTop) / G.rowH)]; if (!hr || hr.t == null) return { kind: "none" }; return { kind: p.x < G.L ? "tlabel" : "heat", t: hr.t }; }
+  if (p.y >= G.hTop && p.y < G.hTop + G.heatH) { const hr = G.hrows[Math.floor((p.y - G.hTop) / G.rowH)];
+    if (hr && hr.dz != null) return { kind: "dens", d: hr.dz, k: hr.k };
+    if (!hr || hr.t == null) return { kind: "none" }; return { kind: p.x < G.L ? "tlabel" : "heat", t: hr.t }; }
+  if (G.EQH && p.y >= G.EQH.top && p.y < G.EQH.top + G.EQH.h && p.x >= G.L) { let best = null, bd = 6;
+    for (const h of G.EQH.hits) { const d = Math.abs(p.x - h.xs); if (d < bd) { bd = d; best = h; } } return best ? { kind: "eq", r: best.r } : { kind: "none" }; }
   const ti = trackHit(G.T, p.x, p.y);
   if (ti != null) return ti >= 0 ? { kind: "qtl", i: ti } : { kind: "row" };
   return { kind: "none" };
@@ -542,6 +611,8 @@ gcan.addEventListener("mousemove", ev => {
   if (h.kind === "tlabel") lines = ["<b>" + esc(tname(h.t)) + "</b>", esc(D.traits.cat[h.t]) + " · " + esc(D.traits.raw[h.t]), S.traits.has(h.t) ? "click to remove" : "click to draw its QTL below"];
   else if (h.kind === "heat" && p.ch) { const n = heat()[h.t][p.ch][Math.floor(p.pos / HB)] || 0; lines = ["<b>" + esc(tname(h.t)) + "</b>", '<span class="mono">' + p.ch + ":" + fmt(p.pos) + "</span>", n + " QTL in this 50 kb bin", "click to open this region"]; }
   else if (h.kind === "qtl") lines = qtlTip(h.i).concat(["click to open this QTL"]);
+  else if (h.kind === "dens" && p.ch) { const n = ((dens()[h.d].kinds[h.k][p.ch] || {})[Math.floor(p.pos / HB)]) || 0; lines = ["<b>" + esc(D.datasets.label[h.d]) + " · " + h.k + " eQTL</b>", '<span class="mono">' + p.ch + ":" + fmt(p.pos) + "</span>", n + " eQTL intervals touch this 50 kb bin", "search a gene to see its own eQTL"]; }
+  else if (h.kind === "eq") lines = eqTip(h.r).concat(["click to open this region"]);
   else if (p.ch) lines = ['<span class="mono">' + p.ch + ":" + fmt(p.pos) + "</span>", "click to open this region"];
   if (!lines.length) { gtip.hidden = true; return; }
   gtip.innerHTML = lines.join("<br>"); gtip.hidden = false;
@@ -552,8 +623,12 @@ gcan.addEventListener("click", ev => {
   const p = gPos(ev); const h = gHit(p);
   if (h.kind === "tlabel") { toggleTrait(h.t); return; }
   if (h.kind === "qtl") { openQTL(h.i); return; }
+  if (h.kind === "eq") { const t = h.r.t, i = h.r.i, pad = Math.max(30000, (t.e[i] - t.a[i]) * 0.6); openLocus(t.c[i], t.a[i] - pad, t.e[i] + pad); return; }
   if (p.ch) openLocus(p.ch, p.pos - 110000, p.pos + 110000);
 });
+function eqTip(r) { const t = r.t, i = r.i;
+  return ["<b>" + esc(gname(t.g[i])) + " expression</b> · " + (t.loc[i] === 1 ? "local" : "distant") + " eQTL · " + esc(D.datasets.label[t.ds]),
+    '<span class="mono">' + t.c[i] + ":" + fmt(t.a[i]) + "–" + fmt(t.e[i]) + "</span> · LOD " + num(t.lod[i], 1) + (t.ef[i] != null ? " · effect " + sgn(t.ef[i], 2) : "")]; }
 function toggleTrait(t) { if (S.traits.has(t)) S.traits.delete(t); else S.traits.add(t); go(); }
 function qtlTip(i) {
   const q = Q(); const out = ["<b>" + esc(tname(q.t[i])) + "</b> · " + esc(qcross(i))];
@@ -712,14 +787,26 @@ function renderGeneCard() {
   const ks = (CBYG[i] || []).filter(k => S.ds.has(D.causal.ds[k]));
   let cand = "";
   if (ks.length) { cand = '<br><b>Candidate gene</b> ' + tierPill(bestTier(i)) + ' for ' + [...new Set(ks.map(k => D.causal.t[k]))].map(t => esc(tname(t))).join(", ") +
-    '; lowest local FDR ' + Math.min(...ks.map(k => D.causal.fdr[k])).toFixed(3) + ' (' + esc(D.datasets.label[D.causal.ds[ks[0]]]) + ').'; }
+    (ks.some(k => D.causal.fdr[k] != null) ? '; lowest local FDR ' + Math.min(...ks.filter(k => D.causal.fdr[k] != null).map(k => D.causal.fdr[k])).toFixed(3) : '') + ' (' + esc(D.datasets.label[D.causal.ds[ks[0]]]) + ').'; }
+  let eq = "";
+  if (lazyRows("eqtl").length) {
+    if (S.eg === i && EQ.rows) { const rs = EQ.rows.slice().sort((a, b) => b.t.lod[b.i] - a.t.lod[a.i]);
+      eq = '<br><b>eQTL for its expression</b>: ' + rs.length + (rs.length ? '' : ' (none reported)') + ' <button class="btn" data-eg="clear" style="padding:1px 7px">hide</button>' +
+        (rs.length ? '<div class="list" style="max-height:160px;margin-top:4px">' + rs.map(r => '<a href="#" data-eqc="' + r.t.c[r.i] + '" data-eqa="' + r.t.a[r.i] + '" data-eqe="' + r.t.e[r.i] + '"><span>' + (r.t.loc[r.i] === 1 ? "local" : "distant") + ' · <span class="mono">' + r.t.c[r.i] + ':' + fmt(r.t.p[r.i]) + '</span></span><span class="k">LOD ' + num(r.t.lod[r.i], 1) + '</span></a>').join("") + '</div>' : ''); }
+    else if (S.eg === i) eq = '<br>' + (EQ.err ? 'eQTL file did not load (' + esc(EQ.err) + ')' : 'Loading eQTL for its expression…');
+    else eq = '<br><button class="btn" data-eg="' + i + '" style="margin-top:4px">Show eQTL for its expression</button>';
+  }
   el.innerHTML = '<div class="genecard"><b>' + esc(nm) + '</b> <span class="mono" style="color:var(--muted)">' + esc(D.genes.id[i]) + '</span><br>' + cls + ' · ' + D.genes.c[i] + ':' + fmt(D.genes.a[i]) + '–' + fmt(D.genes.e[i]) + ' (' + D.genes.s[i] + ')<br>' +
-    'Inside <b>' + nq + '</b> shown QTL interval' + (nq === 1 ? "" : "s") + ' from <b>' + ts.size + '</b> trait' + (ts.size === 1 ? "" : "s") + '.' + cand + '<br><a href="https://www.yeastgenome.org/locus/' + encodeURIComponent(D.genes.id[i]) + '" target="_blank" rel="noopener">SGD page</a></div>';
+    'Inside <b>' + nq + '</b> shown QTL interval' + (nq === 1 ? "" : "s") + ' from <b>' + ts.size + '</b> trait' + (ts.size === 1 ? "" : "s") + '.' + cand + eq + '<br><a href="https://www.yeastgenome.org/locus/' + encodeURIComponent(D.genes.id[i]) + '" target="_blank" rel="noopener">SGD page</a></div>';
 }
 document.getElementById("ltable").addEventListener("click", e => { const r = e.target.closest("tr.row"); if (!r) return; S.q = +r.dataset.q; S.src = false; writeHash(); renderLocus(); document.getElementById("qcard").scrollIntoView({ block: "start", behavior: smooth() }); });
 document.getElementById("ltable").addEventListener("mouseover", e => { const r = e.target.closest("tr.row"); const id = r ? +r.dataset.q : null; if (id !== S.hover) { S.hover = id; drawLocus(); } });
 document.getElementById("ltable").addEventListener("mouseleave", () => { S.hover = null; drawLocus(); });
 for (const id of ["genelist", "candlist"]) document.getElementById(id).addEventListener("click", e => { const a = e.target.closest("a[data-gene]"); if (!a) return; e.preventDefault(); S.gene = +a.dataset.gene; drawLocus(); renderGeneCard(); });
+document.getElementById("genecard").addEventListener("click", e => {
+  const b = e.target.closest("[data-eg]"); if (b) { e.preventDefault(); setExprGene(b.dataset.eg === "clear" ? null : +b.dataset.eg); return; }
+  const a = e.target.closest("[data-eqc]"); if (a) { e.preventDefault(); const lo = +a.dataset.eqa, hi = +a.dataset.eqe, pad = Math.max(30000, (hi - lo) * 0.6); openLocus(a.dataset.eqc, lo - pad, hi + pad); }
+});
 function smooth() { return matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"; }
 
 /* ---------- QTL card ---------- */
@@ -996,6 +1083,7 @@ document.getElementById("tsv").onclick = () => {
 /* ---------- search ---------- */
 let INDEX = [];
 function buildIndex() {
+  if (D.lazy && D.lazy.name && D.lazy.name.includes("eqtl")) for (let i = 0; i < D.genes.c.length; i++) { const n = D.genes.n[i]; INDEX.push({ t: "expr", key: ((n || D.genes.id[i]) + " EXPRESSION").toUpperCase(), alt: (D.genes.id[i] + " EQTL").toUpperCase(), alt2: ((n || D.genes.id[i]) + " EQTL").toUpperCase(), label: (n || D.genes.id[i]) + " expression", sub: "eQTL for this gene, genome-wide", i }); }
   for (let i = 0; i < D.genes.c.length; i++) { const n = D.genes.n[i]; const tr = CANDG[i] ? " · candidate" : ""; INDEX.push({ t: "gene", key: (n || "").toUpperCase(), alt: D.genes.id[i].toUpperCase(), label: n || D.genes.id[i], sub: (n ? D.genes.id[i] + " · " : "") + D.genes.c[i] + tr, i }); }
   for (const t of TORDER) INDEX.push({ t: "trait", key: tname(t).toUpperCase(), alt: D.traits.raw[t].toUpperCase().replace(/_/g, " "), alt2: (D.traits.ck && D.traits.ck[t] || "").toUpperCase(), label: tname(t), sub: "trait · " + D.traits.cat[t] + " · " + D.datasets.label[D.traits.ds[t]], i: t });
   for (const x of XORDER) { const a = pname(D.crosses.p1[x]), b = pname(D.crosses.p2[x]);
@@ -1005,7 +1093,7 @@ function buildIndex() {
   for (let p = 0; p < D.parents.id.length; p++) { const n = D.parents.name[p]; if (!byName.has(n)) byName.set(n, []); byName.get(n).push(p); }
   for (const [n, ps] of byName) { const xs = XORDER.filter(x => ps.includes(D.crosses.p1[x]) || ps.includes(D.crosses.p2[x])); const nds = new Set(ps.map(p => D.parents.ds[p])).size;
     INDEX.push({ t: "parent", key: n.toUpperCase(), alt: (D.parents.code[ps[0]] || "").toUpperCase(), alt2: ps.map(p => D.parents.p18[p] || "").join(" ").toUpperCase().trim(), label: n, sub: "parent strain · " + xs.length + " cross" + (xs.length === 1 ? "" : "es") + (nds > 1 ? " in " + nds + " datasets" : ""), ps, xs }); }
-  for (let d = 0; d < D.datasets.id.length; d++) INDEX.push({ t: "dataset", key: D.datasets.label[d].toUpperCase(), alt: D.datasets.id[d].toUpperCase(), alt2: "ROUND ROBIN", label: D.datasets.label[d], sub: "dataset · " + D.datasets.cite[d], i: d });
+  for (let d = 0; d < D.datasets.id.length; d++) INDEX.push({ t: "dataset", key: D.datasets.label[d].toUpperCase(), alt: D.datasets.id[d].toUpperCase(), alt2: /round.robin/i.test(D.datasets.design[d] || "") ? "ROUND ROBIN" : "", label: D.datasets.label[d], sub: "dataset · " + D.datasets.cite[d], i: d });
 }
 function parseCoord(s) {
   const m = s.trim().match(/^(?:chr)?\s*([ivx]+|\d{1,2})\s*[:\s]\s*([\d,.]+)\s*(k|kb|m|mb)?(?:\s*[-–]\s*([\d,.]+)\s*(k|kb|m|mb)?)?$/i);
@@ -1025,7 +1113,7 @@ function suggest(qs) {
   const scored = [];
   for (const it of INDEX) { let s = -1; const keys = [it.key, it.alt, it.alt2, it.alt3].filter(Boolean);
     if (keys.some(k => k === q)) s = 0; else if (keys.some(k => k.startsWith(q))) s = 1; else if (q.length > 2 && keys.some(k => k.includes(q))) s = 2;
-    if (s >= 0) scored.push([s + ({ dataset: 0, cross: .05, parent: .1, trait: .15, gene: .2 }[it.t]), it]); }
+    if (s >= 0) scored.push([s + ({ dataset: 0, cross: .05, parent: .1, trait: .15, gene: .2, expr: .25 }[it.t]), it]); }
   scored.sort((a, b) => a[0] - b[0] || a[1].label.length - b[1].label.length);
   suggs = suggs.concat(scored.slice(0, 12).map(x => x[1])); sIdx = 0;
   box.innerHTML = suggs.length ? suggs.map((s, j) => '<button role="option" aria-selected="' + (j === 0) + '" data-j="' + j + '"><span>' + esc(s.label) + '</span><span class="k">' + esc(s.sub) + '</span></button>').join("") : '<div class="empty">No gene, trait, cross, strain or region matches. Try IRA2, chrIV:509600, caffeine, M22 or 375.</div>';
@@ -1034,6 +1122,7 @@ function suggest(qs) {
 function choose(s) {
   document.getElementById("sugg").hidden = true; const q = document.getElementById("q"); q.value = ""; q.blur();
   if (s.t === "coord") openLocus(s.co.ch, s.co.a, s.co.e);
+  else if (s.t === "expr") { S.gene = s.i; S.view = "genome"; setExprGene(s.i); }
   else if (s.t === "gene") { const i = s.i, len = D.genes.e[i] - D.genes.a[i], half = Math.max(40000, len * 3); S.gene = i; S.q = null; openLocus(D.genes.c[i], (D.genes.a[i] + D.genes.e[i]) / 2 - half, (D.genes.a[i] + D.genes.e[i]) / 2 + half); }
   else if (s.t === "trait") { S.ds.add(D.traits.ds[s.i]); S.traits = new Set([s.i]); S.view = "genome"; go(); }
   else if (s.t === "cross") { S.ds.add(D.crosses.ds[s.i]); S.crosses = new Set([s.i]); S.view = "genome"; go(); }
@@ -1115,6 +1204,7 @@ function token() {
   if (S.ds.size < D.datasets.id.length) t += "~d" + [...S.ds].map(i => D.datasets.sc[i]).join("_");
   if (S.view === "locus" && S.q != null) t += "~q" + Q().id[S.q];
   if (S.view === "locus" && S.only) t += "~o";
+  if (S.eg != null) t += "~e" + D.genes.id[S.eg];
   if (S.view !== "table" && S.h === "ef") t += "~he";
   if (S.view === "table") { const f = S.tf; if (f.t !== "") t += "~ft" + D.traits.id[+f.t]; if (f.x !== "") t += "~fx" + (+f.x < 0 ? "joint" : D.crosses.id[+f.x]); if (f.c) t += "~fc" + f.c;
     if (f.lod !== "") t += "~fl" + f.lod; if (f.ef !== "") t += "~fe" + f.ef; }
@@ -1125,7 +1215,7 @@ function readHash() {
   const h = decodeURIComponent((location.hash || "").slice(1)); if (!h) return false;
   const parts = h.split("~"); const head = parts.shift();
   // a link carries the full state: start from the defaults, then apply what it names
-  S.crosses = new Set(); S.model = "both"; S.only = false; S.h = "lod"; S.q = null; S.src = false; S.tf = { t: "", x: "", c: "", lod: "", ef: "", m: "" };
+  S.crosses = new Set(); S.model = "both"; S.only = false; S.h = "lod"; let eg = null; S.q = null; S.src = false; S.tf = { t: "", x: "", c: "", lod: "", ef: "", m: "" };
   S.ds = new Set(D.datasets.id.map((_, i) => i));
   for (const p of parts) {
     if (p[0] === "t" && p.length >= 1 && !p.startsWith("tf")) { S.traits = new Set(p.slice(1).split("_").map(id => TBYID[id]).filter(v => v != null)); }
@@ -1140,10 +1230,12 @@ function readHash() {
     else if (p[0] === "q") { const v = QBYID[p.slice(1)]; S.q = v != null ? v : null; }
     else if (p === "o") S.only = true;
     else if (p === "he") S.h = "ef";
+    else if (p[0] === "e" && GENE_BY_ID[p.slice(1)] != null) eg = GENE_BY_ID[p.slice(1)];
   }
   const m = head.match(/^(chr[IVX]+)\.(\d+)-(\d+)$/);
   if (m && CHL[m[1]]) { S.view = "locus"; S.chrom = m[1]; S.start = +m[2]; S.end = +m[3]; clampRegion(); }
   else if (head === "table" || head === "genome") S.view = head;
+  if (eg !== S.eg) { if (eg != null) S.gene = eg; setExprGene(eg, true); }
   return true;
 }
 function go() {
