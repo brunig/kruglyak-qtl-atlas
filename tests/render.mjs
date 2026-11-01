@@ -114,6 +114,14 @@ try {
     const pYJM = data.parents.name.map((n, i) => n === "YJM454" ? i : -1).filter(i => i >= 0);
     const nYJM = data.crosses.id.filter((_, x) => pYJM.includes(data.crosses.p1[x]) || pYJM.includes(data.crosses.p2[x])).length;
     check("search parent strain YJM454 (every dataset)", f.includes("YJM454") && (await page.textContent("#crossf")).includes(nYJM + " crosses"), nYJM + " crosses expected");
+    if (data.lazy && data.lazy.name && data.lazy.name.includes("eqtl")) {
+      f = await search(page, "TDH3 expression");
+      await page.waitForFunction(() => location.hash.includes("~eYGR192C"), null, { timeout: 5000 });
+      await page.waitForTimeout(1500);   // the eQTL file loads on demand
+      const shot = path.join(SHOTS, "light-genome-eqtl.png"); await page.screenshot({ path: shot, clip: { x: 0, y: 0, width: 1400, height: 950 } });
+      const nTDH3 = (await page.evaluate(() => fetch("v/a18_eqtl.json").then(r => r.json()).then(t => { const g = D.genes.id.indexOf("YGR192C"); return t.g.filter(x => x === g).length; })));
+      check("search gene expression: TDH3 eQTL track loads", f.includes("TDH3 expression") && nTDH3 > 0 && (await page.evaluate(() => location.hash)).includes("~eYGR192C"), nTDH3 + " eQTL for TDH3");
+    }
     f = await search(page, "round robin");
     const rr = data.datasets.label.filter((l, d) => /round.robin/i.test(data.datasets.design[d] || ""));
     check("search dataset 'round robin'", rr.some(l => f.includes(l)), f + " vs " + rr.join(", "));

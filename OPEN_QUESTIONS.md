@@ -563,6 +563,69 @@ scans for a future track clearly labelled "recomputed by the atlas", not reporte
 paper's own scans used BLUP residuals from a mixed model, so a simple scan would not reproduce its
 statistics exactly.
 
+## Albert et al. 2018
+
+Sources: the 36 files of `elife-35471-supp-v1.zip` (unpacked in `sources/albert2018/raw/`; the zip's
+checksum is in `sources/albert2018/SOURCE_ZIP.tsv`), the article page, the eLife figures page
+(`extracted/figures_page.html`, for file captions) and the analysis code
+[joshsbloom/eQTL_BYxRM](https://github.com/joshsbloom/eQTL_BYxRM) at commit `ad83786`.
+
+### Q1. Display design: hotspots drawn, eQTL on demand
+Chosen by the user. The 102 hotspots are ordinary `qtl` rows (trait "Expression hotspots
+(trans-eQTL)", category `expression`); the 36,498 eQTL are in `docs/v/a18_eqtl.json` (table
+`lazy`), with per-50-kb counts in `dens` (`local`, `distant`). There is no trait per gene.
+
+### Q2. Sign of r — settled
+Genotypes are coded −1 = BY, +1 = RM (code README; Source data 3 caption on the figures page), and
+`r` is the Pearson correlation between residual expression and that genotype at the peak marker
+(`fasterLOD` in `code/eQTL_BYxRM1000_fx_stranded.R`). **r > 0: the RM allele raises expression.**
+`r` and `lm.coeff` agree in sign for 36,494 of 36,498 rows. `crosses.g1` is set to BY so the page's
+generic effect orientation matches.
+
+### Q3. Two definitions of "local"
+Column `cis` (used for `loc`) is the paper's local eQTL: interval overlaps the gene padded 1 kb
+upstream and 200 bp downstream, and, in the code, peak within 40 kb of the gene (2,969 eQTL in 2,884
+genes, as the Methods state). Column `gene.to.CI.dist` measures distance to the *unpadded* gene
+(`NA` on another chromosome). The sentence "33,529 of 36,498 did not overlap the genes they
+influenced" matches 36,498 − 2,969 (cis rule); counting `gene.to.CI.dist` NA or ≥ 1 gives 33,588.
+The "5,606 genes with a distant eQTL" matches the unpadded rule (the cis rule gives 5,605). Strict
+xfail for the 33,529 under the unpadded rule; the atlas uses `cis`.
+
+### Q4. Hotspot rows carry no LOD or effect
+The hotspot overview gives bootstrap peak (median bootstrap position), 95% bootstrap interval and
+counts. `lod` and `ef` are null; `qtl.cc` holds `numberEQTLInHotspot` (eQTL whose interval overlaps
+the hotspot; an eQTL can count for two overlapping hotspots, so these sum to 55,049). The number of
+genes affected (`numberNonzeroEffects`, the paper's "affected N genes") and per-gene effects (Source
+data 9) are in the verbatim rows and `docs/v/a18_hotspot_effects.json`.
+
+### Q5. Candidate genes for hotspots
+Only genes the text names: MKT1, HAP1, IRA2, GPA1 get tier `x` because the paper says it
+"previously identified and experimentally confirmed" them (in earlier papers, not by allele
+replacement in this one; the page's `x` label "Confirmed by allele replacement" is slightly
+narrower than that). GIS1, STB5, MOT3 (single-gene hotspots), KRE33 ("likely caused by"), ERC1, and
+the six transcription factors with damaging variants located in hotspots (GAT1, HMS1, PUT3, RFX1,
+SRD1, TBS1) get tier `c`. Each is placed on the hotspot whose interval overlaps its SGD bounds, and
+each is also in that hotspot's `allGenesInInterval`. Not assigned: the mating-type locus (confirmed,
+but not one gene), AMN1 and SSY1 (cited as known causal genes of yeast eQTL hotspots, but neither
+lies in any of the 102 intervals), and GCR2/YNL198C/WHI3/SLZ1 (the text says the chrXIV 267 kb
+hotspot "spans" them, without naming a candidate).
+
+### Q6. Genes not in the R64-5-1 table
+59 genes with eQTL (371 eQTL; e.g. the mitochondrial Q0140 and Ty-element ORFs such as YAR009C)
+are not `gene` features of the R64-5-1 table; their eQTL keep `g = -1` in the lazy file, with the
+systematic name in the verbatim row.
+
+### Q7. Markers
+The genotype file (Source data 3) holds all 42,052 markers; the 11,530-marker collapsed map used
+for mapping is not listed separately. Peak and interval markers in Source data 4 are named
+`chr:pos_BY/RM` on sacCer3 and all lie inside R64 chromosomes.
+
+### Q8. Large files kept by member list only
+Source data 1 (expression, 97 MB unpacked), 3 (genotypes, 107 MB) and 10 (all GO results,
+1.07 million rows) are inner zips kept untouched; nothing from them is copied to `docs/`.
+Source data 9 (hotspot effects) and 11 (TFBS enrichment) are kept verbatim in their own lazy files
+(`a18_hotspot_effects.json`, `a18_tfbs.json`) to keep `a18_extra.json` small.
+
 ## Blocked steps
 
 ### B1. GitHub Pages

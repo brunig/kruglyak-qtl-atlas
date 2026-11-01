@@ -2,14 +2,18 @@
 
 A static browser for every QTL the Kruglyak lab has mapped in yeast, one dataset at a time,
 in the visual language of the
-[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). Four datasets so far
-(12,864 QTL, 95 traits):
+[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). Eight datasets so far
+(14,356 QTL drawn, 180 traits, plus 36,498 eQTL loaded per gene on demand):
 
 | dataset | design | QTL |
 |---|---|---|
 | Bloom et al. 2019, eLife | 16-parent round-robin segregant panel, 13,950 segregants | 4,552 joint-model + 7,751 within-cross, 38 traits |
+| Bloom et al. 2015, Nat Commun | BY × RM, 4,390 segregants | 797, 20 traits |
+| Bloom et al. 2013, Nature | BY × RM, ~1,000 segregants | 591, 46 traits |
+| Albert et al. 2018, eLife | BY × RM eQTL, 1,012 segregants | 102 trans-eQTL hotspots; 36,498 eQTL on demand |
 | Treusch et al. 2015, PLoS Genet | X-QTL in a 12-strain round robin, plus BY × RM | 97 (60 grouped across crosses), caffeine and salt |
 | Ehrenreich et al. 2012, PLoS Genet | X-QTL in all 6 crosses of BY, RM, YJM789, YPS163 | 411 loci, 13 chemicals |
+| Ehrenreich et al. 2010, Nature | X-QTL in BY × RM pools | 2 tabulated loci (the rest are figures only) |
 | Breunig et al. 2014, PLoS Genet | BY × RM segregants, metabolite levels | 53 linkages, 34 metabolites (genetic positions only) |
 
 Details, counts and the queue of papers still to ingest: `DATASETS.md`.
@@ -40,6 +44,9 @@ below). Locally: `python3 -m http.server --directory docs` and open http://local
   and the verbatim source row with file, sheet and row number.
 - **Table view.** The full QTL table, filterable by dataset, model, trait, cross,
   chromosome, LOD and |effect|, sortable, with a download of the filtered rows as TSV.
+- **eQTL on demand.** Search `TDH3 expression` (or open a gene and press "Show eQTL for its
+  expression") to draw that gene's eQTL from Albert 2018 genome-wide, local and distant, with
+  the gene marked. The heatmap carries eQTL density rows for the whole set.
 - **Search.** Genes (`IRA2`, `YOL081W`), coordinates (`chrIV:509600`, `IV:400k-600k`),
   traits (`caffeine`), crosses (`375`, `M22 x BY`), parent strains (`YJM454`) and datasets
   (`Bloom 2019`, `round robin`).
@@ -86,6 +93,10 @@ with `python3 -I` and reads only from `sources/`.
 | Treusch et al. 2015 | PLOS supporting information S1-S14 and the article page | R64, no transform |
 | Ehrenreich et al. 2012 | PLOS supporting information S1-S17 and the article page | consistent with R64 at locus resolution; no transform |
 | Breunig et al. 2014 | PLOS supporting information S1-S8 and the article page | none (cM only) |
+| Bloom et al. 2013 | Nature supplementary information (Tables 1-3, SI PDF) and the article page | R64-compatible, no transform |
+| Bloom et al. 2015 | Nature Communications supplementary information and Data 1-5 (including genotypes and phenotypes) | R64, no transform |
+| Ehrenreich et al. 2010 | Nature supplementary information PDF and the article page | consistent with R64, no transform |
+| Albert et al. 2018 | eLife bundle `elife-35471-supp-v1.zip`, unpacked (zip checksum in `SOURCE_ZIP.tsv`) | R64, no transform |
 | genes | SGD S288C annotation R64-5-1, via `brunig/microscale-xqtl` `docs/data.json` | R64 |
 
 Each dataset's raw files sit untouched in `sources/<id>/raw/` with checksums in
@@ -103,11 +114,11 @@ settled a question the atlas uses the most defensible reading and says so in `OP
 Each dataset has `tests/test_<id>.py`, which checks the paper's own reported numbers
 against the ingested tables, coordinate sanity (inside R64 chromosomes, start ≤ peak ≤ end),
 provenance, and that every source row is kept verbatim. Run them all with `./build.sh test`:
-100 pass, 1 is skipped (not checkable from the files), and 14 are strict expected failures,
+186 pass, 2 are skipped (not checkable from the files), and 21 are strict expected failures,
 each a number in a paper that its own supplementary files do not reproduce, named with file
 and column (for example Bloom 2019's 105 candidate genes at FDR 5%, 102 in the table;
 Breunig 2014's 52 linkages, 53 in Table S1). `OPEN_QUESTIONS.md` explains each one.
-`node tests/render.mjs` checks the browser (36 checks).
+`node tests/render.mjs` checks the browser (37 checks).
 
 ## Adding a dataset
 

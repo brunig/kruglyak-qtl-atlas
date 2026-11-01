@@ -207,7 +207,7 @@ parent, with the probability mass of the pair's joint posterior summed over the 
 |---|---|
 | `ds`, `g` | dataset and gene indices |
 | `tier` | best evidence tier over the gene's rows: `v` previously identified (the analysis code's list, `sources/bloom2019/code_tables/previously_identified.tsv`), `5` local FDR < 0.05, `20` local FDR < 0.2 |
-|  | Further codes from later datasets: `x` confirmed by allele replacement, `c` candidate gene named by the paper without a statistical tier. Datasets without fine-mapping leave `causal.pcs`, `sp`, `eff`, `fdr`, `jppc`, `jv` null and `q2 = -1`. |
+|  | Further codes from later datasets: `x` experimentally confirmed (allele replacement or other experiments the paper cites), `c` candidate gene named by the paper without a statistical tier. Datasets without fine-mapping leave `causal.pcs`, `sp`, `eff`, `fdr`, `jppc`, `jv` null and `q2 = -1`. |
 | `fdr` | lowest local FDR |
 | `nt` | number of traits the gene is assigned for |
 | `n` | number of rows in `causal` |

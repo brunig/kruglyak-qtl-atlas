@@ -1,0 +1,5 @@
+zip	bytes	sha256	url
+elife-35471-supp-v1.zip	86194370	b866ce1852d1dccc9e1aecb1ec189aabb80df1caaccc29f5c82ca49d8204a716	https://cdn.elifesciences.org/articles/35471/elife-35471-supp-v1.zip
+
+# Cross-check (2026-11-01): the user supplied elife-35471-data2-v2.xlsx, -data4-v2.xlsx, -data5-v2.xlsx and -data10-v2.zip
+# (eLife's current file versions). Each is byte-identical (size and SHA-256) to the matching elife_poa_e35471_Source_data_{2,4,5,10} file here.
