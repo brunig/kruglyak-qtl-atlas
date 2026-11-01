@@ -2,7 +2,7 @@
 
 A static browser for every QTL the Kruglyak lab has mapped in yeast, one dataset at a time,
 in the visual language of the
-[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). Eight datasets so far
+[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). Nine datasets so far
 (14,356 QTL drawn, 180 traits, plus 36,498 eQTL loaded per gene on demand):
 
 | dataset | design | QTL |
@@ -15,6 +15,7 @@ in the visual language of the
 | Ehrenreich et al. 2012, PLoS Genet | X-QTL in all 6 crosses of BY, RM, YJM789, YPS163 | 411 loci, 13 chemicals |
 | Ehrenreich et al. 2010, Nature | X-QTL in BY × RM pools | 2 tabulated loci (the rest are figures only) |
 | Breunig et al. 2014, PLoS Genet | BY × RM segregants, metabolite levels | 53 linkages, 34 metabolites (genetic positions only) |
+| Gou et al. 2019, Genetics | BY × RM segregants, mutation rate and mutagen growth | 8 QTL, chromosome only (no coordinates published) |
 
 Details, counts and the queue of papers still to ingest: `DATASETS.md`.
 
@@ -97,6 +98,7 @@ with `python3 -I` and reads only from `sources/`.
 | Bloom et al. 2015 | Nature Communications supplementary information and Data 1-5 (including genotypes and phenotypes) | R64, no transform |
 | Ehrenreich et al. 2010 | Nature supplementary information PDF and the article page | consistent with R64, no transform |
 | Albert et al. 2018 | eLife bundle `elife-35471-supp-v1.zip`, unpacked (zip checksum in `SOURCE_ZIP.tsv`) | R64, no transform |
+| Gou et al. 2019 | article PDF and supplement zip supplied by the user; QTL notebooks from `gouliangke/Mutation-rate` @ `bcaf987` | none (chromosome only) |
 | genes | SGD S288C annotation R64-5-1, via `brunig/microscale-xqtl` `docs/data.json` | R64 |
 
 Each dataset's raw files sit untouched in `sources/<id>/raw/` with checksums in
@@ -114,7 +116,7 @@ settled a question the atlas uses the most defensible reading and says so in `OP
 Each dataset has `tests/test_<id>.py`, which checks the paper's own reported numbers
 against the ingested tables, coordinate sanity (inside R64 chromosomes, start ≤ peak ≤ end),
 provenance, and that every source row is kept verbatim. Run them all with `./build.sh test`:
-186 pass, 2 are skipped (not checkable from the files), and 21 are strict expected failures,
+205 pass, 2 are skipped (not checkable from the files), and 23 are strict expected failures,
 each a number in a paper that its own supplementary files do not reproduce, named with file
 and column (for example Bloom 2019's 105 candidate genes at FDR 5%, 102 in the table;
 Breunig 2014's 52 linkages, 53 in Table S1). `OPEN_QUESTIONS.md` explains each one.

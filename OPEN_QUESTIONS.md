@@ -626,6 +626,69 @@ Source data 1 (expression, 97 MB unpacked), 3 (genotypes, 107 MB) and 10 (all GO
 Source data 9 (hotspot effects) and 11 (TFBS enrichment) are kept verbatim in their own lazy files
 (`a18_hotspot_effects.json`, `a18_tfbs.json`) to keep `a18_extra.json` small.
 
+## Gou et al. 2019
+
+Sources: the article PDF and the Figshare supplement (doi:10.6084/m9.figshare.7343036), both supplied
+by the user, and the authors' notebooks from github.com/gouliangke/Mutation-rate at commit `bcaf987`.
+Statements used are quoted in `sources/gou2019/extracted/text_facts.tsv`.
+
+### Q1. No QTL coordinates anywhere
+The four mutation-rate QTL are named by chromosome in the Results text (XII, XIV, I, V) with their
+direction and variance explained. Their positions, 1.5-LOD intervals and LODs are only drawn: Figure 1B
+plots LOD against the genetic map, as do Figure 4 (4NQO, MMS) and Figure S5 (H2O2). The supplement has
+no QTL table, and the QTL notebook computes the scan and plots it without printing peaks or intervals.
+**Atlas:** QTL rows carry the chromosome only (`a`, `e`, `p`, `cm` null). The page lists them in the
+table and card but does not draw them. Peaks could be recomputed from the repository's genotype and
+phenotype files, but that would be re-mapping, so it is not done.
+
+### Q2. Which QTL the mutagen traits have
+The text says "two large-effect QTL for 4NQO and MMS sensitivity ... overlapped with the major QTL for
+mutation rate", and the next sentence refers to "The QTL on chromosome XII and XIV". **Atlas (most
+defensible reading):** one 4NQO and one MMS QTL on each of chrXII and chrXIV. For H2O2 the chrXII and
+chrXIV QTL "were still observed ... but they had small effects", and its large-effect QTL on other
+chromosomes are not named. Whether the chrXII/XIV H2O2 signals pass the 3.64 threshold is not stated,
+so H2O2 gets no QTL rows.
+
+### Q3. Candidate tiers
+RAD5 (chrXII) and MKT1 (chrXIV) are confirmed for mutation rate by allele-replacement strains (tier
+`x`). For 4NQO the paper cites Demogines et al. 2008 for RAD5 and MKT1 as "the underlying causal genes for
+4NQO sensitivity", so those rows are tier `c` (named by the paper, from earlier work). MMS gets no
+gene: the text does not assign one.
+
+### Q4. Effect direction for the mutagen traits
+The Discussion cites Demogines et al. 2008 for the RM RAD5 allele increasing 4NQO and MMS sensitivity.
+That is not a measurement in this paper's QTL scan, so `up` is left empty for the mutagen QTL.
+
+### Q5. Engineered-strain mean differences
+File S2 reproduces three of the five stated differences at one decimal (I791S − BY 0.9, E783D − BY 0.3,
+I791S − E783D 0.6, × 10⁻⁷). BY::RAD5-RM − BY gives 2.84 × 10⁻⁷ against the stated 2.9, and RM::MKT1-BY −
+RM gives 6.17 × 10⁻⁷ against the stated 6.1 (strict xfails).
+
+### Q6. RM's mutation rate differs between Table S1 and File S2
+Table S1 gives RM11-1a 5.8 × 10⁻⁷ (mean of 96 replicates). File S2's 96 RM replicates average 2.1 × 10⁻⁷.
+BY agrees (1.7 vs 1.78 × 10⁻⁷). The two are presumably separate experiments (Table S1 with the seven
+isolates, File S2 with the allele replacements, Figure 3), but the paper does not say so. Recorded, not
+resolved.
+
+### Q7. Variance explained adds to 20.6%, not 20.7%
+8.8 + 6.1 + 3.1 + 2.6 = 20.6, and the text gives 20.7% for the four together. This is consistent with
+rounding of the parts and is not marked as a discrepancy.
+
+### Q8. Category
+No category is specific to mutation rate. **Atlas:** `cellular phenotype`, as for Ehrenreich 2010's
+mitochondrial function. The condition keys for 4NQO (`4nqo 0.1mg/mL`), MMS and H2O2 (`hydrogen peroxide
+4mM`) match no other dataset's dose, so they do not link to Bloom 2013 or Ehrenreich 2010's 4NQO and
+H2O2 traits.
+
+### Q9. Segregant count
+1040 segregants were assayed and 843 were mapped after removing 197 with unreliable cell counts.
+`crosses.n` is 843, the mapped number (and File S1's row count).
+
+### Q10. The 4NQO dose may be a unit misprint
+The paper prints 4NQO at "0.1 mg/ml" (Materials and Methods and the Figure 4 legend). Bloom 2013 used
+4NQO at 0.125 µg/mL and Ehrenreich 2010 at 5 µg/ml, so 0.1 mg/ml would be 800-fold higher than the
+earlier BY × RM work. It may be meant as µg/ml. **Atlas:** kept as printed.
+
 ## Blocked steps
 
 ### B1. GitHub Pages
@@ -639,8 +702,8 @@ From the build environment (network policy as of 2026-11-01):
   Bloom 2015 and Ehrenreich 2010 supplements fetched. Their main texts and Online Methods are
   paywalled, so semantics come from tables, captions and supplements only.
 - **eLife** (Albert 2018): resolved; `elifesciences.org` and its CDN now answer plain requests.
-- **Genetics / OUP** (Gou 2019): `academic.oup.com` answers 403; `gsajournals.figshare.com`,
-  `figshare.com` and `doi.org` are not allowed hosts.
+- **Genetics / OUP** (Gou 2019): `academic.oup.com` answers 403 and figshare is not allowed;
+  resolved by the user supplying the article PDF and the supplement zip.
 - **Dryad** (Treusch 2015 code and mapping data): not an allowed host.
 Fix: add `idp.nature.com`, `doi.org`, `*.figshare.com`, `datadryad.org` to the environment's
 allowed domains, or supply the files directly (upload, or a shared folder).

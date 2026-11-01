@@ -514,7 +514,7 @@ function drawGenome() {
   hrows.forEach((hr, r) => {
     const y = hTop + r * rowH;
     if (hr.u != null) { ctx.fillStyle = muted; ctx.font = "italic " + HF + css("--sans"); ctx.textAlign = "left";
-      ctx.fillText(unplaced[hr.u] + " trait" + (unplaced[hr.u] === 1 ? "" : "s") + " with genetic positions only (cM): not placed on the genome; listed in the Table view", L, y + rowH / 2); return; }
+      ctx.fillText(unplaced[hr.u] + " trait" + (unplaced[hr.u] === 1 ? "" : "s") + " with no physical position (cM or chromosome only): not placed on the genome; listed in the Table view", L, y + rowH / 2); return; }
     if (hr.z != null) { ctx.fillStyle = muted; ctx.font = "italic " + HF + css("--sans"); ctx.textAlign = "left";
       ctx.fillText(fitText(ctx, empty[hr.z].length + " trait" + (empty[hr.z].length === 1 ? "" : "s") + " with no tabulated QTL (" + empty[hr.z].map(tname).join(", ") + ")", w - L - R), L, y + rowH / 2); return; }
     if (hr.h != null) { ctx.fillStyle = css("--fg"); ctx.font = "600 " + HF + css("--sans"); ctx.textAlign = "left"; ctx.fillText(fitText(ctx, D.datasets.label[hr.h], L + 200), 4, y + rowH / 2); ctx.fillStyle = css("--rule"); ctx.fillRect(0, y + rowH - 0.5, w, 0.8); lastCat = null; return; }
@@ -751,7 +751,7 @@ function renderLocus() {
   document.getElementById("only").checked = S.only;
   document.getElementById("l-meta").innerHTML = fmtkb(S.end - S.start) + (S.only ? " · selected traits only" : " · every trait") +
     (S.model === "both" ? "" : S.model === "j" ? " · joint model" : " · within-cross") + (S.crosses.size ? " · " + S.crosses.size + " crosses" : "") +
-    (() => { let n = 0; const q = Q(); for (let i = 0; i < NQ; i++) if (q.p[i] == null && q.c[i] === S.chrom && qv(i)) n++; return n ? " · " + n + " QTL on " + S.chrom + " have a genetic position only and are listed in the Table view, not drawn" : ""; })() +
+    (() => { let n = 0; const q = Q(); for (let i = 0; i < NQ; i++) if (q.p[i] == null && q.c[i] === S.chrom && qv(i)) n++; return n ? " · " + n + " QTL on " + S.chrom + " have no physical position (genetic position or chromosome only) and are listed in the Table view, not drawn" : ""; })() +
     " · click a QTL for its card · drag to pan · double-click or ctrl-scroll to zoom";
   document.getElementById("l-height").innerHTML = heightSeg();
   document.getElementById("l-legend").innerHTML = (S.traits.size ? trackLegend() : "") + '<span><i class="sw box" style="--c:var(--accent)"></i>reported interval, opacity by LOD (or |effect|), dark tick at the peak</span>' +
@@ -847,7 +847,8 @@ async function renderCard() {
   h += '<div class="pk-sub"><span class="mono">' + q.c[i] + (placed(i) ? ':' + (pt ? fmt(q.p[i]) : fmt(q.a[i]) + '–' + fmt(q.e[i])) : (q.cm && q.cm[i] != null ? ' · ' + num(q.cm[i], 1) + ' cM' : '')) + '</span> · ' + esc(D.datasets.label[ds]) + ' · ' + esc(D.traits.cat[q.t[i]]) + (kind ? ' · ' + esc(kind) : "") + ' · <span class="mono">' + esc(q.id[i]) + '</span> · source <span class="mono">' + esc(q.pv[i]) + '</span></div>';
   // position
   let pos = '<dl><h3>Position</h3><dt>Chromosome</dt><dd>' + q.c[i] + '</dd>';
-  if (!placed(i)) pos += '<dt>Genetic position</dt><dd>' + (q.cm && q.cm[i] != null ? num(q.cm[i], 1) + ' cM' : "not given") + '</dd><dt>Physical position</dt><dd>not placed on R64: the source gives a genetic position only, and its marker map is not published with it</dd>';
+  if (!placed(i)) pos += (q.cm && q.cm[i] != null ? '<dt>Genetic position</dt><dd>' + num(q.cm[i], 1) + ' cM</dd><dt>Physical position</dt><dd>not placed on R64: the source gives a genetic position only, and its marker map is not published with it</dd>'
+    : '<dt>Position</dt><dd>chromosome only: the paper publishes no coordinates, interval or LOD for this QTL</dd>');
   else if (isJ) pos += '<dt>Lead variant</dt><dd class="mono">' + esc(lv) + '</dd><dt>Interval</dt><dd>none reported; the joint model gives the lead variant only</dd>';
   else {
     pos += pt ? '<dt>Interval</dt><dd>not reported in a table; drawn at the peak</dd>' : '<dt>Interval</dt><dd class="mono">' + fmt(q.a[i]) + '–' + fmt(q.e[i]) + '</dd><dt>Width</dt><dd>' + fmtkb(q.e[i] - q.a[i]) + '</dd>';

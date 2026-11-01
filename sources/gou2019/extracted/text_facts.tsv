@@ -1,0 +1,29 @@
+kind	trait	gene	value	source	location	quote
+design			1040 segregants, BY x RM	raw/Gou_et_al_2019_Genetics.pdf	page 1, Abstract	rates in seven natural yeast isolates and in 1040 segregant progeny from a cross between BY, a laboratory strain, and RM, a wine strain.
+design			broad-sense heritability 0.49	raw/Gou_et_al_2019_Genetics.pdf	page 1, Abstract	We observed that mutation rate varies among yeast strains and is heritable (H2 = 0.49).
+design	mutation rate		four QTL	raw/Gou_et_al_2019_Genetics.pdf	page 1, Abstract	We performed linkage mapping in the segregants and identified four quantitative trait loci underlying mutation rate variation in the cross.
+design			parents BY4724 and RM11-1a	raw/Gou_et_al_2019_Genetics.pdf	page 2, left column	the laboratory strain BY4724 (hereafter referred to as BY) and the vineyard strain RM11-1a (hereafter referred to as RM).
+genotyping			segregants genotyped in Bloom et al. 2013	raw/Gou_et_al_2019_Genetics.pdf	page 2, left column	were generated, genotyped, and described previously (Bloom et al. 2013).
+phenotype	mutation rate		CAN1 loss of function, canavanine	raw/Gou_et_al_2019_Genetics.pdf	page 5, left column	Here, we measured rare spontaneous loss-of-function mutations in the gene CAN1, which encodes an arginine permease.
+phenotype	mutation rate		mutation rate score = residual of m after N and plate	raw/Gou_et_al_2019_Genetics.pdf	page 3, left column	We built a linear model that included the number of cells per culture (N) and a plate effect as additive covariates for the number of mutations per culture (m). The residuals from this linear model were called the “mutation rate score” and used in downstream analyses.
+design	mutation rate		843 segregants mapped	raw/Gou_et_al_2019_Genetics.pdf	page 2, right column	Thus we removed these 197 segregants from the downstream QTL analysis; only 843 segregants with confident measurements of N were used.
+method			LOD from Pearson r	raw/Gou_et_al_2019_Genetics.pdf	page 3, right column	We tested for linkage by calculating logarithm likelihood ratio (LOD scores) for each genotypic marker and trait as
+method			5% FWER thresholds from 1000 permutations	raw/Gou_et_al_2019_Genetics.pdf	page 3, right column	The estimated 5% family-wise error rate significance thresholds were 3.52, 3.62, 3.61, and 3.64 for mutation rate, mutagen sensitivity for 4NQO, MMS,
+method			1.5-LOD drop intervals	raw/Gou_et_al_2019_Genetics.pdf	page 3, right column	determined using a 1.5 LOD score drop.
+method			positions plotted on the genetic map only	raw/Gou_et_al_2019_Genetics.pdf	page 3, Figure 1 legend	LOD score for mutation rate variation is plotted against the genetic map.
+heritability	mutation rate		narrow-sense heritability 30%	raw/Gou_et_al_2019_Genetics.pdf	page 5, right column	segregating markers (narrow-sense heritability) to be 30%
+direction	mutation rate		chrXII and chrI: RM allele higher	raw/Gou_et_al_2019_Genetics.pdf	page 5, right column	At two of the QTL, on chromosomes XII and I, the RM allele conferred a higher mutation rate
+direction	mutation rate		chrXIV and chrV: BY allele higher	raw/Gou_et_al_2019_Genetics.pdf	page 5, right column	At the other two QTL, on chromosomes XIV and V, the BY allele conferred a higher mutation rate
+ve_total	mutation rate		20.7% total, 69% of additive heritability	raw/Gou_et_al_2019_Genetics.pdf	page 5, right column	The four detected QTL explained 20.7% of the phenotypic variance, thus accounting for 69% of the estimated additive heritability.
+ve	mutation rate		XII 8.8, XIV 6.1, I 3.1, V 2.6 %	raw/Gou_et_al_2019_Genetics.pdf	page 5, right column	The loci on chromosomes XII, XIV, I, and V explained 8.8, 6.1, 3.1, and 2.6% of the variance, respectively.
+interaction	mutation rate		XII x XIV interaction, 1% of variance	raw/Gou_et_al_2019_Genetics.pdf	page 5, right column	found a significant interaction between the QTL on chromosome XII and the QTL on chromosome XIV that explained 1% of the phenotypic variance
+interval_genes	mutation rate		10 genes in the chrXII interval	raw/Gou_et_al_2019_Genetics.pdf	page 5, right column	Ten genes fell within the confidence interval of the QTL on chromosome XII.
+interval_genes	mutation rate		19 genes in the chrXIV interval	raw/Gou_et_al_2019_Genetics.pdf	page 6, left column	Nineteen genes fell within the confidence interval of the QTL on chromosome XIV.
+candidate	mutation rate	RAD5	RM allele increases mutation rate (allele replacement BY::RAD5-RM)	raw/Gou_et_al_2019_Genetics.pdf	page 6, right column	demonstrating that the RM RAD5 allele increases mutation rate
+candidate	mutation rate	MKT1	BY allele increases mutation rate (allele replacement RM::MKT1-BY)	raw/Gou_et_al_2019_Genetics.pdf	page 6, right column	showing that the BY MKT1 allele increases mutation rate
+candidate	mutation rate	RAD5	both RAD5 missense variants contribute	raw/Gou_et_al_2019_Genetics.pdf	page 7, left column	suggesting that both variants contribute to the higher mutation rate.
+mutagen	4NQO; MMS		two large-effect QTL overlap the major mutation-rate QTL	raw/Gou_et_al_2019_Genetics.pdf	page 7, right column	We identified two large-effect QTL for 4NQO and MMS sensitivity that overlapped with the major QTL for mutation rate
+mutagen	H2O2		chrXII and chrXIV observed with small effects	raw/Gou_et_al_2019_Genetics.pdf	page 7, right column	QTL on chromosome XII and XIV were still observed in
+mutagen	4NQO	RAD5; MKT1	causal genes for 4NQO sensitivity (Demogines et al. 2008)	raw/Gou_et_al_2019_Genetics.pdf	page 7, right column	the underlying causal genes for 4NQO sensitivity were also RAD5 and MKT1.
+mutagen			doses: 4NQO 0.1 mg/ml, MMS 0.01%, H2O2 4 mM (the '4 mM' follows on the next line, after the subscript digits of H2O2)	raw/Gou_et_al_2019_Genetics.pdf	page 2, left column	were 0.1 mg/ml, 0.01%
+genotype_code			genotype coding -1 = BY, +1 = RM	code/mutation rate qtl mapping.ipynb	cell 7	#genotype data -1  = BY, +1  = RM
