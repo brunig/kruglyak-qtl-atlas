@@ -1,0 +1,119 @@
+sav.gol <- function(T, fl, forder=4, dorder=0) { 
+    m <- length(T) 
+    dorder <- dorder + 1 
+    # -- calculate filter coefficients -- 
+    fc <- (fl-1)/2 # index: window left and right 
+    X <- outer(-fc:fc, 0:forder, FUN="^") # polynomial terms and 
+coefficients 
+    Y <- pinv(X); # pseudoinverse 
+    # -- filter via convolution and take care of the end points -- 
+    T2 <- convolve(T, rev(Y[dorder,]), type="o") # convolve(...) 
+    T2 <- T2[(fc+1):(length(T2)-fc)] 
+} 
+
+pinv <- function (A) { 
+    s <- svd(A) 
+    # D <- diag(s$d); Dinv <- diag(1/s$d) 
+    # U <- s$u; V <- s$v 
+    # A = U D V' 
+    # X = V Dinv U' 
+    s$v %*% diag(1/s$d) %*% t(s$u) 
+}
+
+conf.ints <- function(sel.datum, npt.window = 50, moments = c(0, .01, .025, .05, .1, .2, .3, .4, .5, .6, .7, .8, .9, .95, .975, .99, 1)) {
+	do.call("rbind", by(sel.datum, list(sel.datum$Chromosome), function(chromdata) {
+		vals <- lapply(1:nrow(chromdata), function(index) {
+			min.index = index - npt.window
+			max.index = index + npt.window
+			if (min.index < 1) {
+				min.index = 1
+				max.index = ((2 * npt.window) + 1)
+			} else if (max.index > nrow(chromdata)) {
+				min.index = (nrow(chromdata) - ((2*npt.window) + 1))
+				max.index = nrow(chromdata)
+			}
+			quantile(chromdata$Dif[min.index:max.index], moments, na.rm = TRUE)
+		})
+		vals <- cbind(chromdata, do.call("rbind", vals))
+	}))
+}
+
+groupPeaks <- function(chromdata, median.range, min.pts = 50, peak.window = 1E5, quant.thres = 0.05, big.peak.thresh = 750) {
+#	print(paste("chromosome", chromdata$chromosome[1], sep = " "))
+	crosspts = collapseRLE(rle(abs(chromdata$SG) >= median.range/2))
+	cross.cumsums = c(1,cumsum(crosspts$length))
+	new.crosspts = list(lengths = c(), values = c())
+	if (sum(crosspts$lengths[crosspts$values == TRUE] > big.peak.thresh) > 0) {
+		big.peak.index = which(crosspts$lengths > big.peak.thresh & crosspts$values == TRUE)
+		peak.sites = chromdata$SG[cross.cumsums[big.peak.index]:(cross.cumsums[big.peak.index + 1] - 1)]
+		#big.peak.crosspts = collapseRLE(rle(abs(peak.sites)  >= quantile(abs(peak.sites), c(quant.thres))[[1]]))
+		nsites = length(peak.sites)
+		big.peak.crosspts = collapseRLE(rle(abs(peak.sites)  >= (min(abs(peak.sites[round(0.3 * nsites):round(0.7 * nsites)])) + 0.05)))
+		for (i in 1:length(crosspts$lengths)) {
+			if (i == big.peak.index) {
+				new.crosspts$lengths = c(new.crosspts$lengths, big.peak.crosspts$lengths)
+				new.crosspts$values = c(new.crosspts$values, big.peak.crosspts$values)
+			} else {
+				new.crosspts$lengths = c(new.crosspts$lengths, crosspts$lengths[i])
+				new.crosspts$values = c(new.crosspts$values, crosspts$values[i])
+			}
+		}
+		crosspts = new.crosspts
+		cross.cumsums = c(1,cumsum(crosspts$length))
+	}
+	true.peaks = c()
+	i = 1
+	while (i <= length(crosspts$values)) {
+		if (crosspts$values[i] == TRUE) {
+			true.peaks = c(true.peaks, (cross.cumsums[i] + which.max(abs(chromdata$SG[cross.cumsums[i]:(cross.cumsums[i + 1] - 1)]))))
+		} 
+		i = i + 1
+	}
+	chromdata$IsPeak = FALSE
+	chromdata$IsPeak[true.peaks] = TRUE
+	return(chromdata)
+}
+
+collapseRLE <- function(crosspts, min.pts = 50, min.true = 20) {
+	#crosspts = list(values = crosspts$values, lengths = crosspts$lengths)
+	for (i in 1:length(crosspts$values)) {
+		if ((crosspts$values[i] == TRUE) & (crosspts$lengths[i] < min.true)) {
+			crosspts$values[i] = FALSE
+		}
+	}
+	new.lengths = c()
+	new.checks = c()
+	length.check = crosspts$lengths >= min.pts
+	i = 1
+	while (i <= length(length.check)) {
+		if (((length.check[i] == FALSE) | (crosspts$values[i] == TRUE)) & (i < (length(length.check) - 1))) { #& crosspts$values[i] == TRUE) {
+			j = i + 1
+			while(((length.check[j] == FALSE) | (crosspts$values[j] == TRUE)) & (j <= length(length.check))) {
+				j = j + 1
+			}
+			new.lengths = c(new.lengths, sum(crosspts$lengths[i:(j - 1)]))
+			new.checks = c(new.checks, sort(crosspts$values[i:(j - 1)], decreasing = TRUE)[1])
+			i = j
+		} else {
+			new.lengths = c(new.lengths, crosspts$lengths[i])
+			new.checks = c(new.checks, crosspts$values[i])
+			i = i + 1
+		}
+	}
+	return(list(lengths = new.lengths, values = new.checks))
+}
+
+distanceGrouper <- function(chromdata, peak.window = 2E5) {
+	peaks = chromdata[order(abs(chromdata$SG), decreasing = TRUE),]
+	iteration = 1
+	while (nrow(peaks) >= iteration) {
+		peaks = peaks[peaks$IsPeak == TRUE,]
+		flanking.sites = which((sign(peaks$SG) == sign(peaks$SG[iteration])) & (peaks$GenomePosition != peaks$GenomePosition[iteration]) & (peaks$GenomePosition >= (peaks$GenomePosition[iteration] - peak.window)) & (peaks$GenomePosition <= (peaks$GenomePosition[iteration] + peak.window)))
+		if (length(flanking.sites) != 0) {peaks[flanking.sites,]$IsPeak = FALSE}
+		iteration = iteration + 1
+	}	
+	if (nrow(peaks) > 0) {chromdata$IsPeak = sapply(chromdata$GenomePosition, function(pos) {pos %in% peaks$GenomePosition})}
+	peaks = chromdata[chromdata$IsPeak == TRUE,]
+	return(chromdata)
+}
+	 

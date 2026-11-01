@@ -275,7 +275,8 @@ def main():
             cat, catb = "reference medium", PH + "condition table ('" + comp + "')"
         else:
             raise SystemExit("no category for trait " + raw)
-        tidx[raw] = add("traits", id=f"{SC}-{slug(raw)}", ds=0, raw=raw, name=trait_name(raw), cond=cond, bt=bt, cat=cat, catb=catb)
+        ck = (comp.replace("_", " ").lower() + (" " + cond if cond else "")).strip()
+        tidx[raw] = add("traits", id=f"{SC}-{slug(raw)}", ds=0, raw=raw, name=trait_name(raw), cond=cond, bt=bt, ck=ck, cat=cat, catb=catb)
 
     prev = {r["name"] for r in tsv(os.path.join(SRC, "code_tables", "previously_identified.tsv"))}
     G = atlas.genes()

@@ -13,7 +13,7 @@ SOURCES = os.path.join(ROOT, "sources")
 DOCS = os.path.join(ROOT, "docs")
 FRAG_DIR = os.path.join(ROOT, "build", "fragments")
 
-SCHEMA = "atlas-1"
+SCHEMA = "atlas-2"
 BUILD = "S288C R64 (UCSC sacCer3)"
 HEAT_BIN = 50000
 
@@ -24,7 +24,7 @@ REFS = {
     "parents": {"ds": "datasets"},
     "crosses": {"ds": "datasets", "p1": "parents", "p2": "parents", "g1": "parents"},
     "traits": {"ds": "datasets"},
-    "qtl": {"ds": "datasets", "t": "traits", "x": "crosses", "up": "parents"},
+    "qtl": {"ds": "datasets", "t": "traits", "x": "crosses", "up": "parents", "xs": "crosses", "ups": "parents", "dns": "parents"},
     "jeff": {"q": "qtl", "x": "crosses"},
     "causal": {"ds": "datasets", "t": "traits", "sp": "parents", "q1": "qtl", "q2": "qtl"},
     "cand": {"ds": "datasets"},
@@ -67,13 +67,25 @@ def nlen(table):
 
 
 def write_json(path, obj):
+    """Write atomically (temp file + rename) so parallel ingests never see a half-written file."""
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
+    tmp = f"{path}.{os.getpid()}.tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
         json.dump(obj, f, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+    os.replace(tmp, path)
 
 
 def save_fragment(dataset_id, frag):
     write_json(os.path.join(FRAG_DIR, dataset_id + ".json"), frag)
+
+
+def rebase(v, off):
+    """Shift a row index (or a list of them) by off; -1, None and booleans stay as they are."""
+    if isinstance(v, list):
+        return [rebase(x, off) for x in v]
+    if isinstance(v, int) and not isinstance(v, bool) and v >= 0:
+        return v + off
+    return v
 
 
 def assemble():
@@ -92,7 +104,7 @@ def assemble():
             for k, col in tab.items():
                 ref = REFS.get(t, {}).get(k)
                 if ref:
-                    col = [v + offset[ref] if isinstance(v, int) and v >= 0 else v for v in col]
+                    col = [rebase(v, offset[ref]) for v in col]
                 if k not in out[t]:
                     out[t][k] = [None] * base
                 out[t][k].extend(col)

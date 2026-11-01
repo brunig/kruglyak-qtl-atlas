@@ -16,7 +16,7 @@ Coordinates are 1-based S288C reference positions, build R64 (UCSC sacCer3); see
 
 | key | type | meaning |
 |---|---|---|
-| `schema` | string | schema version, `"atlas-1"` |
+| `schema` | string | schema version, `"atlas-2"` |
 | `build` | string | genome build all coordinates use |
 | `chroms` | object | chromosome → length (bp), R64 |
 | `hb` | int | heatmap bin width (bp), 50,000 |
@@ -79,6 +79,7 @@ Excel shows it. `F3D1:w#2` is the first data row of the within-cross sheet.
 | `ds` | dataset index |
 | `code` | cross name in the source and code (`375`, `A`, …) |
 | `p1`, `p2` | parent indices, in source order (Parent 1, Parent 2) |
+| `name` | cross name as the source writes it (`Cross 2`), may be `null` |
 | `g1` | parent index whose allele is genotype 1 in the within-cross model (the other parent is genotype 2). Inferred; see OPEN_QUESTIONS Q2 |
 | `n` | number of segregants analysed |
 | `dip` | diploid parent strain |
@@ -95,6 +96,7 @@ Excel shows it. `F3D1:w#2` is the first data row of the within-cross sheet.
 | `name` | display name (`Cadmium chloride 75 µM`) |
 | `cond` | second field of `raw` (dose, temperature or pH), may be empty |
 | `bt` | third field of `raw`. Most defensible reading: experiment batch / replicate index (OPEN_QUESTIONS Q10) |
+| `ck` | condition key for matching the same condition across datasets: lower-case compound plus dose as the source gives it (`caffeine 15mM`); `null` if unsure |
 | `cat` | category: `drug/chemical`, `carbon source`, `temperature`, `pH`, `osmotic stress`, `reference medium` |
 | `catb` | where the category comes from (`Figure 1-source data 1, Phenotypes sheet: <section>` or `atlas assignment`) |
 
@@ -108,8 +110,10 @@ told apart by `m`.
 | `id` | atlas id, `<sc>-<m>-<source row>` |
 | `ds` | dataset index |
 | `t` | trait index |
-| `x` | cross index; `-1` for a joint-model QTL ("joint") |
-| `m` | model: `w` within-cross, `j` joint (all crosses together) |
+| `x` | cross index; `-1` for a QTL not tied to one cross (joint model, or a locus grouped over several crosses) |
+| `xs` | list of cross indices in which a grouped QTL was detected (`null` when `x` is set or the QTL is a joint-model QTL) |
+| `k` | short subtype label from the source, e.g. `grouped round-robin QTL`, `replicate-confirmed BY/RM QTL`, `MAT-linked`; `null` if the dataset has one kind |
+| `m` | model: `w` linkage in one segregant cross (individual genotyped segregants), `j` joint model over several crosses, `x` bulk-segregant / X-QTL peak (pooled selection, allele frequencies) |
 | `c` | chromosome |
 | `a`, `e` | interval start and end. Within-cross: positions of the left and right markers of the 1.5-LOD drop interval. Joint: both equal the lead variant position (the source reports no interval) |
 | `p` | peak position. Within-cross: the relocalized peak marker (equals the source `pos` column). Joint: the lead variant |
@@ -124,6 +128,7 @@ told apart by `m`.
 | `anc` | source `ancestral` flag: 1 = reference allele is ancestral (alternate allele derived), 0 = reference allele derived; joint only |
 | `daf` | derived allele frequency in the 1,011 panel (`unfolded allele frequency`); joint only |
 | `up` | within-cross: index of the parent whose allele increases the trait; joint: `-1` (the sign of `ef` says whether the alternate or reference allele increases it) |
+| `ups`, `dns` | lists of parent indices the source names as carrying the beneficial (trait-increasing) or deleterious allele, when it reports direction by strain rather than by effect size; `null` otherwise |
 | `g` | candidate gene: gene index, `-1` if the paper assigned none |
 | `gf` | local FDR of that assignment |
 | `gt` | evidence tier of that gene (see `cand`) |

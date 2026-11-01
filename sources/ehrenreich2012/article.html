@@ -1,0 +1,1655 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:dc="http://purl.org/dc/terms/"
+      xmlns:doi="http://dx.doi.org/"
+      lang="en" xml:lang="en"
+      itemscope itemtype="http://schema.org/Article"
+      class="no-js">
+
+
+
+<head prefix="og: http://ogp.me/ns#">
+
+
+
+
+<link rel="stylesheet" href="/resource/css/screen.css?dfa2fab16b07ca66c34a5d9afd28bc6f"/>
+  <!-- allows for  extra head tags -->
+
+
+<!-- hello -->
+<link rel="stylesheet" type="text/css"
+      href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600">
+
+<link media="print" rel="stylesheet" type="text/css"  href="/resource/css/print.css"/>
+    <script type="text/javascript">
+        var siteUrlPrefix = "/plosgenetics/";
+    </script>
+  <script src="/resource/js/vendor/modernizr-v2.7.1.js" type="text/javascript"></script>
+  <script src="/resource/js/vendor/detectizr.min.js" type="text/javascript"></script>
+
+  <link rel="shortcut icon" href="/resource/img/favicon.ico" type="image/x-icon"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+
+
+
+
+
+  <link rel="canonical" href="https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1002570" />
+  <meta name="description" content="Author Summary Most heritable traits of agricultural, evolutionary, and medical significance are specified by multiple genetic loci. Despite decades of research, we have only a limited understanding of the genetic basis of such complex traits. Studies in model organisms have the potential to provide fundamental insights into this research area, but most genetic mapping studies in these species have had low statistical power to detect multiple loci with small effects. Using a technique in which we employed millions of cross progeny in genetic mapping, we previously showed that resistance to chemicals has a highly complex genetic basis in a cross of a lab strain and a wine strain of the budding yeast Saccharomyces cerevisiae. Because we only examined a single cross, it was unclear how general our findings were. Here, we expand our work to all six possible crosses of four strains&mdash;the two isolates we used in our last study, as well as an isolate from an immunocompromised human being and an isolate from the sap of an oak tree. Our results based on these four ecologically and genetically distinct S. cerevisiae strains suggest that resistance to chemicals commonly exhibits a highly complex genetic basis among yeast isolates." />
+
+  <meta name="citation_abstract" content="Many questions about the genetic basis of complex traits remain unanswered. This is in part due to the low statistical power of traditional genetic mapping studies. We used a statistically powerful approach, extreme QTL mapping (X-QTL), to identify the genetic basis of resistance to 13 chemicals in all 6 pairwise crosses of four ecologically and genetically diverse yeast strains, and we detected a total of more than 800 loci. We found that the number of loci detected in each experiment was primarily a function of the trait (explaining 46% of the variance) rather than the cross (11%), suggesting that the level of genetic complexity is a consistent property of a trait across different genetic backgrounds. Further, we observed that most loci had trait-specific effects, although a small number of loci with effects in many conditions were identified. We used the patterns of resistance and susceptibility alleles in the four parent strains to make inferences about the allele frequency spectrum of functional variants. We also observed evidence of more complex allelic series at a number of loci, as well as strain-specific signatures of selection. These results improve our understanding of complex traits in yeast and have implications for study design in other organisms.">
+
+
+  <meta name="keywords" content="Genetic loci,Quantitative trait loci,Genomics,Alleles,Saccharomyces cerevisiae,Single nucleotide polymorphisms,Yeast,Complex traits" />
+
+
+<meta name="citation_doi" content="10.1371/journal.pgen.1002570"/>
+<meta name="citation_author" content="Ian M. Ehrenreich"/>
+  <meta name="citation_author_institution" content="Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Department of Ecology and Evolutionary Biology, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Howard Hughes Medical Institute, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Molecular and Computational Biology Section, University of Southern California, Los Angeles, California, United States of America"/>
+<meta name="citation_author" content="Joshua Bloom"/>
+  <meta name="citation_author_institution" content="Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Department of Molecular Biology, Princeton University, Princeton, New Jersey, United States of America"/>
+<meta name="citation_author" content="Noorossadat Torabi"/>
+  <meta name="citation_author_institution" content="Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Department of Molecular Biology, Princeton University, Princeton, New Jersey, United States of America"/>
+<meta name="citation_author" content="Xin Wang"/>
+  <meta name="citation_author_institution" content="Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Department of Molecular Biology, Princeton University, Princeton, New Jersey, United States of America"/>
+<meta name="citation_author" content="Yue Jia"/>
+  <meta name="citation_author_institution" content="Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Howard Hughes Medical Institute, Princeton University, Princeton, New Jersey, United States of America"/>
+<meta name="citation_author" content="Leonid Kruglyak"/>
+  <meta name="citation_author_institution" content="Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Department of Ecology and Evolutionary Biology, Princeton University, Princeton, New Jersey, United States of America"/>
+  <meta name="citation_author_institution" content="Howard Hughes Medical Institute, Princeton University, Princeton, New Jersey, United States of America"/>
+
+<meta name="citation_title" content="Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains"/>
+<meta itemprop="name" content="Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains"/>
+<meta name="citation_journal_title" content="PLOS Genetics"/>
+<meta name="citation_journal_abbrev" content="PLOS Genetics"/>
+<meta name="citation_date" content="Mar 15, 2012"/>
+<meta name="citation_firstpage" content="e1002570"/>
+<meta name="citation_issue" content="3"/>
+<meta name="citation_volume" content="8"/>
+<meta name="citation_issn" content="1553-7404"/>
+<meta name="citation_publisher" content="Public Library of Science"/>
+
+  <meta name="citation_pdf_url" content="https://journals.plos.org/plosgenetics/article/file?id=10.1371/journal.pgen.1002570&type=printable">
+
+  <meta name="citation_article_type" content="Research Article">
+
+<meta name="dc.identifier" content="10.1371/journal.pgen.1002570" />
+
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="plosgenetics"/>
+    <meta name="twitter:title" content="Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains" />
+    <meta property="twitter:description" content="Author Summary Most heritable traits of agricultural, evolutionary, and medical significance are specified by multiple genetic loci. Despite decades of research, we have only a limited understanding of the genetic basis of such complex traits. Studies in model organisms have the potential to provide fundamental insights into this research area, but most genetic mapping studies in these species have had low statistical power to detect multiple loci with small effects. Using a technique in which we employed millions of cross progeny in genetic mapping, we previously showed that resistance to chemicals has a highly complex genetic basis in a cross of a lab strain and a wine strain of the budding yeast Saccharomyces cerevisiae. Because we only examined a single cross, it was unclear how general our findings were. Here, we expand our work to all six possible crosses of four strains&mdash;the two isolates we used in our last study, as well as an isolate from an immunocompromised human being and an isolate from the sap of an oak tree. Our results based on these four ecologically and genetically distinct S. cerevisiae strains suggest that resistance to chemicals commonly exhibits a highly complex genetic basis among yeast isolates." />
+    <meta property="twitter:image" content="https://journals.plos.org/plosgenetics/article/figure/image?id=10.1371/journal.pgen.1002570.g003&size=inline" />
+
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1002570"/>
+<meta property="og:title" content="Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains"/>
+<meta property="og:description" content="Author Summary Most heritable traits of agricultural, evolutionary, and medical significance are specified by multiple genetic loci. Despite decades of research, we have only a limited understanding of the genetic basis of such complex traits. Studies in model organisms have the potential to provide fundamental insights into this research area, but most genetic mapping studies in these species have had low statistical power to detect multiple loci with small effects. Using a technique in which we employed millions of cross progeny in genetic mapping, we previously showed that resistance to chemicals has a highly complex genetic basis in a cross of a lab strain and a wine strain of the budding yeast Saccharomyces cerevisiae. Because we only examined a single cross, it was unclear how general our findings were. Here, we expand our work to all six possible crosses of four strains&mdash;the two isolates we used in our last study, as well as an isolate from an immunocompromised human being and an isolate from the sap of an oak tree. Our results based on these four ecologically and genetically distinct S. cerevisiae strains suggest that resistance to chemicals commonly exhibits a highly complex genetic basis among yeast isolates."/>
+<meta property="og:image" content="https://journals.plos.org/plosgenetics/article/figure/image?id=10.1371/journal.pgen.1002570.g003&size=inline"/>
+
+<meta name="citation_reference" content="citation_title=Introduction to quantitative genetics (4th edition);citation_author=DS Falconer;citation_author=TF Mackay;citation_publication_date=1996;citation_publisher=Pearson Education Limited"/>    
+<meta name="citation_reference" content="citation_title=Finding the missing heritability of complex diseases.;citation_author=TA Manolio;citation_author=FS Collins;citation_author=NJ Cox;citation_author=DB Goldstein;citation_author=LA Hindorff;citation_journal_title=Nature;citation_volume=461;citation_number=461;citation_first_page=747;citation_last_page=753;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=The genetics of quantitative traits: challenges and prospects.;citation_author=TF Mackay;citation_author=EA Stone;citation_author=JF Ayroles;citation_journal_title=Nat Rev Genet;citation_volume=10;citation_number=10;citation_first_page=565;citation_last_page=577;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=The landscape of genetic complexity across 5,700 gene expression traits in yeast.;citation_author=RB Brem;citation_author=L Kruglyak;citation_journal_title=Proc Natl Acad Sci U S A;citation_volume=102;citation_number=102;citation_first_page=1572;citation_last_page=1577;citation_publication_date=2005;"/>    
+<meta name="citation_reference" content="citation_title=Dissection of genetically complex traits with extremely large pools of yeast segregants.;citation_author=IM Ehrenreich;citation_author=N Torabi;citation_author=Y Jia;citation_author=J Kent;citation_author=S Martis;citation_journal_title=Nature;citation_volume=464;citation_number=464;citation_first_page=1039;citation_last_page=1042;citation_publication_date=2010;"/>    
+<meta name="citation_reference" content="citation_title=Revealing the genetic structure of a trait by sequencing a population under selection.;citation_author=L Parts;citation_author=FA Cubillos;citation_author=J Warringer;citation_author=K Jain;citation_author=F Salinas;citation_journal_title=Genome Res;citation_volume=21;citation_number=21;citation_first_page=1131;citation_last_page=1138;citation_publication_date=2011;"/>    
+<meta name="citation_reference" content="citation_title=A catalog of neutral and deleterious polymorphism in yeast.;citation_author=SW Doniger;citation_author=HS Kim;citation_author=D Swain;citation_author=D Corcuera;citation_author=M Williams;citation_journal_title=PLoS Genet;citation_volume=4;citation_number=4;citation_first_page=e1000183;citation_publication_date=2008;"/>    
+<meta name="citation_reference" content="citation_title=Genome sequencing and comparative analysis of Saccharomyces cerevisiae strain YJM789.;citation_author=W Wei;citation_author=JH McCusker;citation_author=RW Hyman;citation_author=T Jones;citation_author=Y Ning;citation_journal_title=Proc Natl Acad Sci U S A;citation_volume=104;citation_number=104;citation_first_page=12825;citation_last_page=12830;citation_publication_date=2007;"/>    
+<meta name="citation_reference" content="citation_title=Population genomic analysis of outcrossing and recombination in yeast.;citation_author=DM Ruderfer;citation_author=SC Pratt;citation_author=HS Seidel;citation_author=L Kruglyak;citation_journal_title=Nat Genet;citation_volume=38;citation_number=38;citation_first_page=1077;citation_last_page=1081;citation_publication_date=2006;"/>    
+<meta name="citation_reference" content="citation_title=Population genomics of domestic and wild yeasts.;citation_author=G Liti;citation_author=DM Carter;citation_author=AM Moses;citation_author=J Warringer;citation_author=L Parts;citation_journal_title=Nature;citation_volume=458;citation_number=458;citation_first_page=337;citation_last_page=341;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=Comprehensive polymorphism survey elucidates population structure of Saccharomyces cerevisiae.;citation_author=J Schacherer;citation_author=JA Shapiro;citation_author=DM Ruderfer;citation_author=L Kruglyak;citation_journal_title=Nature;citation_volume=458;citation_number=458;citation_first_page=342;citation_last_page=345;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=Genetic dissection of transcriptional regulation in budding yeast.;citation_author=RB Brem;citation_author=G Yvert;citation_author=R Clinton;citation_author=L Kruglyak;citation_journal_title=Science;citation_volume=296;citation_number=296;citation_first_page=752;citation_last_page=755;citation_publication_date=2002;"/>    
+<meta name="citation_reference" content="citation_title=Dissecting the architecture of a quantitative trait locus in yeast.;citation_author=LM Steinmetz;citation_author=H Sinha;citation_author=DR Richards;citation_author=JI Spiegelman;citation_author=PJ Oefner;citation_journal_title=Nature;citation_volume=416;citation_number=416;citation_first_page=326;citation_last_page=330;citation_publication_date=2002;"/>    
+<meta name="citation_reference" content="citation_title=Genetic basis of individual differences in the response to small-molecule drugs in yeast.;citation_author=EO Perlstein;citation_author=DM Ruderfer;citation_author=DC Roberts;citation_author=SL Schreiber;citation_author=L Kruglyak;citation_journal_title=Nat Genet;citation_volume=39;citation_number=39;citation_first_page=496;citation_last_page=502;citation_publication_date=2007;"/>    
+<meta name="citation_reference" content="citation_title=Genetic variation in the cysteine biosynthesis pathway causes sensitivity to pharmacological compounds.;citation_author=HS Kim;citation_author=JC Fay;citation_journal_title=Proc Natl Acad Sci U S A;citation_volume=104;citation_number=104;citation_first_page=19387;citation_last_page=19391;citation_publication_date=2007;"/>    
+<meta name="citation_reference" content="citation_title=Genetic interactions between transcription factors cause natural variation in yeast.;citation_author=J Gerke;citation_author=K Lorenz;citation_author=B Cohen;citation_journal_title=Science;citation_volume=323;citation_number=323;citation_first_page=498;citation_last_page=501;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=A combined-cross analysis reveals genes with drug-specific and background-dependent effects on drug sensitivity in Saccharomyces cerevisiae.;citation_author=HS Kim;citation_author=JC Fay;citation_journal_title=Genetics;citation_volume=183;citation_number=183;citation_first_page=1141;citation_last_page=1151;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=Genetic characterization of pathogenic Saccharomyces cerevisiae isolates.;citation_author=JH McCusker;citation_author=KV Clemons;citation_author=DA Stevens;citation_author=RW Davis;citation_journal_title=Genetics;citation_volume=136;citation_number=136;citation_first_page=1261;citation_last_page=1269;citation_publication_date=1994;"/>    
+<meta name="citation_reference" content="citation_title=Genetic dissection of complex traits in yeast: insights from studies of gene expression and other phenotypes in the BYxRM cross.;citation_author=IM Ehrenreich;citation_author=JP Gerke;citation_author=L Kruglyak;citation_journal_title=Cold Spring Harb Symp Quant Biol;citation_volume=74;citation_number=74;citation_first_page=145;citation_last_page=153;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=Assessing the complex architecture of polygenic traits in diverged yeast populations.;citation_author=FA Cubillos;citation_author=E Billi;citation_author=E Zorgo;citation_author=L Parts;citation_author=P Fargier;citation_journal_title=Mol Ecol;citation_volume=20;citation_number=20;citation_first_page=1401;citation_last_page=1413;citation_publication_date=2011;"/>    
+
+<meta name="citation_reference" content="citation_title=Testing natural selection vs. genetic drift in phenotypic evolution using quantitative trait locus data.;citation_author=HA Orr;citation_journal_title=Genetics;citation_volume=149;citation_number=149;citation_first_page=2099;citation_last_page=2104;citation_publication_date=1998;"/>    
+<meta name="citation_reference" content="citation_title=Population genetic variation in gene expression is associated with phenotypic variation in Saccharomyces cerevisiae.;citation_author=JC Fay;citation_author=HL McCullough;citation_author=PD Sniegowski;citation_author=MB Eisen;citation_journal_title=Genome Biol;citation_volume=5;citation_number=5;citation_first_page=R26;citation_publication_date=2004;"/>    
+<meta name="citation_reference" content="citation_title=Variations in stress sensitivity and genomic expression in diverse S. cerevisiae isolates.;citation_author=DJ Kvitek;citation_author=JL Will;citation_author=AP Gasch;citation_journal_title=PLoS Genet;citation_volume=4;citation_number=4;citation_first_page=e1000223;citation_publication_date=2008;"/>    
+<meta name="citation_reference" content="citation_title=Trait variation in yeast is defined by population history.;citation_author=J Warringer;citation_author=E Zorgo;citation_author=FA Cubillos;citation_author=A Zia;citation_author=A Gjuvsland;citation_journal_title=PLoS Genet;citation_volume=7;citation_number=7;citation_first_page=e1002111;citation_publication_date=2011;"/>    
+<meta name="citation_reference" content="citation_title=Elevated evolutionary rates in the laboratory strain of Saccharomyces cerevisiae.;citation_author=Z Gu;citation_author=L David;citation_author=D Petrov;citation_author=T Jones;citation_author=RW Davis;citation_journal_title=Proc Natl Acad Sci U S A;citation_volume=102;citation_number=102;citation_first_page=1092;citation_last_page=1097;citation_publication_date=2005;"/>    
+<meta name="citation_reference" content="citation_title=Evidence for widespread adaptive evolution of gene expression in budding yeast.;citation_author=HB Fraser;citation_author=AM Moses;citation_author=EE Schadt;citation_journal_title=Proc Natl Acad Sci U S A;citation_volume=107;citation_number=107;citation_first_page=2977;citation_last_page=2982;citation_publication_date=2010;"/>    
+<meta name="citation_reference" content="citation_title=Systematic genetic analysis with ordered arrays of yeast deletion mutants.;citation_author=AH Tong;citation_author=M Evangelista;citation_author=AB Parsons;citation_author=H Xu;citation_author=GD Bader;citation_journal_title=Science;citation_volume=294;citation_number=294;citation_first_page=2364;citation_last_page=2368;citation_publication_date=2001;"/>    
+<meta name="citation_reference" content="citation_title=Fast statistical alignment.;citation_author=RK Bradley;citation_author=A Roberts;citation_author=M Smoot;citation_author=S Juvekar;citation_author=J Do;citation_journal_title=PLoS Comput Biol;citation_volume=5;citation_number=5;citation_first_page=e1000392;citation_publication_date=2009;"/>    
+<meta name="citation_reference" content="citation_title=Optimized detection of sequence variation in heterozygous genomes using DNA microarrays with isothermal-melting probes.;citation_author=D Gresham;citation_author=B Curry;citation_author=A Ward;citation_author=DB Gordon;citation_author=L Brizuela;citation_journal_title=Proc Natl Acad Sci U S A;citation_volume=107;citation_number=107;citation_first_page=1482;citation_last_page=1487;citation_publication_date=2010;"/>    
+<meta name="citation_reference" content="citation_title=In vivo site-directed mutagenesis using oligonucleotides.;citation_author=F Storici;citation_author=LK Lewis;citation_author=MA Resnick;citation_journal_title=Nat Biotechnology;citation_volume=19;citation_number=19;citation_first_page=773;citation_last_page=776;citation_publication_date=2001;"/>    
+
+
+<script type="text/javascript">
+    var WombatConfig = WombatConfig || {};
+    WombatConfig.journalKey = "PLoSGenetics";
+    WombatConfig.journalName = "PLOS Genetics";
+    WombatConfig.figurePath = "/plosgenetics/article/figure/image";
+    WombatConfig.figShareInstitutionString = "plos";
+    WombatConfig.doiResolverPrefix = "https://dx.plos.org/";
+</script>
+
+<script type="text/javascript">
+  var WombatConfig = WombatConfig || {};
+  WombatConfig.metrics = WombatConfig.metrics || {};
+  WombatConfig.metrics.referenceUrl      = "http://lagotto.io/plos";
+  WombatConfig.metrics.googleScholarUrl  = "https://scholar.google.com/scholar";
+  WombatConfig.metrics.googleScholarCitationUrl  = WombatConfig.metrics.googleScholarUrl + "?hl=en&lr=&q=";
+  WombatConfig.metrics.crossrefUrl  = "https://www.crossref.org";
+</script>
+<script defer="defer" src="/resource/js/defer.js?2e8afd3b305f91b42788"></script><script src="/resource/js/sync.js?2e8afd3b305f91b42788"></script>
+<script src="/resource/js/vendor/jquery.min.js" type="text/javascript"></script>
+
+          <script type="text/javascript" src="https://widgets.figshare.com/static/figshare.js"></script>
+
+<script src="/resource/js/vendor/fastclick/lib/fastclick.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/underscore-min.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/underscore.string.min.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/moment.js" type="text/javascript"></script>
+
+
+<script src="/resource/js/vendor/jquery-ui-effects.min.js" type="text/javascript"></script>
+
+<script src="/resource/js/vendor/foundation/foundation.tooltip.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.dropdown.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.tab.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.reveal.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.slider.js" type="text/javascript"></script>
+
+<script src="/resource/js/util/utils.js" type="text/javascript"></script>
+<script src="/resource/js/components/toggle.js" type="text/javascript"></script>
+<script src="/resource/js/components/truncate_elem.js" type="text/javascript"></script>
+<script src="/resource/js/components/tooltip_hover.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/jquery.dotdotdot.js" type="text/javascript"></script>
+
+
+<!-- DoubleClick overall ad setup script -->
+<script type='text/javascript'>
+  var googletag = googletag || {};
+  googletag.cmd = googletag.cmd || [];
+  if (window.plosCookieConsent?.hasConsented('advertising')) {
+    (function() {
+      var gads = document.createElement('script');
+      gads.async = true;
+      gads.type = 'text/javascript';
+      var useSSL = 'https:' == document.location.protocol;
+      gads.src = (useSSL ? 'https:' : 'http:') +
+          '//www.googletagservices.com/tag/js/gpt.js';
+      var node = document.getElementsByTagName('script')[0];
+      node.parentNode.insertBefore(gads, node);
+    })();
+  }
+</script>
+
+<!-- DoubleClick ad slot setup script -->
+
+  <script id="doubleClickSetupScript" type='text/javascript'>
+    googletag.cmd.push(function() {
+  googletag.defineSlot('/75507958/PGEN_728x90_ATF', [728, 90], 'div-gpt-ad-1458247671871-0').addService(googletag.pubads());
+  googletag.defineSlot('/75507958/PGEN_160x600_BTF', [160, 600], 'div-gpt-ad-1458247671871-1').addService(googletag.pubads());
+      googletag.pubads().enableSingleRequest();
+      googletag.enableServices();
+    });
+  </script>
+
+<!--For Google Tag manager to be able to track site information  -->
+<script>
+
+  dataLayer = [{
+    'mobileSite': 'false',
+    'desktopSite': 'true'
+  }];
+
+</script>
+
+    <title>Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains | PLOS Genetics</title>
+</head>
+
+<body class="article plosgenetics">
+
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TP26BH"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TP26BH');
+</script>
+
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MQQMGF"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MQQMGF');</script>
+<!-- End Google Tag Manager -->
+
+<!-- Start of HubSpot Embed Code -->
+<script>
+  // from https://developers.hubspot.com/docs/reference/api/analytics-and-events/cookie-banner/cookie-banner-api#example-using-a-third-party-cookie-banner-to-control-hubspot-cookies
+  window.disableHubSpotCookieBanner = true;
+  window._hsp = window._hsp || [];
+  window._hsp.push(['setHubSpotConsent',
+      {
+        analytics: window.plosCookieConsent?.hasConsented('analytics'),
+        advertisement: window.plosCookieConsent?.hasConsented('advertising'),
+        functionality: window.plosCookieConsent?.hasConsented('functionality')
+      }
+    ]);
+</script>
+<script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/44092021.js"></script>
+<!-- End of HubSpot Embed Code -->
+
+<!-- New Relic -->
+<script type="text/javascript">
+  ;window.NREUM||(NREUM={});NREUM.init={distributed_tracing:{enabled:true},privacy:{cookies_enabled:true},ajax:{deny_list:["bam.nr-data.net"]}};
+  window.NREUM||(NREUM={}),__nr_require=function(t,e,n){function r(n){if(!e[n]){var o=e[n]={exports:{}};t[n][0].call(o.exports,function(e){var o=t[n][1][e];return r(o||e)},o,o.exports)}return e[n].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<n.length;o++)r(n[o]);return r}({1:[function(t,e,n){function r(t){try{s.console&&console.log(t)}catch(e){}}var o,i=t("ee"),a=t(32),s={};try{o=localStorage.getItem("__nr_flags").split(","),console&&"function"==typeof console.log&&(s.console=!0,o.indexOf("dev")!==-1&&(s.dev=!0),o.indexOf("nr_dev")!==-1&&(s.nrDev=!0))}catch(c){}s.nrDev&&i.on("internal-error",function(t){r(t.stack)}),s.dev&&i.on("fn-err",function(t,e,n){r(n.stack)}),s.dev&&(r("NR AGENT IN DEVELOPMENT MODE"),r("flags: "+a(s,function(t,e){return t}).join(", ")))},{}],2:[function(t,e,n){function r(t,e,n,r,s){try{l?l-=1:o(s||new UncaughtException(t,e,n),!0)}catch(f){try{i("ierr",[f,c.now(),!0])}catch(d){}}return"function"==typeof u&&u.apply(this,a(arguments))}function UncaughtException(t,e,n){this.message=t||"Uncaught error with no additional information",this.sourceURL=e,this.line=n}function o(t,e){var n=e?null:c.now();i("err",[t,n])}var i=t("handle"),a=t(33),s=t("ee"),c=t("loader"),f=t("gos"),u=window.onerror,d=!1,p="nr@seenError";if(!c.disabled){var l=0;c.features.err=!0,t(1),window.onerror=r;try{throw new Error}catch(h){"stack"in h&&(t(14),t(13),"addEventListener"in window&&t(7),c.xhrWrappable&&t(15),d=!0)}s.on("fn-start",function(t,e,n){d&&(l+=1)}),s.on("fn-err",function(t,e,n){d&&!n[p]&&(f(n,p,function(){return!0}),this.thrown=!0,o(n))}),s.on("fn-end",function(){d&&!this.thrown&&l>0&&(l-=1)}),s.on("internal-error",function(t){i("ierr",[t,c.now(),!0])})}},{}],3:[function(t,e,n){var r=t("loader");r.disabled||(r.features.ins=!0)},{}],4:[function(t,e,n){function r(){U++,L=g.hash,this[u]=y.now()}function o(){U--,g.hash!==L&&i(0,!0);var t=y.now();this[h]=~~this[h]+t-this[u],this[d]=t}function i(t,e){E.emit("newURL",[""+g,e])}function a(t,e){t.on(e,function(){this[e]=y.now()})}var s="-start",c="-end",f="-body",u="fn"+s,d="fn"+c,p="cb"+s,l="cb"+c,h="jsTime",m="fetch",v="addEventListener",w=window,g=w.location,y=t("loader");if(w[v]&&y.xhrWrappable&&!y.disabled){var x=t(11),b=t(12),E=t(9),R=t(7),O=t(14),T=t(8),P=t(15),S=t(10),M=t("ee"),N=M.get("tracer"),C=t(23);t(17),y.features.spa=!0;var L,U=0;M.on(u,r),b.on(p,r),S.on(p,r),M.on(d,o),b.on(l,o),S.on(l,o),M.buffer([u,d,"xhr-resolved"]),R.buffer([u]),O.buffer(["setTimeout"+c,"clearTimeout"+s,u]),P.buffer([u,"new-xhr","send-xhr"+s]),T.buffer([m+s,m+"-done",m+f+s,m+f+c]),E.buffer(["newURL"]),x.buffer([u]),b.buffer(["propagate",p,l,"executor-err","resolve"+s]),N.buffer([u,"no-"+u]),S.buffer(["new-jsonp","cb-start","jsonp-error","jsonp-end"]),a(T,m+s),a(T,m+"-done"),a(S,"new-jsonp"),a(S,"jsonp-end"),a(S,"cb-start"),E.on("pushState-end",i),E.on("replaceState-end",i),w[v]("hashchange",i,C(!0)),w[v]("load",i,C(!0)),w[v]("popstate",function(){i(0,U>1)},C(!0))}},{}],5:[function(t,e,n){function r(){var t=new PerformanceObserver(function(t,e){var n=t.getEntries();s(v,[n])});try{t.observe({entryTypes:["resource"]})}catch(e){}}function o(t){if(s(v,[window.performance.getEntriesByType(w)]),window.performance["c"+p])try{window.performance[h](m,o,!1)}catch(t){}else try{window.performance[h]("webkit"+m,o,!1)}catch(t){}}function i(t){}if(window.performance&&window.performance.timing&&window.performance.getEntriesByType){var a=t("ee"),s=t("handle"),c=t(14),f=t(13),u=t(6),d=t(23),p="learResourceTimings",l="addEventListener",h="removeEventListener",m="resourcetimingbufferfull",v="bstResource",w="resource",g="-start",y="-end",x="fn"+g,b="fn"+y,E="bstTimer",R="pushState",O=t("loader");if(!O.disabled){O.features.stn=!0,t(9),"addEventListener"in window&&t(7);var T=NREUM.o.EV;a.on(x,function(t,e){var n=t[0];n instanceof T&&(this.bstStart=O.now())}),a.on(b,function(t,e){var n=t[0];n instanceof T&&s("bst",[n,e,this.bstStart,O.now()])}),c.on(x,function(t,e,n){this.bstStart=O.now(),this.bstType=n}),c.on(b,function(t,e){s(E,[e,this.bstStart,O.now(),this.bstType])}),f.on(x,function(){this.bstStart=O.now()}),f.on(b,function(t,e){s(E,[e,this.bstStart,O.now(),"requestAnimationFrame"])}),a.on(R+g,function(t){this.time=O.now(),this.startPath=location.pathname+location.hash}),a.on(R+y,function(t){s("bstHist",[location.pathname+location.hash,this.startPath,this.time])}),u()?(s(v,[window.performance.getEntriesByType("resource")]),r()):l in window.performance&&(window.performance["c"+p]?window.performance[l](m,o,d(!1)):window.performance[l]("webkit"+m,o,d(!1))),document[l]("scroll",i,d(!1)),document[l]("keypress",i,d(!1)),document[l]("click",i,d(!1))}}},{}],6:[function(t,e,n){e.exports=function(){return"PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver}},{}],7:[function(t,e,n){function r(t){for(var e=t;e&&!e.hasOwnProperty(u);)e=Object.getPrototypeOf(e);e&&o(e)}function o(t){s.inPlace(t,[u,d],"-",i)}function i(t,e){return t[1]}var a=t("ee").get("events"),s=t("wrap-function")(a,!0),c=t("gos"),f=XMLHttpRequest,u="addEventListener",d="removeEventListener";e.exports=a,"getPrototypeOf"in Object?(r(document),r(window),r(f.prototype)):f.prototype.hasOwnProperty(u)&&(o(window),o(f.prototype)),a.on(u+"-start",function(t,e){var n=t[1];if(null!==n&&("function"==typeof n||"object"==typeof n)){var r=c(n,"nr@wrapped",function(){function t(){if("function"==typeof n.handleEvent)return n.handleEvent.apply(n,arguments)}var e={object:t,"function":n}[typeof n];return e?s(e,"fn-",null,e.name||"anonymous"):n});this.wrapped=t[1]=r}}),a.on(d+"-start",function(t){t[1]=this.wrapped||t[1]})},{}],8:[function(t,e,n){function r(t,e,n){var r=t[e];"function"==typeof r&&(t[e]=function(){var t=i(arguments),e={};o.emit(n+"before-start",[t],e);var a;e[m]&&e[m].dt&&(a=e[m].dt);var s=r.apply(this,t);return o.emit(n+"start",[t,a],s),s.then(function(t){return o.emit(n+"end",[null,t],s),t},function(t){throw o.emit(n+"end",[t],s),t})})}var o=t("ee").get("fetch"),i=t(33),a=t(32);e.exports=o;var s=window,c="fetch-",f=c+"body-",u=["arrayBuffer","blob","json","text","formData"],d=s.Request,p=s.Response,l=s.fetch,h="prototype",m="nr@context";d&&p&&l&&(a(u,function(t,e){r(d[h],e,f),r(p[h],e,f)}),r(s,"fetch",c),o.on(c+"end",function(t,e){var n=this;if(e){var r=e.headers.get("content-length");null!==r&&(n.rxSize=r),o.emit(c+"done",[null,e],n)}else o.emit(c+"done",[t],n)}))},{}],9:[function(t,e,n){var r=t("ee").get("history"),o=t("wrap-function")(r);e.exports=r;var i=window.history&&window.history.constructor&&window.history.constructor.prototype,a=window.history;i&&i.pushState&&i.replaceState&&(a=i),o.inPlace(a,["pushState","replaceState"],"-")},{}],10:[function(t,e,n){function r(t){function e(){f.emit("jsonp-end",[],l),t.removeEventListener("load",e,c(!1)),t.removeEventListener("error",n,c(!1))}function n(){f.emit("jsonp-error",[],l),f.emit("jsonp-end",[],l),t.removeEventListener("load",e,c(!1)),t.removeEventListener("error",n,c(!1))}var r=t&&"string"==typeof t.nodeName&&"script"===t.nodeName.toLowerCase();if(r){var o="function"==typeof t.addEventListener;if(o){var a=i(t.src);if(a){var d=s(a),p="function"==typeof d.parent[d.key];if(p){var l={};u.inPlace(d.parent,[d.key],"cb-",l),t.addEventListener("load",e,c(!1)),t.addEventListener("error",n,c(!1)),f.emit("new-jsonp",[t.src],l)}}}}}function o(){return"addEventListener"in window}function i(t){var e=t.match(d);return e?e[1]:null}function a(t,e){var n=t.match(l),r=n[1],o=n[3];return o?a(o,e[r]):e[r]}function s(t){var e=t.match(p);return e&&e.length>=3?{key:e[2],parent:a(e[1],window)}:{key:t,parent:window}}var c=t(23),f=t("ee").get("jsonp"),u=t("wrap-function")(f);if(e.exports=f,o()){var d=/[?&](?:callback|cb)=([^&#]+)/,p=/(.*)\.([^.]+)/,l=/^(\w+)(\.|$)(.*)$/,h=["appendChild","insertBefore","replaceChild"];Node&&Node.prototype&&Node.prototype.appendChild?u.inPlace(Node.prototype,h,"dom-"):(u.inPlace(HTMLElement.prototype,h,"dom-"),u.inPlace(HTMLHeadElement.prototype,h,"dom-"),u.inPlace(HTMLBodyElement.prototype,h,"dom-")),f.on("dom-start",function(t){r(t[0])})}},{}],11:[function(t,e,n){var r=t("ee").get("mutation"),o=t("wrap-function")(r),i=NREUM.o.MO;e.exports=r,i&&(window.MutationObserver=function(t){return this instanceof i?new i(o(t,"fn-")):i.apply(this,arguments)},MutationObserver.prototype=i.prototype)},{}],12:[function(t,e,n){function r(t){var e=i.context(),n=s(t,"executor-",e,null,!1),r=new f(n);return i.context(r).getCtx=function(){return e},r}var o=t("wrap-function"),i=t("ee").get("promise"),a=t("ee").getOrSetContext,s=o(i),c=t(32),f=NREUM.o.PR;e.exports=i,f&&(window.Promise=r,["all","race"].forEach(function(t){var e=f[t];f[t]=function(n){function r(t){return function(){i.emit("propagate",[null,!o],a,!1,!1),o=o||!t}}var o=!1;c(n,function(e,n){Promise.resolve(n).then(r("all"===t),r(!1))});var a=e.apply(f,arguments),s=f.resolve(a);return s}}),["resolve","reject"].forEach(function(t){var e=f[t];f[t]=function(t){var n=e.apply(f,arguments);return t!==n&&i.emit("propagate",[t,!0],n,!1,!1),n}}),f.prototype["catch"]=function(t){return this.then(null,t)},f.prototype=Object.create(f.prototype,{constructor:{value:r}}),c(Object.getOwnPropertyNames(f),function(t,e){try{r[e]=f[e]}catch(n){}}),o.wrapInPlace(f.prototype,"then",function(t){return function(){var e=this,n=o.argsToArray.apply(this,arguments),r=a(e);r.promise=e,n[0]=s(n[0],"cb-",r,null,!1),n[1]=s(n[1],"cb-",r,null,!1);var c=t.apply(this,n);return r.nextPromise=c,i.emit("propagate",[e,!0],c,!1,!1),c}}),i.on("executor-start",function(t){t[0]=s(t[0],"resolve-",this,null,!1),t[1]=s(t[1],"resolve-",this,null,!1)}),i.on("executor-err",function(t,e,n){t[1](n)}),i.on("cb-end",function(t,e,n){i.emit("propagate",[n,!0],this.nextPromise,!1,!1)}),i.on("propagate",function(t,e,n){this.getCtx&&!e||(this.getCtx=function(){if(t instanceof Promise)var e=i.context(t);return e&&e.getCtx?e.getCtx():this})}),r.toString=function(){return""+f})},{}],13:[function(t,e,n){var r=t("ee").get("raf"),o=t("wrap-function")(r),i="equestAnimationFrame";e.exports=r,o.inPlace(window,["r"+i,"mozR"+i,"webkitR"+i,"msR"+i],"raf-"),r.on("raf-start",function(t){t[0]=o(t[0],"fn-")})},{}],14:[function(t,e,n){function r(t,e,n){t[0]=a(t[0],"fn-",null,n)}function o(t,e,n){this.method=n,this.timerDuration=isNaN(t[1])?0:+t[1],t[0]=a(t[0],"fn-",this,n)}var i=t("ee").get("timer"),a=t("wrap-function")(i),s="setTimeout",c="setInterval",f="clearTimeout",u="-start",d="-";e.exports=i,a.inPlace(window,[s,"setImmediate"],s+d),a.inPlace(window,[c],c+d),a.inPlace(window,[f,"clearImmediate"],f+d),i.on(c+u,r),i.on(s+u,o)},{}],15:[function(t,e,n){function r(t,e){d.inPlace(e,["onreadystatechange"],"fn-",s)}function o(){var t=this,e=u.context(t);t.readyState>3&&!e.resolved&&(e.resolved=!0,u.emit("xhr-resolved",[],t)),d.inPlace(t,y,"fn-",s)}function i(t){x.push(t),m&&(E?E.then(a):w?w(a):(R=-R,O.data=R))}function a(){for(var t=0;t<x.length;t++)r([],x[t]);x.length&&(x=[])}function s(t,e){return e}function c(t,e){for(var n in t)e[n]=t[n];return e}t(7);var f=t("ee"),u=f.get("xhr"),d=t("wrap-function")(u),p=t(23),l=NREUM.o,h=l.XHR,m=l.MO,v=l.PR,w=l.SI,g="readystatechange",y=["onload","onerror","onabort","onloadstart","onloadend","onprogress","ontimeout"],x=[];e.exports=u;var b=window.XMLHttpRequest=function(t){var e=new h(t);try{u.emit("new-xhr",[e],e),e.addEventListener(g,o,p(!1))}catch(n){try{u.emit("internal-error",[n])}catch(r){}}return e};if(c(h,b),b.prototype=h.prototype,d.inPlace(b.prototype,["open","send"],"-xhr-",s),u.on("send-xhr-start",function(t,e){r(t,e),i(e)}),u.on("open-xhr-start",r),m){var E=v&&v.resolve();if(!w&&!v){var R=1,O=document.createTextNode(R);new m(a).observe(O,{characterData:!0})}}else f.on("fn-end",function(t){t[0]&&t[0].type===g||a()})},{}],16:[function(t,e,n){function r(t){if(!s(t))return null;var e=window.NREUM;if(!e.loader_config)return null;var n=(e.loader_config.accountID||"").toString()||null,r=(e.loader_config.agentID||"").toString()||null,f=(e.loader_config.trustKey||"").toString()||null;if(!n||!r)return null;var h=l.generateSpanId(),m=l.generateTraceId(),v=Date.now(),w={spanId:h,traceId:m,timestamp:v};return(t.sameOrigin||c(t)&&p())&&(w.traceContextParentHeader=o(h,m),w.traceContextStateHeader=i(h,v,n,r,f)),(t.sameOrigin&&!u()||!t.sameOrigin&&c(t)&&d())&&(w.newrelicHeader=a(h,m,v,n,r,f)),w}function o(t,e){return"00-"+e+"-"+t+"-01"}function i(t,e,n,r,o){var i=0,a="",s=1,c="",f="";return o+"@nr="+i+"-"+s+"-"+n+"-"+r+"-"+t+"-"+a+"-"+c+"-"+f+"-"+e}function a(t,e,n,r,o,i){var a="btoa"in window&&"function"==typeof window.btoa;if(!a)return null;var s={v:[0,1],d:{ty:"Browser",ac:r,ap:o,id:t,tr:e,ti:n}};return i&&r!==i&&(s.d.tk=i),btoa(JSON.stringify(s))}function s(t){return f()&&c(t)}function c(t){var e=!1,n={};if("init"in NREUM&&"distributed_tracing"in NREUM.init&&(n=NREUM.init.distributed_tracing),t.sameOrigin)e=!0;else if(n.allowed_origins instanceof Array)for(var r=0;r<n.allowed_origins.length;r++){var o=h(n.allowed_origins[r]);if(t.hostname===o.hostname&&t.protocol===o.protocol&&t.port===o.port){e=!0;break}}return e}function f(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.enabled}function u(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.exclude_newrelic_header}function d(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&NREUM.init.distributed_tracing.cors_use_newrelic_header!==!1}function p(){return"init"in NREUM&&"distributed_tracing"in NREUM.init&&!!NREUM.init.distributed_tracing.cors_use_tracecontext_headers}var l=t(29),h=t(18);e.exports={generateTracePayload:r,shouldGenerateTrace:s}},{}],17:[function(t,e,n){function r(t){var e=this.params,n=this.metrics;if(!this.ended){this.ended=!0;for(var r=0;r<p;r++)t.removeEventListener(d[r],this.listener,!1);e.aborted||(n.duration=a.now()-this.startTime,this.loadCaptureCalled||4!==t.readyState?null==e.status&&(e.status=0):i(this,t),n.cbTime=this.cbTime,s("xhr",[e,n,this.startTime,this.endTime,"xhr"],this))}}function o(t,e){var n=c(e),r=t.params;r.hostname=n.hostname,r.port=n.port,r.protocol=n.protocol,r.host=n.hostname+":"+n.port,r.pathname=n.pathname,t.parsedOrigin=n,t.sameOrigin=n.sameOrigin}function i(t,e){t.params.status=e.status;var n=v(e,t.lastSize);if(n&&(t.metrics.rxSize=n),t.sameOrigin){var r=e.getResponseHeader("X-NewRelic-App-Data");r&&(t.params.cat=r.split(", ").pop())}t.loadCaptureCalled=!0}var a=t("loader");if(a.xhrWrappable&&!a.disabled){var s=t("handle"),c=t(18),f=t(16).generateTracePayload,u=t("ee"),d=["load","error","abort","timeout"],p=d.length,l=t("id"),h=t(24),m=t(22),v=t(19),w=t(23),g=NREUM.o.REQ,y=window.XMLHttpRequest;a.features.xhr=!0,t(15),t(8),u.on("new-xhr",function(t){var e=this;e.totalCbs=0,e.called=0,e.cbTime=0,e.end=r,e.ended=!1,e.xhrGuids={},e.lastSize=null,e.loadCaptureCalled=!1,e.params=this.params||{},e.metrics=this.metrics||{},t.addEventListener("load",function(n){i(e,t)},w(!1)),h&&(h>34||h<10)||t.addEventListener("progress",function(t){e.lastSize=t.loaded},w(!1))}),u.on("open-xhr-start",function(t){this.params={method:t[0]},o(this,t[1]),this.metrics={}}),u.on("open-xhr-end",function(t,e){"loader_config"in NREUM&&"xpid"in NREUM.loader_config&&this.sameOrigin&&e.setRequestHeader("X-NewRelic-ID",NREUM.loader_config.xpid);var n=f(this.parsedOrigin);if(n){var r=!1;n.newrelicHeader&&(e.setRequestHeader("newrelic",n.newrelicHeader),r=!0),n.traceContextParentHeader&&(e.setRequestHeader("traceparent",n.traceContextParentHeader),n.traceContextStateHeader&&e.setRequestHeader("tracestate",n.traceContextStateHeader),r=!0),r&&(this.dt=n)}}),u.on("send-xhr-start",function(t,e){var n=this.metrics,r=t[0],o=this;if(n&&r){var i=m(r);i&&(n.txSize=i)}this.startTime=a.now(),this.listener=function(t){try{"abort"!==t.type||o.loadCaptureCalled||(o.params.aborted=!0),("load"!==t.type||o.called===o.totalCbs&&(o.onloadCalled||"function"!=typeof e.onload))&&o.end(e)}catch(n){try{u.emit("internal-error",[n])}catch(r){}}};for(var s=0;s<p;s++)e.addEventListener(d[s],this.listener,w(!1))}),u.on("xhr-cb-time",function(t,e,n){this.cbTime+=t,e?this.onloadCalled=!0:this.called+=1,this.called!==this.totalCbs||!this.onloadCalled&&"function"==typeof n.onload||this.end(n)}),u.on("xhr-load-added",function(t,e){var n=""+l(t)+!!e;this.xhrGuids&&!this.xhrGuids[n]&&(this.xhrGuids[n]=!0,this.totalCbs+=1)}),u.on("xhr-load-removed",function(t,e){var n=""+l(t)+!!e;this.xhrGuids&&this.xhrGuids[n]&&(delete this.xhrGuids[n],this.totalCbs-=1)}),u.on("xhr-resolved",function(){this.endTime=a.now()}),u.on("addEventListener-end",function(t,e){e instanceof y&&"load"===t[0]&&u.emit("xhr-load-added",[t[1],t[2]],e)}),u.on("removeEventListener-end",function(t,e){e instanceof y&&"load"===t[0]&&u.emit("xhr-load-removed",[t[1],t[2]],e)}),u.on("fn-start",function(t,e,n){e instanceof y&&("onload"===n&&(this.onload=!0),("load"===(t[0]&&t[0].type)||this.onload)&&(this.xhrCbStart=a.now()))}),u.on("fn-end",function(t,e){this.xhrCbStart&&u.emit("xhr-cb-time",[a.now()-this.xhrCbStart,this.onload,e],e)}),u.on("fetch-before-start",function(t){function e(t,e){var n=!1;return e.newrelicHeader&&(t.set("newrelic",e.newrelicHeader),n=!0),e.traceContextParentHeader&&(t.set("traceparent",e.traceContextParentHeader),e.traceContextStateHeader&&t.set("tracestate",e.traceContextStateHeader),n=!0),n}var n,r=t[1]||{};"string"==typeof t[0]?n=t[0]:t[0]&&t[0].url?n=t[0].url:window.URL&&t[0]&&t[0]instanceof URL&&(n=t[0].href),n&&(this.parsedOrigin=c(n),this.sameOrigin=this.parsedOrigin.sameOrigin);var o=f(this.parsedOrigin);if(o&&(o.newrelicHeader||o.traceContextParentHeader))if("string"==typeof t[0]||window.URL&&t[0]&&t[0]instanceof URL){var i={};for(var a in r)i[a]=r[a];i.headers=new Headers(r.headers||{}),e(i.headers,o)&&(this.dt=o),t.length>1?t[1]=i:t.push(i)}else t[0]&&t[0].headers&&e(t[0].headers,o)&&(this.dt=o)}),u.on("fetch-start",function(t,e){this.params={},this.metrics={},this.startTime=a.now(),this.dt=e,t.length>=1&&(this.target=t[0]),t.length>=2&&(this.opts=t[1]);var n,r=this.opts||{},i=this.target;"string"==typeof i?n=i:"object"==typeof i&&i instanceof g?n=i.url:window.URL&&"object"==typeof i&&i instanceof URL&&(n=i.href),o(this,n);var s=(""+(i&&i instanceof g&&i.method||r.method||"GET")).toUpperCase();this.params.method=s,this.txSize=m(r.body)||0}),u.on("fetch-done",function(t,e){this.endTime=a.now(),this.params||(this.params={}),this.params.status=e?e.status:0;var n;"string"==typeof this.rxSize&&this.rxSize.length>0&&(n=+this.rxSize);var r={txSize:this.txSize,rxSize:n,duration:a.now()-this.startTime};s("xhr",[this.params,r,this.startTime,this.endTime,"fetch"],this)})}},{}],18:[function(t,e,n){var r={};e.exports=function(t){if(t in r)return r[t];var e=document.createElement("a"),n=window.location,o={};e.href=t,o.port=e.port;var i=e.href.split("://");!o.port&&i[1]&&(o.port=i[1].split("/")[0].split("@").pop().split(":")[1]),o.port&&"0"!==o.port||(o.port="https"===i[0]?"443":"80"),o.hostname=e.hostname||n.hostname,o.pathname=e.pathname,o.protocol=i[0],"/"!==o.pathname.charAt(0)&&(o.pathname="/"+o.pathname);var a=!e.protocol||":"===e.protocol||e.protocol===n.protocol,s=e.hostname===document.domain&&e.port===n.port;return o.sameOrigin=a&&(!e.hostname||s),"/"===o.pathname&&(r[t]=o),o}},{}],19:[function(t,e,n){function r(t,e){var n=t.responseType;return"json"===n&&null!==e?e:"arraybuffer"===n||"blob"===n||"json"===n?o(t.response):"text"===n||""===n||void 0===n?o(t.responseText):void 0}var o=t(22);e.exports=r},{}],20:[function(t,e,n){function r(){}function o(t,e,n,r){return function(){return u.recordSupportability("API/"+e+"/called"),i(t+e,[f.now()].concat(s(arguments)),n?null:this,r),n?void 0:this}}var i=t("handle"),a=t(32),s=t(33),c=t("ee").get("tracer"),f=t("loader"),u=t(25),d=NREUM;"undefined"==typeof window.newrelic&&(newrelic=d);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],l="api-",h=l+"ixn-";a(p,function(t,e){d[e]=o(l,e,!0,"api")}),d.addPageAction=o(l,"addPageAction",!0),d.setCurrentRouteName=o(l,"routeName",!0),e.exports=newrelic,d.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(t,e){var n={},r=this,o="function"==typeof e;return i(h+"tracer",[f.now(),t,n],r),function(){if(c.emit((o?"":"no-")+"fn-start",[f.now(),r,o],n),o)try{return e.apply(this,arguments)}catch(t){throw c.emit("fn-err",[arguments,this,t],n),t}finally{c.emit("fn-end",[f.now()],n)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(t,e){m[e]=o(h,e)}),newrelic.noticeError=function(t,e){"string"==typeof t&&(t=new Error(t)),u.recordSupportability("API/noticeError/called"),i("err",[t,f.now(),!1,e])}},{}],21:[function(t,e,n){function r(t){if(NREUM.init){for(var e=NREUM.init,n=t.split("."),r=0;r<n.length-1;r++)if(e=e[n[r]],"object"!=typeof e)return;return e=e[n[n.length-1]]}}e.exports={getConfiguration:r}},{}],22:[function(t,e,n){e.exports=function(t){if("string"==typeof t&&t.length)return t.length;if("object"==typeof t){if("undefined"!=typeof ArrayBuffer&&t instanceof ArrayBuffer&&t.byteLength)return t.byteLength;if("undefined"!=typeof Blob&&t instanceof Blob&&t.size)return t.size;if(!("undefined"!=typeof FormData&&t instanceof FormData))try{return JSON.stringify(t).length}catch(e){return}}}},{}],23:[function(t,e,n){var r=!1;try{var o=Object.defineProperty({},"passive",{get:function(){r=!0}});window.addEventListener("testPassive",null,o),window.removeEventListener("testPassive",null,o)}catch(i){}e.exports=function(t){return r?{passive:!0,capture:!!t}:!!t}},{}],24:[function(t,e,n){var r=0,o=navigator.userAgent.match(/Firefox[\/\s](\d+\.\d+)/);o&&(r=+o[1]),e.exports=r},{}],25:[function(t,e,n){function r(t,e){var n=[a,t,{name:t},e];return i("storeMetric",n,null,"api"),n}function o(t,e){var n=[s,t,{name:t},e];return i("storeEventMetrics",n,null,"api"),n}var i=t("handle"),a="sm",s="cm";e.exports={constants:{SUPPORTABILITY_METRIC:a,CUSTOM_METRIC:s},recordSupportability:r,recordCustom:o}},{}],26:[function(t,e,n){function r(){return s.exists&&performance.now?Math.round(performance.now()):(i=Math.max((new Date).getTime(),i))-a}function o(){return i}var i=(new Date).getTime(),a=i,s=t(34);e.exports=r,e.exports.offset=a,e.exports.getLastTimestamp=o},{}],27:[function(t,e,n){function r(t){return!(!t||!t.protocol||"file:"===t.protocol)}e.exports=r},{}],28:[function(t,e,n){function r(t,e){var n=t.getEntries();n.forEach(function(t){"first-paint"===t.name?p("timing",["fp",Math.floor(t.startTime)]):"first-contentful-paint"===t.name&&p("timing",["fcp",Math.floor(t.startTime)])})}function o(t,e){var n=t.getEntries();if(n.length>0){var r=n[n.length-1];if(c&&c<r.startTime)return;p("lcp",[r])}}function i(t){t.getEntries().forEach(function(t){t.hadRecentInput||p("cls",[t])})}function a(t){if(t instanceof v&&!g){var e=Math.round(t.timeStamp),n={type:t.type};e<=l.now()?n.fid=l.now()-e:e>l.offset&&e<=Date.now()?(e-=l.offset,n.fid=l.now()-e):e=l.now(),g=!0,p("timing",["fi",e,n])}}function s(t){"hidden"===t&&(c=l.now(),p("pageHide",[c]))}if(!("init"in NREUM&&"page_view_timing"in NREUM.init&&"enabled"in NREUM.init.page_view_timing&&NREUM.init.page_view_timing.enabled===!1)){var c,f,u,d,p=t("handle"),l=t("loader"),h=t(31),m=t(23),v=NREUM.o.EV;if("PerformanceObserver"in window&&"function"==typeof window.PerformanceObserver){f=new PerformanceObserver(r);try{f.observe({entryTypes:["paint"]})}catch(w){}u=new PerformanceObserver(o);try{u.observe({entryTypes:["largest-contentful-paint"]})}catch(w){}d=new PerformanceObserver(i);try{d.observe({type:"layout-shift",buffered:!0})}catch(w){}}if("addEventListener"in document){var g=!1,y=["click","keydown","mousedown","pointerdown","touchstart"];y.forEach(function(t){document.addEventListener(t,a,m(!1))})}h(s)}},{}],29:[function(t,e,n){function r(){function t(){return e?15&e[n++]:16*Math.random()|0}var e=null,n=0,r=window.crypto||window.msCrypto;r&&r.getRandomValues&&(e=r.getRandomValues(new Uint8Array(31)));for(var o,i="xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx",a="",s=0;s<i.length;s++)o=i[s],"x"===o?a+=t().toString(16):"y"===o?(o=3&t()|8,a+=o.toString(16)):a+=o;return a}function o(){return a(16)}function i(){return a(32)}function a(t){function e(){return n?15&n[r++]:16*Math.random()|0}var n=null,r=0,o=window.crypto||window.msCrypto;o&&o.getRandomValues&&Uint8Array&&(n=o.getRandomValues(new Uint8Array(31)));for(var i=[],a=0;a<t;a++)i.push(e().toString(16));return i.join("")}e.exports={generateUuid:r,generateSpanId:o,generateTraceId:i}},{}],30:[function(t,e,n){function r(t,e){if(!o)return!1;if(t!==o)return!1;if(!e)return!0;if(!i)return!1;for(var n=i.split("."),r=e.split("."),a=0;a<r.length;a++)if(r[a]!==n[a])return!1;return!0}var o=null,i=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var s=navigator.userAgent,c=s.match(a);c&&s.indexOf("Chrome")===-1&&s.indexOf("Chromium")===-1&&(o="Safari",i=c[1])}e.exports={agent:o,version:i,match:r}},{}],31:[function(t,e,n){function r(t){function e(){t(s&&document[s]?document[s]:document[i]?"hidden":"visible")}"addEventListener"in document&&a&&document.addEventListener(a,e,o(!1))}var o=t(23);e.exports=r;var i,a,s;"undefined"!=typeof document.hidden?(i="hidden",a="visibilitychange",s="visibilityState"):"undefined"!=typeof document.msHidden?(i="msHidden",a="msvisibilitychange"):"undefined"!=typeof document.webkitHidden&&(i="webkitHidden",a="webkitvisibilitychange",s="webkitVisibilityState")},{}],32:[function(t,e,n){function r(t,e){var n=[],r="",i=0;for(r in t)o.call(t,r)&&(n[i]=e(r,t[r]),i+=1);return n}var o=Object.prototype.hasOwnProperty;e.exports=r},{}],33:[function(t,e,n){function r(t,e,n){e||(e=0),"undefined"==typeof n&&(n=t?t.length:0);for(var r=-1,o=n-e||0,i=Array(o<0?0:o);++r<o;)i[r]=t[e+r];return i}e.exports=r},{}],34:[function(t,e,n){e.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(t,e,n){function r(){}function o(t){function e(t){return t&&t instanceof r?t:t?f(t,c,a):a()}function n(n,r,o,i,a){if(a!==!1&&(a=!0),!l.aborted||i){t&&a&&t(n,r,o);for(var s=e(o),c=m(n),f=c.length,u=0;u<f;u++)c[u].apply(s,r);var p=d[y[n]];return p&&p.push([x,n,r,s]),s}}function i(t,e){g[t]=m(t).concat(e)}function h(t,e){var n=g[t];if(n)for(var r=0;r<n.length;r++)n[r]===e&&n.splice(r,1)}function m(t){return g[t]||[]}function v(t){return p[t]=p[t]||o(n)}function w(t,e){l.aborted||u(t,function(t,n){e=e||"feature",y[n]=e,e in d||(d[e]=[])})}var g={},y={},x={on:i,addEventListener:i,removeEventListener:h,emit:n,get:v,listeners:m,context:e,buffer:w,abort:s,aborted:!1};return x}function i(t){return f(t,c,a)}function a(){return new r}function s(){(d.api||d.feature)&&(l.aborted=!0,d=l.backlog={})}var c="nr@context",f=t("gos"),u=t(32),d={},p={},l=e.exports=o();e.exports.getOrSetContext=i,l.backlog=d},{}],gos:[function(t,e,n){function r(t,e,n){if(o.call(t,e))return t[e];var r=n();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(t,e,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return t[e]=r,r}var o=Object.prototype.hasOwnProperty;e.exports=r},{}],handle:[function(t,e,n){function r(t,e,n,r){o.buffer([t],r),o.emit(t,e,n)}var o=t("ee").get("handle");e.exports=r,r.ee=o},{}],id:[function(t,e,n){function r(t){var e=typeof t;return!t||"object"!==e&&"function"!==e?-1:t===window?0:a(t,i,function(){return o++})}var o=1,i="nr@id",a=t("gos");e.exports=r},{}],loader:[function(t,e,n){function r(){if(!P++){var t=T.info=NREUM.info,e=v.getElementsByTagName("script")[0];if(setTimeout(f.abort,3e4),!(t&&t.licenseKey&&t.applicationID&&e))return f.abort();c(R,function(e,n){t[e]||(t[e]=n)});var n=a();s("mark",["onload",n+T.offset],null,"api"),s("timing",["load",n]);var r=v.createElement("script");0===t.agent.indexOf("http://")||0===t.agent.indexOf("https://")?r.src=t.agent:r.src=h+"://"+t.agent,e.parentNode.insertBefore(r,e)}}function o(){"complete"===v.readyState&&i()}function i(){s("mark",["domContent",a()+T.offset],null,"api")}var a=t(26),s=t("handle"),c=t(32),f=t("ee"),u=t(30),d=t(27),p=t(21),l=t(23),h=p.getConfiguration("ssl")===!1?"http":"https",m=window,v=m.document,w="addEventListener",g="attachEvent",y=m.XMLHttpRequest,x=y&&y.prototype,b=!d(m.location);NREUM.o={ST:setTimeout,SI:m.setImmediate,CT:clearTimeout,XHR:y,REQ:m.Request,EV:m.Event,PR:m.Promise,MO:m.MutationObserver};var E=""+location,R={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-spa-1212.min.js"},O=y&&x&&x[w]&&!/CriOS/.test(navigator.userAgent),T=e.exports={offset:a.getLastTimestamp(),now:a,origin:E,features:{},xhrWrappable:O,userAgent:u,disabled:b};if(!b){t(20),t(28),v[w]?(v[w]("DOMContentLoaded",i,l(!1)),m[w]("load",r,l(!1))):(v[g]("onreadystatechange",o),m[g]("onload",r)),s("mark",["firstbyte",a.getLastTimestamp()],null,"api");var P=0}},{}],"wrap-function":[function(t,e,n){function r(t,e){function n(e,n,r,c,f){function nrWrapper(){var i,a,u,p;try{a=this,i=d(arguments),u="function"==typeof r?r(i,a):r||{}}catch(l){o([l,"",[i,a,c],u],t)}s(n+"start",[i,a,c],u,f);try{return p=e.apply(a,i)}catch(h){throw s(n+"err",[i,a,h],u,f),h}finally{s(n+"end",[i,a,p],u,f)}}return a(e)?e:(n||(n=""),nrWrapper[p]=e,i(e,nrWrapper,t),nrWrapper)}function r(t,e,r,o,i){r||(r="");var s,c,f,u="-"===r.charAt(0);for(f=0;f<e.length;f++)c=e[f],s=t[c],a(s)||(t[c]=n(s,u?c+r:r,o,c,i))}function s(n,r,i,a){if(!h||e){var s=h;h=!0;try{t.emit(n,r,i,e,a)}catch(c){o([c,n,r,i],t)}h=s}}return t||(t=u),n.inPlace=r,n.flag=p,n}function o(t,e){e||(e=u);try{e.emit("internal-error",t)}catch(n){}}function i(t,e,n){if(Object.defineProperty&&Object.keys)try{var r=Object.keys(t);return r.forEach(function(n){Object.defineProperty(e,n,{get:function(){return t[n]},set:function(e){return t[n]=e,e}})}),e}catch(i){o([i],n)}for(var a in t)l.call(t,a)&&(e[a]=t[a]);return e}function a(t){return!(t&&t instanceof Function&&t.apply&&!t[p])}function s(t,e){var n=e(t);return n[p]=t,i(t,n,u),n}function c(t,e,n){var r=t[e];t[e]=s(r,n)}function f(){for(var t=arguments.length,e=new Array(t),n=0;n<t;++n)e[n]=arguments[n];return e}var u=t("ee"),d=t(33),p="nr@original",l=Object.prototype.hasOwnProperty,h=!1;e.exports=r,e.exports.wrapFunction=s,e.exports.wrapInPlace=c,e.exports.argsToArray=f},{}]},{},["loader",2,17,5,3,4]);
+  ;NREUM.loader_config={accountID:"804283",trustKey:"804283",agentID:"402703674",licenseKey:"cf99e8d2a3",applicationID:"402703674"}
+  ;NREUM.info={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",licenseKey:"cf99e8d2a3",
+    // Modified this value from the generated script, to pass prod vs dev
+    applicationID: window.location.hostname.includes('journals.plos.org') ? "402703674" : "402694889",
+    sa:1}
+</script>
+<!-- End New Relic -->
+
+
+
+<header>
+  <div id="topslot" class="head-top">
+  <a id="skip-to-content" tabindex="0" class="button" href="#main-content">
+    Skip to main content
+  </a>
+
+<div class="center">
+<div class="title">Advertisement</div>
+<!-- DoubleClick Ad Zone -->
+  <div class='advertisement' id='div-gpt-ad-1458247671871-0' style='width:728px; height:90px;'>
+    <script type='text/javascript'>
+      googletag.cmd.push(function() { googletag.display('div-gpt-ad-1458247671871-0'); });
+    </script>
+  </div>
+</div>
+  </div>
+
+  <div id="user" class="nav" data-user-management-url="https://community.plos.org">
+  </div>
+  <div id="pagehdr">
+
+    <nav class="nav-main">
+
+
+
+
+<h1 class="logo">
+  <a href="/plosgenetics/.">PLOS Genetics</a>
+</h1>
+
+<section class="top-bar-section"> 
+
+<ul class="nav-elements">
+
+
+
+  <li class="menu-section-header has-dropdown " id="browse">
+    <span class="menu-section-header-title">  Browse </span>
+
+    <ul class="menu-section dropdown "
+        id="browse-dropdown-list">
+      <li>
+    <a href="/plosgenetics/issue" >Current Issue</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/volume" >Journal Archive</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/collections" >Collections</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/find-and-read-articles" >Find and Read Articles</a>
+  </li>
+
+    </ul>
+
+  </li>
+
+
+    <li class="multi-col-parent menu-section-header has-dropdown" id="publish">
+    Publish
+      <div class="dropdown mega ">
+        <ul class="multi-col" id="publish-dropdown-list">
+
+  <li class="menu-section-header " id="submissions">
+    <span class="menu-section-header-title">  Submissions </span>
+
+    <ul class="menu-section "
+        id="submissions-dropdown-list">
+      <li>
+    <a href="/plosgenetics/s/getting-started" >Getting Started</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/submission-guidelines" >Submission Guidelines</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/figures" >Figures</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/tables" >Tables</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/supporting-information" >Supporting Information</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/latex" >LaTeX</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/other-article-types" >Other Article Types</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/preprints" >Preprints</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/revising-your-manuscript" >Revising Your Manuscript</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/submit-now" >Submit Now</a>
+  </li>
+
+    </ul>
+
+  </li>
+
+
+  <li class="menu-section-header " id="policies">
+    <span class="menu-section-header-title">  Policies </span>
+
+    <ul class="menu-section "
+        id="policies-dropdown-list">
+      <li>
+    <a href="/plosgenetics/s/best-practices-in-research-reporting" >Best Practices in Research Reporting</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/human-subjects-research" >Human Subjects Research</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/animal-research" >Animal Research</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/competing-interests" >Competing Interests</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/disclosure-of-funding-sources" >Disclosure of Funding Sources</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/licenses-and-copyright" >Licenses and Copyright</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/data-availability" >Data Availability</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/complementary-research" >Complementary Research</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/materials-software-and-code-sharing" >Materials, Software and Code Sharing</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/ethical-publishing-practice" >Ethical Publishing Practice</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/authorship" >Authorship</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/corrections-expressions-of-concern-and-retractions" >Corrections, Expressions of Concern, and Retractions</a>
+  </li>
+
+    </ul>
+
+  </li>
+
+
+  <li class="menu-section-header " id="manuscript-review-and-publication">
+    <span class="menu-section-header-title">  Manuscript Review and Publication </span>
+
+    <ul class="menu-section "
+        id="manuscript-review-and-publication-dropdown-list">
+      <li>
+    <a href="/plosgenetics/s/editorial-and-peer-review-process" >Editorial and Peer Review Process</a>
+  </li>
+
+      <li>
+    <a href="https://explore.plos.org/editor-resources" >Editor Center</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/reviewer-guidelines" >Guidelines for Reviewers</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/accepted-manuscripts" >Accepted Manuscripts</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/comments" >Comments</a>
+  </li>
+
+    </ul>
+
+  </li>
+        </ul>
+      </div>
+    </li>
+
+
+
+  <li class="menu-section-header has-dropdown " id="about">
+    <span class="menu-section-header-title">  About </span>
+
+    <ul class="menu-section dropdown "
+        id="about-dropdown-list">
+      <li>
+    <a href="/plosgenetics/s/journal-information" >Journal Information</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/editors-in-chief" >Editors-in-Chief</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/editorial-board" >Editorial Board</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/publishing-information" >Publishing Information</a>
+  </li>
+
+      <li>
+    <a href="https://plos.org/publication-fees" >Publication Fees</a>
+  </li>
+
+      <li>
+    <a href="https://plos.org/press-and-media" >Press and Media</a>
+  </li>
+
+      <li>
+    <a href="/plosgenetics/s/contact" >Contact</a>
+  </li>
+
+    </ul>
+
+  </li>
+
+
+<script src="/resource/js/vendor/jquery.hoverIntent.js" type="text/javascript"></script>
+<script src="/resource/js/components/menu_drop.js" type="text/javascript"></script>
+<script src="/resource/js/components/hover_delay.js" type="text/javascript"></script>
+      <li id="navsearch" class="head-search">
+
+
+    <form name="searchForm" action="/plosgenetics/search" method="get">
+      <fieldset>
+        <legend>Search</legend>
+        <label for="search">Search</label>
+        <div class="search-contain">
+          <input id="search" type="text" name="q" placeholder="SEARCH" required/>
+          <button id="headerSearchButton" type="submit" aria-label="Submit search">
+            <i title="Submit search" class="search-icon"></i>
+          </button>
+        </div>
+      </fieldset>
+      <input type="hidden" name="filterJournals" value="PLoSGenetics"/>
+    </form>
+
+    <a id="advSearch"
+       href="/plosgenetics/search">
+      advanced search
+    </a>
+
+
+
+
+<script src="/resource/js/components/placeholder_style.js" type="text/javascript"></script>
+      </li>
+
+      </ul>     
+      </section>  
+    </nav>
+  </div>
+
+</header>
+<main id="main-content"> <div class="set-grid">
+
+<header class="title-block">
+
+
+
+<script src="/resource/js/components/signposts.js" type="text/javascript"></script>
+
+<ul id="almSignposts" class="signposts">
+  <li id="loadingMetrics">
+    <p>Loading metrics</p>
+  </li>
+</ul>
+
+<script type="text/template" id="signpostsGeneralErrorTemplate">
+  <li id="metricsError">Article metrics are unavailable at this time. Please try again later.</li>
+</script>
+
+<script type="text/template" id="signpostsNewArticleErrorTemplate">
+  <li></li><li></li><li id="tooSoon">Article metrics are unavailable for recently published articles.</li>
+</script>
+
+<script type="text/template" id="signpostsTemplate">
+    <li id="almSaves">
+      <%= s.numberFormat(saveCount, 0) %>
+      <div class="tools" data-js-tooltip-hover="trigger">
+        <a class="metric-term" href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570#savedHeader">Save</a>
+        <p class="saves-tip" data-js-tooltip-hover="target"><a href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570#savedHeader">Total Mendeley and Citeulike bookmarks.</a></p>
+      </div>
+    </li>
+
+    <li id="almCitations">
+      <%= s.numberFormat(citationCount, 0) %>
+      <div class="tools" data-js-tooltip-hover="trigger">
+        <a class="metric-term" href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570#citedHeader">Citation</a>
+        <p class="citations-tip" data-js-tooltip-hover="target"><a href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570#citedHeader">Paper's citation count computed by Dimensions.</a></p>
+      </div>
+    </li>
+
+    <li id="almViews">
+      <%= s.numberFormat(viewCount, 0) %>
+      <div class="tools" data-js-tooltip-hover="trigger">
+        <a class="metric-term" href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570#viewedHeader">View</a>
+        <p class="views-tip" data-js-tooltip-hover="target"><a href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570#viewedHeader">PLOS views and downloads.</a></p>
+      </div>
+    </li>
+
+    <li id="almShares">
+      <%= s.numberFormat(shareCount, 0) %>
+      <div class="tools" data-js-tooltip-hover="trigger">
+        <a class="metric-term" href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570#discussedHeader">Share</a>
+        <p class="shares-tip" data-js-tooltip-hover="target"><a href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570#discussedHeader">Sum of Facebook, Twitter, Reddit and Wikipedia activity.</a></p>
+      </div>
+    </li>
+</script>
+
+    <div class="article-meta">
+
+<div class="classifications">
+  <p class="license-short" id="licenseShort">Open Access</p>
+  <p class="peer-reviewed" id="peerReviewed">Peer-reviewed</p>
+
+<div class="article-type" >
+  <p class="type-article" id="artType">Research Article</p>
+</div>
+
+
+</div>
+    </div>
+    <div class="article-title-etc">
+
+
+
+<div class="title-authors">
+  <h1 id="artTitle"><?xml version="1.0" encoding="UTF-8"?>Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains</h1>
+
+<ul class="author-list clearfix"  data-js-tooltip="tooltip_container" id="author-list">
+
+
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="0" class="author-name" >
+Ian M. Ehrenreich <span class="email">  </span>,</a>    <div id="author-meta-0" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  <p id="authCorresponding-0"> <span class="email">* E-mail:</span> <a href="mailto:Ian.Ehrenreich@usc.edu">Ian.Ehrenreich@usc.edu</a> (IME); <a href="mailto:leonid@genomics.princeton.edu">leonid@genomics.princeton.edu</a> (LK)</p>
+  <p id="authAffiliations-0"><span class="type">Affiliations</span>
+    Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America, 
+    Department of Ecology and Evolutionary Biology, Princeton University, Princeton, New Jersey, United States of America, 
+    Howard Hughes Medical Institute, Princeton University, Princeton, New Jersey, United States of America, 
+    Molecular and Computational Biology Section, University of Southern California, Los Angeles, California, United States of America
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose0"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="1" class="author-name" >
+Joshua Bloom <span class="contribute"> </span>,</a>    <div id="author-meta-1" class="author-info" data-js-tooltip="tooltip_target">
+
+  <p>
+    <span class="contribute"> </span> Contributed equally to this work with:
+    Joshua Bloom,
+    Noorossadat Torabi,
+    Xin Wang
+  </p>
+  
+  
+  <p id="authAffiliations-1"><span class="type">Affiliations</span>
+    Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America, 
+    Department of Molecular Biology, Princeton University, Princeton, New Jersey, United States of America
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose1"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="2" class="author-name" >
+Noorossadat Torabi <span class="contribute"> </span>,</a>    <div id="author-meta-2" class="author-info" data-js-tooltip="tooltip_target">
+
+  <p>
+    <span class="contribute"> </span> Contributed equally to this work with:
+    Joshua Bloom,
+    Noorossadat Torabi,
+    Xin Wang
+  </p>
+  
+  
+  <p id="authAffiliations-2"><span class="type">Affiliations</span>
+    Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America, 
+    Department of Molecular Biology, Princeton University, Princeton, New Jersey, United States of America
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose2"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="3" class="author-name" >
+Xin Wang <span class="contribute"> </span>,</a>    <div id="author-meta-3" class="author-info" data-js-tooltip="tooltip_target">
+
+  <p>
+    <span class="contribute"> </span> Contributed equally to this work with:
+    Joshua Bloom,
+    Noorossadat Torabi,
+    Xin Wang
+  </p>
+  
+  
+  <p id="authAffiliations-3"><span class="type">Affiliations</span>
+    Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America, 
+    Department of Molecular Biology, Princeton University, Princeton, New Jersey, United States of America
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose3"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="4" class="author-name" >
+Yue Jia,</a>    <div id="author-meta-4" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  
+  <p id="authAffiliations-4"><span class="type">Affiliations</span>
+    Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America, 
+    Howard Hughes Medical Institute, Princeton University, Princeton, New Jersey, United States of America
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose4"> &#x02A2F; </a>
+    </div>
+</li>
+
+<li
+  data-js-tooltip="tooltip_trigger"
+  
+>
+   <a  data-author-id="5" class="author-name" >
+Leonid Kruglyak <span class="email">  </span></a>    <div id="author-meta-5" class="author-info" data-js-tooltip="tooltip_target">
+
+  
+  <p id="authCorresponding-5"> <span class="email">* E-mail:</span> <a href="mailto:Ian.Ehrenreich@usc.edu">Ian.Ehrenreich@usc.edu</a> (IME); <a href="mailto:leonid@genomics.princeton.edu">leonid@genomics.princeton.edu</a> (LK)</p>
+  <p id="authAffiliations-5"><span class="type">Affiliations</span>
+    Lewis-Sigler Institute for Integrative Genomics, Princeton University, Princeton, New Jersey, United States of America, 
+    Department of Ecology and Evolutionary Biology, Princeton University, Princeton, New Jersey, United States of America, 
+    Howard Hughes Medical Institute, Princeton University, Princeton, New Jersey, United States of America
+  </p>
+
+      <a data-js-tooltip="tooltip_close" class="close" id="tooltipClose5"> &#x02A2F; </a>
+    </div>
+</li>
+
+</ul>
+<script src="/resource/js/components/tooltip.js" type="text/javascript"></script>
+
+</div>
+
+
+<div id="floatTitleTop" data-js-floater="title_author" class="float-title" role="presentation">
+  <div class="set-grid">
+    <div class="float-title-inner">
+      <h1><?xml version="1.0" encoding="UTF-8"?>Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains</h1>
+
+<ul id="floatAuthorList" data-js-floater="floated_authors">
+
+  <li data-float-index="1">Ian M. Ehrenreich,&nbsp;
+
+  </li>
+  <li data-float-index="2">Joshua Bloom,&nbsp;
+
+  </li>
+  <li data-float-index="3">Noorossadat Torabi,&nbsp;
+
+  </li>
+  <li data-float-index="4">Xin Wang,&nbsp;
+
+  </li>
+  <li data-float-index="5">Yue Jia,&nbsp;
+
+  </li>
+  <li data-float-index="6">Leonid Kruglyak
+
+  </li>
+
+</ul>
+
+
+
+    </div>
+    <div class="logo-close" id="titleTopCloser">
+      <img src="/resource/img/logo-plos-full-color.svg" style="height: 2em" alt="PLOS" />
+      <div class="close-floater" title="close">x</div>
+    </div>
+  </div>
+</div>
+
+      <ul class="date-doi">
+        <li id="artPubDate">Published: March 15, 2012</li>
+        <li id="artDoi">
+<a   href="https://doi.org/10.1371/journal.pgen.1002570">https://doi.org/10.1371/journal.pgen.1002570</a>
+        </li>
+        <li class="flex-spacer"></li>
+      </ul>
+
+    </div>
+  <div>
+
+  </div>
+</header>
+  <section class="article-body">
+
+
+
+<ul class="article-tabs">
+
+          <li class="tab-title active" id="tabArticle">
+            <a href="/plosgenetics/article?id=10.1371/journal.pgen.1002570" class="article-tab-1">Article</a>
+        </li>
+
+
+              <li class="tab-title " id="tabAuthors">
+            <a href="/plosgenetics/article/authors?id=10.1371/journal.pgen.1002570" class="article-tab-2">Authors</a>
+        </li>
+
+
+          <li class="tab-title " id="tabMetrics">
+            <a href="/plosgenetics/article/metrics?id=10.1371/journal.pgen.1002570" class="article-tab-3">Metrics</a>
+        </li>
+
+
+          <li class="tab-title " id="tabComments">
+            <a href="/plosgenetics/article/comments?id=10.1371/journal.pgen.1002570" class="article-tab-4">Comments</a>
+        </li>
+
+  <li class="tab-title" id="tabRelated">
+    <a class="article-tab-5" id="tabRelated-link" target="_blank" href="http://plos.altmetric.com/details/doi/10.1371/journal.pgen.1002570">Media Coverage</a>
+  </li>
+</ul>
+
+    <div class="article-container">
+
+
+<div id="nav-article">
+  <ul class="nav-secondary">
+
+    <li class="nav-comments" id="nav-comments">
+      <a href="article/comments?id=10.1371/journal.pgen.1002570">Reader Comments</a>
+    </li>
+
+    <li id="nav-figures"><a href="#" data-doi="10.1371/journal.pgen.1002570">Figures</a></li>
+  </ul>
+  <div id="nav-data-linking" data-data-url="">
+  </div>
+</div>
+<script src="/resource/js/components/scroll.js" type="text/javascript"></script>
+<script src="/resource/js/components/nav_builder.js" type="text/javascript"></script>
+<script src="/resource/js/components/floating_nav.js" type="text/javascript"></script>
+
+<div id="figure-lightbox-container"></div>
+
+<script id="figure-lightbox-template" type="text/template">
+  <div id="figure-lightbox" class="reveal-modal full" data-reveal aria-hidden="true"
+       role="dialog">
+    <div class="lb-header">
+      <h1 id="lb-title"><%= articleTitle %></h1>
+
+      <div id="lb-authors">
+              <span>Ian M. Ehrenreich</span>
+              <span>Joshua Bloom</span>
+          <a class="more-authors" href="/plosgenetics/article/authors?id=10.1371/journal.pgen.1002570">...</a>
+          <span>Leonid Kruglyak</span>
+      </div>
+
+      <div class="lb-close" title="close">&nbsp;</div>
+    </div>
+    <div class="img-container">
+      <div class="loader"> <i class="fa-spinner"></i> </div>
+      <img class="main-lightbox-image" src=""/>
+      <aside id="figures-list">
+        <% figureList.each(function (ix, figure) { %>
+        <div class="change-img" data-doi="<%= figure.getAttribute('data-doi') %>">
+          <img class="aside-figure" src="/plosgenetics/article/figure/image?size=inline&id=<%= figure.getAttribute('data-doi') %>" />
+        </div>
+        <% }) %>
+        <div class="dummy-figure">
+        </div>
+      </aside>
+    </div>
+    <div id="lightbox-footer">
+
+      <div id="btns-container" class="lightbox-row <% if(figureList.length <= 1) { print('one-figure-only') } %>">
+        <div class="fig-btns-container reset-zoom-wrapper left">
+          <span class="fig-btn reset-zoom-btn">Reset zoom</span>
+        </div>
+        <div class="zoom-slider-container">
+          <div class="range-slider-container">
+            <span id="lb-zoom-min"></span>
+            <div class="range-slider round" data-slider data-options="start: 20; end: 200; initial: 20;">
+              <span class="range-slider-handle" role="slider" tabindex="0"></span>
+              <span class="range-slider-active-segment"></span>
+              <input type="hidden">
+            </div>
+            <span id="lb-zoom-max"></span>
+          </div>
+        </div>
+        <% if(figureList.length > 1) { %>
+        <div class="fig-btns-container">
+          <span class="fig-btn all-fig-btn"><i class="icon icon-all"></i> All Figures</span>
+          <span class="fig-btn next-fig-btn"><i class="icon icon-next"></i> Next</span>
+          <span class="fig-btn prev-fig-btn"><i class="icon icon-prev"></i> Previous</span>
+        </div>
+        <% } %>
+      </div>
+      <div id="image-context">
+      </div>
+    </div>
+  </div>
+</script>
+
+<script id="image-context-template" type="text/template">
+  <div class="footer-text">
+    <div id="figure-description-wrapper">
+      <div id="view-more-wrapper" style="<% descriptionExpanded? print('display:none;') : '' %>">
+        <span id="figure-title"><%= title %></span>
+        <p id="figure-description">
+          <%= description %>&nbsp;&nbsp;
+        </p>
+        <span id="view-more">show more<i class="icon-arrow-right"></i></span>
+
+      </div>
+      <div id="view-less-wrapper" style="<% descriptionExpanded? print('display:inline-block;') : '' %>" >
+        <span id="figure-title"><%= title %></span>
+        <p id="full-figure-description">
+          <%= description %>&nbsp;&nbsp;
+          <span id="view-less">show less<i class="icon-arrow-left"></i></span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="show-context-container">
+    <a class="btn show-context" href="<%= showInContext(strippedDoi) %>">Show in Context</a>
+  </div>
+  <div id="download-buttons">
+    <h3>Download:</h3>
+    <div class="item">
+      <a href="/plosgenetics/article/figure/image?size=original&download=&id=<%= doi %>" title="original image">
+        <span class="download-btn">TIFF</span>
+      </a>
+      <span class="file-size"><%= fileSizes.original %></span>
+    </div>
+    <div class="item">
+      <a href="/plosgenetics/article/figure/image?size=large&download=&id=<%= doi %>" title="large image">
+        <span class="download-btn">PNG</span>
+      </a>
+      <span class="file-size"><%= fileSizes.large %></span>
+    </div>
+
+  </div>
+</script>
+      <div class="article-content">
+
+
+
+
+
+
+<div id="figure-carousel-section">
+  <h2>Figures</h2>
+
+  <div id="figure-carousel">
+
+    <div class="carousel-wrapper">
+      <div class="slider">
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pgen.1002570.g001">
+
+                <img src="/plosgenetics/article/figure/image?size=inline&amp;id=10.1371/journal.pgen.1002570.g001"
+                     loading="lazy"
+                     alt="Figure 1"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pgen.1002570.g002">
+
+                <img src="/plosgenetics/article/figure/image?size=inline&amp;id=10.1371/journal.pgen.1002570.g002"
+                     loading="lazy"
+                     alt="Figure 2"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pgen.1002570.t001">
+
+                <img src="/plosgenetics/article/figure/image?size=inline&amp;id=10.1371/journal.pgen.1002570.t001"
+                     loading="lazy"
+                     alt="Table 1"
+                />
+
+            </div>
+
+          <div class="carousel-item lightbox-figure" data-doi="10.1371/journal.pgen.1002570.g003">
+
+                <img src="/plosgenetics/article/figure/image?size=inline&amp;id=10.1371/journal.pgen.1002570.g003"
+                     loading="lazy"
+                     alt="Figure 3"
+                />
+
+            </div>
+      </div>
+    </div>
+
+    <div class="carousel-control">
+      <span class="button previous"></span>
+      <span class="button next"></span>
+    </div>
+    <div class="carousel-page-buttons">
+
+    </div>
+  </div>
+</div>
+<script src="/resource/js/vendor/jquery.touchswipe.js" type="text/javascript"></script>
+<script src="/resource/js/components/figure_carousel.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/jquery.dotdotdot.js" type="text/javascript"></script>
+
+
+        <div class="article-text" id="artText">
+          
+
+
+
+<div xmlns:plos="http://plos.org" class="abstract toc-section abstract-type-"><a id="abstract0" name="abstract0" data-toc="abstract0" class="link-target" title="Abstract"></a><h2>Abstract</h2><div class="abstract-content"><a id="article1.front1.article-meta1.abstract1.p1" name="article1.front1.article-meta1.abstract1.p1" class="link-target"></a><p>Many questions about the genetic basis of complex traits remain unanswered. This is in part due to the low statistical power of traditional genetic mapping studies. We used a statistically powerful approach, extreme QTL mapping (X-QTL), to identify the genetic basis of resistance to 13 chemicals in all 6 pairwise crosses of four ecologically and genetically diverse yeast strains, and we detected a total of more than 800 loci. We found that the number of loci detected in each experiment was primarily a function of the trait (explaining 46% of the variance) rather than the cross (11%), suggesting that the level of genetic complexity is a consistent property of a trait across different genetic backgrounds. Further, we observed that most loci had trait-specific effects, although a small number of loci with effects in many conditions were identified. We used the patterns of resistance and susceptibility alleles in the four parent strains to make inferences about the allele frequency spectrum of functional variants. We also observed evidence of more complex allelic series at a number of loci, as well as strain-specific signatures of selection. These results improve our understanding of complex traits in yeast and have implications for study design in other organisms.</p>
+</div></div><div xmlns:plos="http://plos.org" class="abstract toc-section abstract-type-summary"><a id="abstract1" name="abstract1" data-toc="abstract1" class="link-target" title="Author Summary"></a>
+<h2>Author Summary</h2>
+<div class="abstract-content"><a id="article1.front1.article-meta1.abstract2.p1" name="article1.front1.article-meta1.abstract2.p1" class="link-target"></a><p>Most heritable traits of agricultural, evolutionary, and medical significance are specified by multiple genetic loci. Despite decades of research, we have only a limited understanding of the genetic basis of such complex traits. Studies in model organisms have the potential to provide fundamental insights into this research area, but most genetic mapping studies in these species have had low statistical power to detect multiple loci with small effects. Using a technique in which we employed millions of cross progeny in genetic mapping, we previously showed that resistance to chemicals has a highly complex genetic basis in a cross of a lab strain and a wine strain of the budding yeast <em>Saccharomyces cerevisiae</em>. Because we only examined a single cross, it was unclear how general our findings were. Here, we expand our work to all six possible crosses of four strains—the two isolates we used in our last study, as well as an isolate from an immunocompromised human being and an isolate from the sap of an oak tree. Our results based on these four ecologically and genetically distinct <em>S. cerevisiae</em> strains suggest that resistance to chemicals commonly exhibits a highly complex genetic basis among yeast isolates.</p>
+</div></div>
+
+
+<div xmlns:plos="http://plos.org" class="articleinfo"><p><strong>Citation: </strong>Ehrenreich IM, Bloom J, Torabi N, Wang X, Jia Y, Kruglyak L (2012) Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains. PLoS Genet 8(3):
+           e1002570.
+        
+        https://doi.org/10.1371/journal.pgen.1002570</p><p><strong>Editor: </strong>Audrey P. Gasch, University of Wisconsin-Madison, United States of America</p><p><strong>Received: </strong>July 26, 2011; <strong>Accepted: </strong>January 16, 2012; <strong>Published: </strong> March 15, 2012</p><p><strong>Copyright: </strong> © 2012 Ehrenreich et al. This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.</p><p><strong>Funding: </strong>This research was supported by NIH grant R37 MH59520 (LK), James S. McDonnell Centennial Fellowship (LK), the Howard Hughes Medical Institute (LK), NIH postdoctoral fellowship F32 HG51762 (IME), NSF predoctoral fellowship (JB), and NIH grant P50 GM071508 to the Center for Quantitative Biology at the Lewis-Sigler Institute of Princeton University. The funders had no role in study design, data collection and analysis, decision to publish, or preparation of the manuscript.</p><p><strong>Competing interests: </strong> The authors have declared that no competing interests exist.</p></div>
+
+
+
+
+
+<div xmlns:plos="http://plos.org" id="section1" class="section toc-section"><a id="s1" name="s1" data-toc="s1" class="link-target" title="Introduction"></a><h2>Introduction</h2><a id="article1.body1.sec1.p1" name="article1.body1.sec1.p1" class="link-target"></a><p>Most traits of agricultural, evolutionary, and medical significance are genetically complex, involving multiple genes that interact with one another and the environment <a href="#pgen.1002570-Falconer1" class="ref-tip">[1]</a>. Despite decades of effort, our understanding of how such traits are specified at the genetic level remains incomplete <a href="#pgen.1002570-Manolio1" class="ref-tip">[2]</a>. Studies in model organisms can provide fundamental insights into the genetic basis of complex traits that are applicable to other species, including humans <a href="#pgen.1002570-Mackay1" class="ref-tip">[3]</a>. However, such studies typically detect only a small fraction of the loci that contribute to a trait due to low statistical power <a href="#pgen.1002570-Brem1" class="ref-tip">[4]</a>.</p>
+<a id="article1.body1.sec1.p2" name="article1.body1.sec1.p2" class="link-target"></a><p>To improve genetic mapping of complex traits in <em>Saccharomyces cerevisiae</em>, we recently developed extreme QTL mapping (X-QTL), which is a bulk segregant mapping technique that employs millions of cross progeny <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>. X-QTL involves three key steps: generation of very large segregating populations, isolation of cross progeny with extreme trait values, and quantitative measurement of pooled allele frequencies across the genome in these phenotypically extreme individuals <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>. To make the pools of segregants that are the starting point for X-QTL, we use selectable markers to obtain an effectively unlimited number of progeny from a cross of two strains. We then employ selection-based phenotyping to isolate large numbers of segregants with extreme trait values from populations that contain millions of cross progeny. DNA is extracted from pools of phenotypically extreme segregants, and the allele frequencies of markers throughout these individuals' genomes are determined using custom microarrays or next generation sequencing. In an X-QTL experiment, a locus that influences a trait is expected to show an allele frequency skew in the direction of the parental allele that contributes to a more extreme trait value.</p>
+<a id="article1.body1.sec1.p3" name="article1.body1.sec1.p3" class="link-target"></a><p>By applying X-QTL to a number of chemical resistance phenotypes in a single cross of the lab strain BY4716 and the vineyard strain RM11-1a (hereafter, BY and RM, respectively), we were able to show that large numbers of loci can underlie quantitative trait variation between <em>S. cerevisiae</em> isolates <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>. Following our publication, another group observed similar results in a different cross <a href="#pgen.1002570-Parts1" class="ref-tip">[6]</a>, suggesting that high genetic complexity may be a common feature of heritable trait variation among yeast strains.</p>
+<a id="article1.body1.sec1.p4" name="article1.body1.sec1.p4" class="link-target"></a><p>Here, we examined how genetic complexity varies among strains and crosses. We used X-QTL to identify the genetic basis of resistance to 13 diverse chemicals in all 6 pairwise crosses of strains BY, RM, YJM789, and YPS163. YJM789 (hereafter, YJM) is derived from a clinical isolate, and YPS163 (hereafter, YPS) is an oak strain. These 4 strains are highly diverged at the sequence level <a href="#pgen.1002570-Doniger1" class="ref-tip">[7]</a>, <a href="#pgen.1002570-Wei1" class="ref-tip">[8]</a>, <a href="#pgen.1002570-Ruderfer1" class="ref-tip">[9]</a>, <a href="#pgen.1002570-Liti1" class="ref-tip">[10]</a>, <a href="#pgen.1002570-Schacherer1" class="ref-tip">[11]</a> and exhibit a wide range of heritable phenotypic differences <a href="#pgen.1002570-Brem2" class="ref-tip">[12]</a>, <a href="#pgen.1002570-Steinmetz1" class="ref-tip">[13]</a>, <a href="#pgen.1002570-Perlstein1" class="ref-tip">[14]</a>, <a href="#pgen.1002570-Kim1" class="ref-tip">[15]</a>, <a href="#pgen.1002570-Gerke1" class="ref-tip">[16]</a>, <a href="#pgen.1002570-Kim2" class="ref-tip">[17]</a>, <a href="#pgen.1002570-McCusker1" class="ref-tip">[18]</a>, <a href="#pgen.1002570-Ehrenreich2" class="ref-tip">[19]</a>. Because of the statistical power gained by using very large mapping populations, we detected approximately an order of magnitude more loci than did previous studies involving multiple crosses of yeast strains <a href="#pgen.1002570-Kim1" class="ref-tip">[15]</a>, <a href="#pgen.1002570-Kim2" class="ref-tip">[17]</a>, <a href="#pgen.1002570-Cubillos1" class="ref-tip">[20]</a>, allowing us to gain deeper insights into the genetic architecture and evolution of complex traits in <em>S. cerevisiae</em>.</p>
+</div>
+
+<div xmlns:plos="http://plos.org" id="section2" class="section toc-section"><a id="s2" name="s2" data-toc="s2" class="link-target" title="Results/Discussion"></a><h2>Results/Discussion</h2><a id="article1.body1.sec2.p1" name="article1.body1.sec2.p1" class="link-target"></a><p>We previously noted that levels of genetic complexity underlying heritable variation in growth differed among chemical conditions in a single cross <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>. Here, we sought to determine the generality of our previous finding by examining additional crosses. We first generated the strains and microarrays to conduct X-QTL in all 6 pairwise crosses of the BY, RM, YJM, and YPS strains (<a href="#s3">Materials and Methods</a>). Because the statistical power of X-QTL is dependent on effective enrichment of highly resistant cross progeny in a segregating pool, and the crosses vary in their genetic compositions, leading to different distributions of resistance among the progeny of each cross, we used dose-response experiments to determine cross-specific, highly selective drug concentrations for each of 13 diverse chemicals that resulted in similar selection intensities for all crosses (<a href="#s3">Materials and Methods</a>; <a href="#pgen.1002570.s004">File S1</a>). Once the selective doses were determined, we conducted one X-QTL experiment for each chemical and cross combination.</p>
+<a id="article1.body1.sec2.p2" name="article1.body1.sec2.p2" class="link-target"></a><p>We observed substantial variation in the number of loci detected in different conditions and crosses (<a href="#pgen-1002570-g001">Figure 1</a>). Across all 78 X-QTL experiments, we identified 837 total peaks at a False Discovery Rate (FDR) of 1%, or an average of 10.7 peaks per trait per cross (<a href="#pgen-1002570-g001">Figure 1</a>; <a href="#pgen.1002570.s001">Figure S1A</a>–<a href="#pgen.1002570.s001">S1M</a>). Both the chemical and the cross had significant effects on the number of peaks detected in an X-QTL experiment (ANOVA, chemical effect F = 5.27, d.f. = 12, p = 5.67×10<sup>−6</sup>; cross effect F = 3.14, d.f. = 5, p = 0.014), with the effect of the chemical (partial R<sup>2</sup> = 0.46) being much larger than the effect of the cross (partial R<sup>2</sup> = 0.11). An ANOVA testing the effects of chemical and strain resulted in a similar effect of chemical on the number of detected peaks (partial R<sup>2</sup> = 0.46; F = 4.52, d.f. = 12, p = 3.51×10<sup>−5</sup>), but no strain had a significant effect on its own (partial R<sup>2</sup>&lt;0.02; F&lt;2.5, d.f. = 1, p&gt;0.12; <a href="#s3">Materials and Methods</a>). Consistent with a comparatively small effect of strain background on genetic complexity, only one trait showed a significant excess of peaks in crosses involving any one strain: crosses in which RM was one of the parents had an excess of peaks in diamide (χ2 = 22.44, d.f. = 1, Bonferroni-corrected p = 1.97×10<sup>−4</sup>; <a href="#pgen-1002570-g001">Figure 1</a>). These results suggest that genetic complexity in yeast is mainly a property of the trait being examined rather than of the strain background.</p>
+<a class="link-target" id="pgen-1002570-g001" name="pgen-1002570-g001"></a><div class="figure" data-doi="10.1371/journal.pgen.1002570.g001"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pgen.1002570.g001" data-doi="10.1371/journal.pgen.1002570" data-uri="10.1371/journal.pgen.1002570.g001"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pgen.1002570.g001" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pgen.1002570.g001"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pgen.1002570.g001"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Figure 1. </span> Numbers of detected peaks and distinct loci.</div><p class="caption_target"><a id="article1.body1.sec2.fig1.caption1.p1" name="article1.body1.sec2.fig1.caption1.p1" class="link-target"></a><p>The stacked bar plots show the number of peaks detected for each trait using X-QTL selections in each cross. The first parent listed in each cross was MATα and the second parent was MAT<strong>a</strong>. The grey dots indicate the number of distinct loci detected in a condition after peak grouping.</p>
+</p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pgen.1002570.g001">
+              https://doi.org/10.1371/journal.pgen.1002570.g001</a></p></div><a id="article1.body1.sec2.p3" name="article1.body1.sec2.p3" class="link-target"></a><p>For each trait, we expected to detect loci at the same genomic positions in different crosses sharing a parent. To identify only the distinct loci affecting each trait, we performed a grouping procedure on the peaks identified in all crosses for a given chemical condition. We found 411 distinct loci (an average of 32 loci per condition), with a minimum of 8 loci for growth in cycloheximide and a maximum of 57 loci for growth in zeocin (<a href="#pgen-1002570-g001">Figure 1</a> and <a href="#pgen-1002570-g002">Figure 2A</a>). We then examined the extent to which these loci showed effects on growth in multiple conditions. For a range of genomic window sizes, we considered peaks detected for multiple chemicals within a window to correspond to the same underlying locus, and counted the number of conditions in which the locus showed an effect. With 50-kilobase (kb) windows, we found that 40% of the distinct loci had effects in only one condition, 29% had effects in two conditions, 11% had effects in three conditions, and only 20% had effects in four or more conditions (<a href="#pgen-1002570-g002">Figure 2B</a>; <a href="#s3">Materials and Methods</a>). Although the numbers differed across window sizes, the general observation that most of the detected loci had effects in a relatively small number of the tested conditions, and only a small number of loci showed effects across a large number of conditions, held over the entire range of plausible sizes. With 50 kb windows, three loci exhibited effects in more conditions than expected by chance (<a href="#s3">Materials and Methods</a>). These loci were located on Chromosome V near the X-QTL control marker <em>CAN1</em>, Chromosome X near <em>ENT3</em>, <em>RSF2</em>, and <em>VPS70</em>, and Chromosome XIV near the pleiotropic gene <em>MKT1</em>.</p>
+<a class="link-target" id="pgen-1002570-g002" name="pgen-1002570-g002"></a><div class="figure" data-doi="10.1371/journal.pgen.1002570.g002"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pgen.1002570.g002" data-doi="10.1371/journal.pgen.1002570" data-uri="10.1371/journal.pgen.1002570.g002"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pgen.1002570.g002" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pgen.1002570.g002"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pgen.1002570.g002"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Figure 2. </span> Genome-wide plots of detected loci.</div><p class="caption_target"><a id="article1.body1.sec2.fig2.caption1.p1" name="article1.body1.sec2.fig2.caption1.p1" class="link-target"></a><p>(A) Loci detected for each cross and trait, with green indicating loci selected in the direction of the MATα parent and red indicating loci selected in the direction of the MATa parent. For each trait, the crosses are vertically ordered as follows: BYxRM, BYxYJM, BYxYPS, RMxYJM, RMxYPS, YJMxYPS. (B) The number of traits affected by loci within each 50-kb window. The grey dotted line shows the threshold for significance, while the black dotted line highlights the bins in which only one trait was affected.</p>
+</p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pgen.1002570.g002">
+              https://doi.org/10.1371/journal.pgen.1002570.g002</a></p></div><a id="article1.body1.sec2.p4" name="article1.body1.sec2.p4" class="link-target"></a><p>We next examined the patterns of detection of loci for each trait across the six crosses. With four strains, two simple patterns are possible at bi-allelic loci: one strain can carry an allele that confers susceptibility or resistance relative to the allele carried by the other three strains, or two strains can carry the more susceptible allele and two strains the more resistant allele. We refer to these cases as “allelic singletons” and “allelic doubletons,” respectively. These two cases should give rise to different patterns of peaks: peaks with a consistent direction of effect in all three crosses involving one strain for allelic singletons, and peaks with specific effect directions in four specific crosses for allelic doubletons (<a href="#pgen.1002570.s015">Table S1</a>; <a href="#pgen-1002570-t001">Table 1</a>). Allowing for false-negative peaks, 135 of the 411 distinct loci showed patterns consistent with allelic singletons, and 28 showed patterns of peaks consistent with allelic doubletons (<a href="#pgen.1002570.s015">Table S1</a>; <a href="#pgen-1002570-t001">Table 1</a>).</p>
+<a class="link-target" id="pgen-1002570-t001" name="pgen-1002570-t001"></a><div class="figure" data-doi="10.1371/journal.pgen.1002570.t001"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pgen.1002570.t001" data-doi="10.1371/journal.pgen.1002570" data-uri="10.1371/journal.pgen.1002570.t001"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pgen.1002570.t001" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pgen.1002570.t001"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pgen.1002570.t001"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Table 1. </span> Patterns used to identify allelic singletons and allelic doubletons in the X-QTL data, and the number of loci detected with these patterns.</div><p class="caption_target"></p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pgen.1002570.t001">
+              https://doi.org/10.1371/journal.pgen.1002570.t001</a></p></div><a id="article1.body1.sec2.p5" name="article1.body1.sec2.p5" class="link-target"></a><p>We attempted to narrow the number of candidate genes for each of the bi-allelic loci by scanning the parental genome sequences for SNP alleles that are found in the four strains in a pattern consistent with the peaks. Using this approach, we found an average of 10 candidate genes per locus, with a range of 1 to 18 genes. Further restricting the list of candidate genes to those that carry nonsynonymous polymorphisms with appropriate allelic patterns reduced the average number to 6 per locus. We attempted to validate the genes underlying some of these loci by constructing allele replacement strains, and found reproducible evidence that <em>HXT6</em> and <em>RED1</em> harbor functional polymorphisms that confer growth differences in rich medium and tunicamycin, respectively (<a href="#pgen.1002570.s002">Figure S2</a>; <a href="#s3">Materials and Methods</a>). <em>HXT6</em> is a high affinity glucose transporter <a href="#pgen.1002570-Saccharomyces1" class="ref-tip">[21]</a>, suggesting that variability in glucose uptake may contribute to growth differences among the strains. The effect of <em>RED1</em> on tunicamycin resistance is less clear, as this gene is thought to be involved in chromosome segregation <a href="#pgen.1002570-Saccharomyces1" class="ref-tip">[21]</a>, and tunicamycin affects the unfolded protein response. We also constructed allele replacement strains for two other genes: <em>NUP157</em>, which lies within a copper sulfate resistance locus with the resistance allele coming from BY, and <em>PTK1</em>, which lies within a paraquat resistance locus with the resistance allele coming from YPS. However, we obtained inconsistent results for <em>NUP157</em> and <em>PTK1</em>: the allele replacements produced effects on resistance that were in the opposite direction from those seen in the X-QTL selections, and also caused growth defects on standard rich medium, suggesting that we did not identify the right candidate genes for these loci.</p>
+<a id="article1.body1.sec2.p6" name="article1.body1.sec2.p6" class="link-target"></a><p>In addition to the simple bi-allelic patterns, we observed other more complex patterns of peaks (<a href="#pgen-1002570-g002">Figure 2A</a>). Some of these are consistent with the presence of allelic series, in which either three or four alleles with different phenotypic effects are present among the four strains; we observed 29 examples involving at least 3 alleles and 9 examples that can only be explained by the presence of 4 different alleles (<a href="#pgen.1002570.s016">Table S2</a>). The other 210 loci (51% of all loci) showed patterns of peaks that were not easily interpretable in terms of specific allelic classes. This probably reflects a mixture of false negatives in which a peak was present but not detected in a given cross, and cross-specific effects due to non-additive interactions and linkage between loci.</p>
+<a id="article1.body1.sec2.p7" name="article1.body1.sec2.p7" class="link-target"></a><p>The allele frequency spectrum of causal loci is critical for the design of genetic mapping studies and for understanding sources of missing heritability in natural populations, including humans. As discussed above, we were able to distinguish and enumerate two simple allelic classes—singletons and doubletons. We used a maximum likelihood approach that accounted for false negatives to estimate the ratio of allelic singletons to doubletons. We estimated the peak detection rate to be 51%, with a 95% confidence interval of 39%–62%, and the ratio of allelic singletons to doubletons to be 3.03, with a 95% confidence interval of 1.7–5.3 (<a href="#pgen-1002570-g003">Figure 3A</a>; <a href="#pgen.1002570.s003">Figure S3</a>). This result suggests that despite the high statistical power of X-QTL, a substantial fraction of loci with weaker effects likely still go undetected in any one cross. Interestingly, the estimate of the ratio of allelic singletons to doubletons is similar to that observed for nonsynonymous polymorphisms in the genomes of the parent strains (2.97), and is shifted toward singletons relative to both the neutral expectation of 2.67 and the observed ratio of 2.57 for 109,585 SNPs genome-wide (<a href="#pgen-1002570-g003">Figure 3A</a>). Thus, the frequency spectrum of variants that contribute to complex trait variation in yeast appears to be mildly shifted toward lower frequencies by purifying selection, but, given the wide confidence interval for the estimated ratio of allelic singletons to doubletons, we cannot rule out that the variant frequencies follow the neutral spectrum.</p>
+<a class="link-target" id="pgen-1002570-g003" name="pgen-1002570-g003"></a><div class="figure" data-doi="10.1371/journal.pgen.1002570.g003"><div class="img-box"><a title="Click for larger image" href="article/figure/image?size=medium&amp;id=10.1371/journal.pgen.1002570.g003" data-doi="10.1371/journal.pgen.1002570" data-uri="10.1371/journal.pgen.1002570.g003"><img src="article/figure/image?size=inline&amp;id=10.1371/journal.pgen.1002570.g003" alt="thumbnail" class="thumbnail" loading="lazy"></a><div class="expand"></div></div><div class="figure-inline-download">
+          Download:
+          <ul><li><a href="article/figure/image?download&amp;size=large&amp;id=10.1371/journal.pgen.1002570.g003"><div class="definition-label">PNG</div><div class="definition-description">larger image</div></a></li><li><a href="article/figure/image?download&amp;size=original&amp;id=10.1371/journal.pgen.1002570.g003"><div class="definition-label">TIFF</div><div class="definition-description">original image</div></a></li></ul></div><div class="figcaption"><span>Figure 3. </span> Population genetics of identified loci.</div><p class="caption_target"><a id="article1.body1.sec2.fig3.caption1.p1" name="article1.body1.sec2.fig3.caption1.p1" class="link-target"></a><p>(A) shows the ratios of singletons to doubletons observed in the X-QTL data and for different classes of sequence variation, (B) plots the ratio of observed X-QTL singletons to expected singletons by strain, (C) plots the ratio of resistance-conferring singletons to susceptibility-conferring singletons by strain, and (D) plots the directionalities of peaks detected in the 78 X-QTL selections. In A, the error bars denote 95% confidence intervals. For the maximum likelihood estimate of the ratio of singletons to doubletons among X-QTL loci, the confidence interval was determined from the likelihood surface. For classes of sites analyzed in the resequencing data, confidence intervals were obtained using bootstrapping. The neutral estimate (8/3) is derived from a folded allele frequency spectrum for n = 4. The other three measurements were obtained directly from a multiple sequence alignment of the genome sequences of the four strains. In B, the number of expected allelic singletons per strain was determined by multiplying the total number of allelic singletons detected by the proportion of all SNP allelic singletons among the four strains present in that parental genome. The values in C were obtained from <a href="#pgen-1002570-t001">Table 1</a>. The horizontal lines in B and C indicate a ratio of one. In D, the number of peaks selected in each direction in each X-QTL selection is plotted. One experiment—copper sulfate in the BYxRM cross—was significant for the sign test after a Bonferroni correction for multiple testing, indicating putative directional selection, and is shown in red. The number of experiments observed with a given number of up and down peaks is indicated by the size of a circle, with a key provided in the bottom right corner. The diagonal line in D shows a 1∶1 ratio of peaks selected in the direction of each parent.</p>
+</p><p class="caption_object"><a href="https://doi.org/10.1371/journal.pgen.1002570.g003">
+              https://doi.org/10.1371/journal.pgen.1002570.g003</a></p></div><a id="article1.body1.sec2.p8" name="article1.body1.sec2.p8" class="link-target"></a><p>Several lines of evidence suggest that lineage-specific selection or demography has shaped variation among the four strains. We observed an excess of allelic singletons at detected loci for BY and RM, and a deficit for YJM and YPS, relative to the numbers of singleton SNPs in the parent genomes (χ2 = 35.98; d.f. = 3, p&lt;0.0001; <a href="#pgen-1002570-g003">Figure 3B</a>). The laboratory strain BY also exhibits other signatures of selection for both general and chemical-specific resistance. For instance, BY carries a marginally significant excess of allelic singletons that confer resistance relative to the other three strains (Fisher's exact test, Bonferroni-corrected p = 0.06; <a href="#pgen-1002570-g003">Figure 3C</a>; <a href="#pgen-1002570-t001">Table 1</a>). In addition, trait-specific sign tests <a href="#pgen.1002570-Orr1" class="ref-tip">[22]</a> identified one significant result: an excess of copper sulfate resistance alleles contributed by BY in the BYxRM cross (18 loci with BY carrying the resistance allele and 2 loci with RM carrying the resistance allele; binomial test, Bonferroni-corrected p = 0.031; <a href="#pgen-1002570-g003">Figure 3D</a>). Interestingly, BY is among the most copper-resistant <em>S. cerevisiae</em> strains <a href="#pgen.1002570-Fay1" class="ref-tip">[23]</a>, <a href="#pgen.1002570-Kvitek1" class="ref-tip">[24]</a>, and our data suggest that this resistance in BY may be the result of selection, possibly due to the use of high levels of copper or another chemical with similar effects in standard growth media. However, the BYxYJM and BYxYPS crosses do not show significant excess of BY alleles, and RM is also among the more highly copper-resistant strains <a href="#pgen.1002570-Fay1" class="ref-tip">[23]</a>, making the excess of BY resistance alleles in the BYxRM cross difficult to explain. Overall, our results are consistent with previous analyses that have shown lab strains isogenic to BY exhibit high evolutionary rates relative to other yeast isolates <a href="#pgen.1002570-Warringer1" class="ref-tip">[25]</a>, probably due to both relaxed purifying selection <a href="#pgen.1002570-Gu1" class="ref-tip">[26]</a> and adaptation <a href="#pgen.1002570-Gu1" class="ref-tip">[26]</a>, <a href="#pgen.1002570-Fraser1" class="ref-tip">[27]</a>.</p>
+<a id="article1.body1.sec2.p9" name="article1.body1.sec2.p9" class="link-target"></a><p>We have shown that variation in chemical resistance among yeast strains is typically due to a large number of underlying loci. The level of genetic complexity, as measured by the number of loci detected, is largely a property of each resistance trait, although it is also affected to a lesser extent by the choice of parent strains. The total number of distinct loci detected for a trait in these crosses among four strains ranged from 8 to 57, and these numbers substantially exceeded those seen in any one cross. These observations suggest that the total number of loci affecting certain resistance traits in <em>S. cerevisiae</em> can be very large, since many of them will have escaped detection because they don't vary among the four parent strains examined here, have effect sizes that are too small, or are too closely linked to be resolved as separate loci by our mapping technique. Our results suggest that the functional variants underlying complex traits are broadly distributed across the frequency spectrum from rare to common alleles, and that many loci harbor more than two allelic variants. These findings provide multiple non-exclusive explanations for the sources of the “missing heritability” of complex traits, and illustrate the power of a simple model system for probing genetic complexity.</p>
+</div>
+
+<div xmlns:plos="http://plos.org" id="section3" class="section toc-section"><a id="s3" name="s3" data-toc="s3" class="link-target" title="Materials and Methods"></a><h2>Materials and Methods</h2>
+<div id="section1" class="section toc-section"><a id="s3a" name="s3a" class="link-target" title="Construction and use of segregating pools for X-QTL"></a>
+<h3>Construction and use of segregating pools for X-QTL</h3>
+<a id="article1.body1.sec3.sec1.p1" name="article1.body1.sec3.sec1.p1" class="link-target"></a><p>The Synthetic Genetic Array marker system <a href="#pgen.1002570-Tong1" class="ref-tip">[28]</a> was used to generate MAT<strong>a</strong> haploid pools as previously reported <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>, with the exception that thialysine and the dominant sensitive <em>LYP1</em>/<em>lyp1Δ</em> marker system were not employed. All six pairwise crosses of BY, RM, YJM, and YPS were made, with one strain in a cross having the genotype MATα <em>can1Δ::STE2pr-SpHIS5 his3Δ</em> and the other having the genotype MAT<strong>a</strong> <em>his3Δ</em>. In notation describing crosses (e.g., BYxRM), we first list the MATα and then the MAT<strong>a</strong> parent. The selection experiments used for X-QTL were conducted as previously described <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>. The drug doses used in the selections, which were determined by plating millions of cells across a range of drug doses and finding a concentration at which 300 to 1,000 colonies could be resolved, are given in <a href="#pgen.1002570.s004">File S1</a>. Each experiment was conducted once, as we previously found that biological replicates conducted on the same day produced highly similar results <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>.</p>
+</div>
+
+<div id="section2" class="section toc-section"><a id="s3b" name="s3b" class="link-target" title="Microarray design and use"></a>
+<h3>Microarray design and use</h3>
+<a id="article1.body1.sec3.sec2.p1" name="article1.body1.sec3.sec2.p1" class="link-target"></a><p>Microarrays were designed from the BY genome sequence obtained from the <em>Saccharomyces</em> Genome Database (<a href="http://www.yeastgenome.org/">http://www.yeastgenome.org/</a>) and from assemblies of the RM, YJM, and YPS genomes obtained from the <em>Saccharomyces</em> Genome Resequencing Project <a href="#pgen.1002570-Liti1" class="ref-tip">[10]</a>. Note that the YPS606 genome was used to design the YPS array, as YPS606 is isogenic to YPS163. We aligned the genomes chromosome-by-chromosome using Fast Statistical Alignment (FSA) <a href="#pgen.1002570-Bradley1" class="ref-tip">[29]</a>. These multiple sequence alignments were filtered for SNPs using the following criteria: i) all 4 strains had to have been sequenced at a position and ii) all 4 strains had to have a specific base called (i.e. A, C, G, or T) at the position. These SNPs were then used for microarray design, as well as for downstream population-genetic analyses. Cross-specific microarrays were designed using only bi-allelic SNPs. Probes were chosen to have a length between 21 and 27 nucleotides and a melting temperature between 54 and 56°C as described previously <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>, <a href="#pgen.1002570-Gresham1" class="ref-tip">[30]</a>. One probe was designed for each allele of a SNP, and the two probes for a SNP were randomly positioned on the microarray. Probes were targeted to regions where only one SNP would be covered by the probes. Markers were chosen to provide near-uniform coverage of the genome. The arrays were tested using control DNA from both parents and the heterozygous diploid to ensure that they could discriminate the two alleles of a SNP. All hybridizations and processing was done as previously described <a href="#pgen.1002570-Ehrenreich1" class="ref-tip">[5]</a>. All microarray data is available in the Princeton University MicroArray database (<a href="http://puma.princeton.edu/">http://puma.princeton.edu/</a>). The processed log<sub>10</sub> hybridization intensities are included in <a href="#pgen.1002570.s005">Files S2</a>, <a href="#pgen.1002570.s006">S3</a>, <a href="#pgen.1002570.s007">S4</a>, <a href="#pgen.1002570.s008">S5</a>, <a href="#pgen.1002570.s009">S6</a>, <a href="#pgen.1002570.s010">S7</a>.</p>
+</div>
+
+<div id="section3" class="section toc-section"><a id="s3c" name="s3c" class="link-target" title="Peak detection"></a>
+<h3>Peak detection</h3>
+<a id="article1.body1.sec3.sec3.p1" name="article1.body1.sec3.sec3.p1" class="link-target"></a><p>For a given SNP, the difference in the log<sub>10</sub> ratios of the intensities of the MATα and MAT<strong>a</strong> parent-specific probes on a single array was computed (subsequently referred to as a ‘log<sub>10</sub> intensity difference’), and this metric was used in downstream analyses. Background allele frequency changes that occur during pool construction were removed from the data for each X-QTL selection. This was done separately for each SNP by subtracting the average log<sub>10</sub> intensity difference obtained in seven cross-specific control experiments from the log<sub>10</sub> intensity difference observed in an X-QTL selection. A peak detection algorithm was then employed that used a Savitzky-Golay filter to smooth the data within sliding windows of 100 probes. This smoothing approach was used to preserve local maxima in the data. Loci were called at a 1% FDR threshold, where the number of false discoveries was determined by running the peak caller on the control data using a range of thresholds, and the total number of discoveries was determined by running the peak caller on the selection data at the same thresholds used to analyze the controls. Thresholds were set by examining the quantiles of log<sub>10</sub> intensity differences observed for every 100 SNP genomic window on an array, and taking the median interquantile range between the x and 1-x quantiles, where x ranged from 0.005 to 0.45. We found that setting x as 0.045 resulted in a 1% FDR. Peak calling and all other statistical analyses were conducted in R (<a href="http://www.r-project.org/">http://www.r-project.org/</a>). The peak caller and an associated function library are included in <a href="#pgen.1002570.s011">Files S8</a> and <a href="#pgen.1002570.s012">S9</a>. The detected peaks are listed in <a href="#pgen.1002570.s013">File S10</a>.</p>
+</div>
+
+<div id="section4" class="section toc-section"><a id="s3d" name="s3d" class="link-target" title="Testing for effects of chemical and genetic background on the number of peaks detected in a cross"></a>
+<h3>Testing for effects of chemical and genetic background on the number of peaks detected in a cross</h3>
+<a id="article1.body1.sec3.sec4.p1" name="article1.body1.sec3.sec4.p1" class="link-target"></a><p>The test for cross effect was conducted using the model y = chemical+cross, while the test for strain effect was conducted using the model y = chemical+strain1+strain2+strain3. Implementing the second test required specifying the design matrix for the strain effect. Each row in the design matrix represented a single X-QTL experiment from a particular combination of chemical and cross. Entries in the design matrix were parameterized as follows: a strain had a value of −1, 1, or 0 if it was the MAT<strong>a</strong> parent, the MATα parent, or not a parent in a particular experiment, respectively. Only three strains were included in the test, because the information for the fourth could be obtained from the other three. To ensure that results were not dependent on the three included strains, we conducted the test with all four possible combinations of the three strains and reported the maximum partial R<sup>2</sup> and F values, and the minimum p value in the text.</p>
+</div>
+
+<div id="section5" class="section toc-section"><a id="s3e" name="s3e" class="link-target" title="Testing for disproportionate contributions of particular strains to the genetic complexity of traits"></a>
+<h3>Testing for disproportionate contributions of particular strains to the genetic complexity of traits</h3>
+<a id="article1.body1.sec3.sec5.p1" name="article1.body1.sec3.sec5.p1" class="link-target"></a><p>We first conducted χ2 tests in which single strains were examined. This test has two categories – one that is the sum of the peaks detected in the three crosses involving the query strain and another that is the sum of the peaks detected in the other three crosses. The expectation is that each of these classes will contain half of the peaks detected for a trait. We then conducted χ2 tests in which two strains were examined. The first category here is the sum of the peaks detected in the four crosses involving the two strains, while the second is sum of the peaks detected in the other two crosses. Here, the expectation is that the first category will contain two-thirds of the peaks, while the second will contain one-third of the peaks.</p>
+</div>
+
+<div id="section6" class="section toc-section"><a id="s3f" name="s3f" class="link-target" title="Identification of distinct loci for a trait"></a>
+<h3>Identification of distinct loci for a trait</h3>
+<a id="article1.body1.sec3.sec6.p1" name="article1.body1.sec3.sec6.p1" class="link-target"></a><p>Peaks identified across the six crosses for a single trait were grouped into distinct loci. We started with the most strongly selected peak on each chromosome and grouped with it all peaks that occurred within a 200-kilobase window surrounding it. This window size accommodated the grouping of peaks that exhibited weak but significant allele frequency changes, and may result in the underestimation of the total number of loci due to the overgrouping of peaks. Remaining peaks were grouped into distinct loci using additional iterations of the procedure until all peaks identified for a trait were members of a group.</p>
+</div>
+
+<div id="section7" class="section toc-section"><a id="s3g" name="s3g" class="link-target" title="Analysis of distinct loci across traits"></a>
+<h3>Analysis of distinct loci across traits</h3>
+<a id="article1.body1.sec3.sec7.p1" name="article1.body1.sec3.sec7.p1" class="link-target"></a><p>We divided the genome into equally sized bins ranging from 20 to 100 kb and counted the number of distinct loci that fell into each bin. A bin was considered to have an excess of distinct loci if the number present in it exceeded the number expected by chance from a Poisson distribution, given the number of distinct loci divided by the total number of bins and a multiple testing correction for the number of bins. With the 50 kb bin size reported in the text, 8 or more distinct loci were required to be present in a bin for the bin to be considered significant.</p>
+</div>
+
+<div id="section8" class="section toc-section"><a id="s3h" name="s3h" class="link-target" title="Identification of allelic singletons, doubletons, and series"></a>
+<h3>Identification of allelic singletons, doubletons, and series</h3>
+<a id="article1.body1.sec3.sec8.p1" name="article1.body1.sec3.sec8.p1" class="link-target"></a><p>The distinct loci identified for each trait were used to classify singletons and doubletons. The specific patterns used to identify the allelic classes are described in <a href="#pgen.1002570.s015">Table S1</a>. We focused on exact pattern matches and on patterns that were missing an expected peak at a given locus in one cross. A number of distinct loci had peaks detected in four or more crosses, but did not conform to the patterns expected for allelic doubletons. We considered these loci as allelic series, and for each of these putative series we determined the possible logical relationships of the parent alleles to each other. These relationships are reported in <a href="#pgen.1002570.s016">Table S2</a>.</p>
+</div>
+
+<div id="section9" class="section toc-section"><a id="s3i" name="s3i" class="link-target" title="Identification of candidate causal genes"></a>
+<h3>Identification of candidate causal genes</h3>
+<a id="article1.body1.sec3.sec9.p1" name="article1.body1.sec3.sec9.p1" class="link-target"></a><p>For each bi-allelic locus, we evaluated a 30 kb interval centered on its estimated position for polymorphisms that segregated among the parent strains in the same pattern as the X-QTL peaks. Any gene that harbored a polymorphism in the coding region or in the immediate upstream and downstream regions was considered a candidate. The candidate genes are listed in <a href="#pgen.1002570.s014">File S11</a>.</p>
+</div>
+
+<div id="section10" class="section toc-section"><a id="s3j" name="s3j" class="link-target" title="Allele replacement strategy"></a>
+<h3>Allele replacement strategy</h3>
+<a id="article1.body1.sec3.sec10.p1" name="article1.body1.sec3.sec10.p1" class="link-target"></a><p>To generate the replacement strains, we used the allele replacement technique described by Storici et al. <a href="#pgen.1002570-Storici1" class="ref-tip">[31]</a>. This method is a two-step process that involves knocking out a gene with a selectable marker cassette, and then replacing the selectable marker cassette with a different allele of the gene. We made each allele replacement strain once in one parental background, and then compared the phenotypes of the strains to their progenitors. For the two genes that exhibited the expected phenotypic effect, we made a second version of the allele replacement strain to validate the presence of functional variation in the gene.</p>
+</div>
+
+<div id="section11" class="section toc-section"><a id="s3k" name="s3k" class="link-target" title="Maximum likelihood estimation of the ratio of singletons to doubletons"></a>
+<h3>Maximum likelihood estimation of the ratio of singletons to doubletons</h3>
+<a id="article1.body1.sec3.sec11.p1" name="article1.body1.sec3.sec11.p1" class="link-target"></a><p>The observed counts of exact-match allelic singletons and doubletons and near-exact-match allelic singletons and doubletons were modelled using two parameters: the detection rate of peaks (α) and the ratio of singletons to doubletons (β). The formulae underlying this computation are provided in <a href="#pgen.1002570.s017">Text S1</a>. The likelihood of each combination of parameter values was examined across a two-dimensional grid of parameter values using χ2 tests with 3 degrees of freedom. The likelihood reached a maximum at α = 0.51 and β = 3.03. We obtained 95% confidence intervals for α and β by using the χ2 distribution with 3 degrees of freedom and identifying the χ2 value for the 95% quantile. We then identified parameter combinations that produced an χ2 value below this threshold (7.81), and determined the minimum and maximum values of α and β that satisfied this condition.</p>
+</div>
+</div>
+
+<div xmlns:plos="http://plos.org" id="section4" class="section toc-section"><a id="s4" name="s4" data-toc="s4" class="link-target" title="Supporting Information"></a><h2>Supporting Information</h2><div class="figshare_widget" doi="10.1371/journal.pgen.1002570"></div><div class="supplementary-material"><a name="pgen.1002570.s001" id="pgen.1002570.s001" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s001">Figure S1. </a></h3><a id="article1.body1.sec4.supplementary-material1.caption1.p1" name="article1.body1.sec4.supplementary-material1.caption1.p1" class="link-target"></a><p class="preSiDOI">Plots of X-QTL mapping results. The data for each trait is plotted as the difference between the MATα and MATa allele-specific probes on the selection array minus the average of the differences between the MATα and MATa allele-specific probes from seven control arrays. The red vertical lines indicate positions that were called as peaks at a 1% FDR.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s001">https://doi.org/10.1371/journal.pgen.1002570.s001</a></p><a id="article1.body1.sec4.supplementary-material1.caption1.p2" name="article1.body1.sec4.supplementary-material1.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s002" id="pgen.1002570.s002" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s002">Figure S2. </a></h3><a id="article1.body1.sec4.supplementary-material2.caption1.p1" name="article1.body1.sec4.supplementary-material2.caption1.p1" class="link-target"></a><p class="preSiDOI">Cloning of genes. (A–C) show the steps taken to clone <em>HXT6</em>, while (D–E) show the steps taken to clone <em>RED1</em>. In both cases, a locus was identified in all three crosses sharing one parent—the crosses involving RM in control conditions for <em>HXT6</em> (A) and the crosses involving BY on tunicamycin for <em>RED1</em> (B). The regions underlying the detected peaks were surveyed for polymorphisms that segregated across the parent strains in the same pattern as the detected locus. Both <em>HXT6</em> and <em>RED1</em> were chosen because they carry a number of nonsynonymous polymorphisms relative to other genes in their genomic regions (B and E). Allele replacement strains were made in the RM background using the BY strain as a template. Each strain was independently constructed twice and phenotyped using serially diluted colony growth assays (C and F). Overnight cultures were grown for each strain and then pinned onto agar plates using the Singer RoToR. The <em>HXT6</em> strains were measured after 24 hours of growth at 30°C, while the <em>RED</em> strains were measured after 65 hours of growth at 30°C. RM grows better on standard medium when it carries its own allele of <em>HXT6</em>, while the BY allele of <em>RED1</em> confers a growth advantage on tunicamycin. In B, dubious ORFs are colored in blue. In C and F, cultures were grown undiluted (abbreviated “Und.”) and at two successive ten-fold dilutions. Each dilution of a strain was pinned in a square of four technical replicates.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s002">https://doi.org/10.1371/journal.pgen.1002570.s002</a></p><a id="article1.body1.sec4.supplementary-material2.caption1.p2" name="article1.body1.sec4.supplementary-material2.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s003" id="pgen.1002570.s003" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s003">Figure S3. </a></h3><a id="article1.body1.sec4.supplementary-material3.caption1.p1" name="article1.body1.sec4.supplementary-material3.caption1.p1" class="link-target"></a><p class="preSiDOI">Likelihood surface for the estimates of the ratio of allelic singletons to doubletons and the detection rate. P(Data|Model) is shown, with the correspondence of colors to probabilities given in the key. This was generated using the model described in <a href="#pgen.1002570.s017">Text S1</a>, and evaluating the model across a wide, two-dimensional range of detection rates and singleton to doubleton ratios. In addition, this likelihood surface was used to generate the confidence intervals described in the main text.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s003">https://doi.org/10.1371/journal.pgen.1002570.s003</a></p><a id="article1.body1.sec4.supplementary-material3.caption1.p2" name="article1.body1.sec4.supplementary-material3.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s004" id="pgen.1002570.s004" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s004">File S1. </a></h3><a id="article1.body1.sec4.supplementary-material4.caption1.p1" name="article1.body1.sec4.supplementary-material4.caption1.p1" class="link-target"></a><p class="preSiDOI">Results from dose-response experiments with segregant pools and final drug doses used in the paper.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s004">https://doi.org/10.1371/journal.pgen.1002570.s004</a></p><a id="article1.body1.sec4.supplementary-material4.caption1.p2" name="article1.body1.sec4.supplementary-material4.caption1.p2" class="link-target"></a><p class="postSiDOI">(XLSX)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s005" id="pgen.1002570.s005" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s005">File S2. </a></h3><a id="article1.body1.sec4.supplementary-material5.caption1.p1" name="article1.body1.sec4.supplementary-material5.caption1.p1" class="link-target"></a><p class="preSiDOI">Processed log<sub>10</sub> hybridization intensities for the BYxRM cross.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s005">https://doi.org/10.1371/journal.pgen.1002570.s005</a></p><a id="article1.body1.sec4.supplementary-material5.caption1.p2" name="article1.body1.sec4.supplementary-material5.caption1.p2" class="link-target"></a><p class="postSiDOI">(TXT)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s006" id="pgen.1002570.s006" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s006">File S3. </a></h3><a id="article1.body1.sec4.supplementary-material6.caption1.p1" name="article1.body1.sec4.supplementary-material6.caption1.p1" class="link-target"></a><p class="preSiDOI">Processed log<sub>10</sub> hybridization intensities for the BYxYJM cross.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s006">https://doi.org/10.1371/journal.pgen.1002570.s006</a></p><a id="article1.body1.sec4.supplementary-material6.caption1.p2" name="article1.body1.sec4.supplementary-material6.caption1.p2" class="link-target"></a><p class="postSiDOI">(TXT)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s007" id="pgen.1002570.s007" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s007">File S4. </a></h3><a id="article1.body1.sec4.supplementary-material7.caption1.p1" name="article1.body1.sec4.supplementary-material7.caption1.p1" class="link-target"></a><p class="preSiDOI">Processed log<sub>10</sub> hybridization intensities for the BYxYPS cross.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s007">https://doi.org/10.1371/journal.pgen.1002570.s007</a></p><a id="article1.body1.sec4.supplementary-material7.caption1.p2" name="article1.body1.sec4.supplementary-material7.caption1.p2" class="link-target"></a><p class="postSiDOI">(TXT)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s008" id="pgen.1002570.s008" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s008">File S5. </a></h3><a id="article1.body1.sec4.supplementary-material8.caption1.p1" name="article1.body1.sec4.supplementary-material8.caption1.p1" class="link-target"></a><p class="preSiDOI">Processed log<sub>10</sub> hybridization intensities for the RMxYJM cross.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s008">https://doi.org/10.1371/journal.pgen.1002570.s008</a></p><a id="article1.body1.sec4.supplementary-material8.caption1.p2" name="article1.body1.sec4.supplementary-material8.caption1.p2" class="link-target"></a><p class="postSiDOI">(TXT)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s009" id="pgen.1002570.s009" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s009">File S6. </a></h3><a id="article1.body1.sec4.supplementary-material9.caption1.p1" name="article1.body1.sec4.supplementary-material9.caption1.p1" class="link-target"></a><p class="preSiDOI">Processed log<sub>10</sub> hybridization intensities for the RMxYPS cross.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s009">https://doi.org/10.1371/journal.pgen.1002570.s009</a></p><a id="article1.body1.sec4.supplementary-material9.caption1.p2" name="article1.body1.sec4.supplementary-material9.caption1.p2" class="link-target"></a><p class="postSiDOI">(TXT)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s010" id="pgen.1002570.s010" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s010">File S7. </a></h3><a id="article1.body1.sec4.supplementary-material10.caption1.p1" name="article1.body1.sec4.supplementary-material10.caption1.p1" class="link-target"></a><p class="preSiDOI">Processed log<sub>10</sub> hybridization intensities for the YJMxYPS cross.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s010">https://doi.org/10.1371/journal.pgen.1002570.s010</a></p><a id="article1.body1.sec4.supplementary-material10.caption1.p2" name="article1.body1.sec4.supplementary-material10.caption1.p2" class="link-target"></a><p class="postSiDOI">(TXT)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s011" id="pgen.1002570.s011" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s011">File S8. </a></h3><a id="article1.body1.sec4.supplementary-material11.caption1.p1" name="article1.body1.sec4.supplementary-material11.caption1.p1" class="link-target"></a><p class="preSiDOI">Peak caller.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s011">https://doi.org/10.1371/journal.pgen.1002570.s011</a></p><a id="article1.body1.sec4.supplementary-material11.caption1.p2" name="article1.body1.sec4.supplementary-material11.caption1.p2" class="link-target"></a><p class="postSiDOI">(R)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s012" id="pgen.1002570.s012" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s012">File S9. </a></h3><a id="article1.body1.sec4.supplementary-material12.caption1.p1" name="article1.body1.sec4.supplementary-material12.caption1.p1" class="link-target"></a><p class="preSiDOI">Library for the peak caller.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s012">https://doi.org/10.1371/journal.pgen.1002570.s012</a></p><a id="article1.body1.sec4.supplementary-material12.caption1.p2" name="article1.body1.sec4.supplementary-material12.caption1.p2" class="link-target"></a><p class="postSiDOI">(R)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s013" id="pgen.1002570.s013" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s013">File S10. </a></h3><a id="article1.body1.sec4.supplementary-material13.caption1.p1" name="article1.body1.sec4.supplementary-material13.caption1.p1" class="link-target"></a><p class="preSiDOI">Loci detected in the X-QTL experiments.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s013">https://doi.org/10.1371/journal.pgen.1002570.s013</a></p><a id="article1.body1.sec4.supplementary-material13.caption1.p2" name="article1.body1.sec4.supplementary-material13.caption1.p2" class="link-target"></a><p class="postSiDOI">(TXT)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s014" id="pgen.1002570.s014" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s014">File S11. </a></h3><a id="article1.body1.sec4.supplementary-material14.caption1.p1" name="article1.body1.sec4.supplementary-material14.caption1.p1" class="link-target"></a><p class="preSiDOI">Candidate genes for bi-allelic loci.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s014">https://doi.org/10.1371/journal.pgen.1002570.s014</a></p><a id="article1.body1.sec4.supplementary-material14.caption1.p2" name="article1.body1.sec4.supplementary-material14.caption1.p2" class="link-target"></a><p class="postSiDOI">(TXT)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s015" id="pgen.1002570.s015" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s015">Table S1. </a></h3><a id="article1.body1.sec4.supplementary-material15.caption1.p1" name="article1.body1.sec4.supplementary-material15.caption1.p1" class="link-target"></a><p class="preSiDOI">All patterns used to identify allelic singletons and allelic doubletons in the X-QTL data, and the number of loci detected with these patterns. The strain mentioned under a cross indicates which allele should have been selected in that cross for the given pattern to hold. We show all exact patterns used to identify singletons and doubletons, as well as each of the patterns that indicate the presence of a singleton or doubleton if one undetected peak is allowed. Both the exact match and “one off” patterns were used in the counts of bi-allelic loci described throughout the paper.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s015">https://doi.org/10.1371/journal.pgen.1002570.s015</a></p><a id="article1.body1.sec4.supplementary-material15.caption1.p2" name="article1.body1.sec4.supplementary-material15.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s016" id="pgen.1002570.s016" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s016">Table S2. </a></h3><a id="article1.body1.sec4.supplementary-material16.caption1.p1" name="article1.body1.sec4.supplementary-material16.caption1.p1" class="link-target"></a><p class="preSiDOI">Allelic series inferred from the data. The most parsimonious relationship of alleles to each other is indicated. Greater than and equal signs indicate the effects of the alleles relative to each other, with “A&gt;B” meaning that allele A confers higher resistance than allele B and “A = B” meaning that the effects of allele A and allele B are not distinguishable. In some cases, there are two equally parsimonious relationships that can explain the data.</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s016">https://doi.org/10.1371/journal.pgen.1002570.s016</a></p><a id="article1.body1.sec4.supplementary-material16.caption1.p2" name="article1.body1.sec4.supplementary-material16.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div><div class="supplementary-material"><a name="pgen.1002570.s017" id="pgen.1002570.s017" class="link-target"></a><h3 class="siTitle title-small"><a href="article/file?type=supplementary&amp;id=10.1371/journal.pgen.1002570.s017">Text S1. </a></h3><a id="article1.body1.sec4.supplementary-material17.caption1.p1" name="article1.body1.sec4.supplementary-material17.caption1.p1" class="link-target"></a><p class="preSiDOI">Formulae used to estimate the detection rate (α) and the ratio of allelic singletons to doubletons (β).</p>
+<p class="siDoi"><a href="https://doi.org/10.1371/journal.pgen.1002570.s017">https://doi.org/10.1371/journal.pgen.1002570.s017</a></p><a id="article1.body1.sec4.supplementary-material17.caption1.p2" name="article1.body1.sec4.supplementary-material17.caption1.p2" class="link-target"></a><p class="postSiDOI">(DOC)</p>
+</div></div>
+
+
+
+
+
+<div xmlns:plos="http://plos.org" class="section toc-section"><a id="ack" name="ack" data-toc="ack" title="Acknowledgments" class="link-target"></a><h2>Acknowledgments</h2>
+<a id="article1.back1.ack1.p1" name="article1.back1.ack1.p1" class="link-target"></a><p>The authors are grateful to members of the Kruglyak lab, Audrey Gasch, and three anonymous reviewers for comments that helped improve the manuscript. We thank David Botstein and Harmen Bussemaker for helpful discussions and Joshua Shapiro for input regarding the maximum likelihood analysis of allele frequencies.</p>
+</div><div xmlns:plos="http://plos.org" class="contributions toc-section"><a id="authcontrib" name="authcontrib" data-toc="authcontrib" title="Author Contributions"></a><h2>Author Contributions</h2><p>Conceived and designed the experiments: IME LK. Performed the experiments: IME NT XW. Analyzed the data: IME JB. Wrote the paper: IME LK. Constructed strains: IME XW YJ. Designed microarrays: IME.</p></div><div xmlns:plos="http://plos.org" class="toc-section"><a id="references" name="references" class="link-target" data-toc="references" title="References"></a><h2>References</h2><ol class="references"><li id="ref1"><span class="order">1.
+            </span><a name="pgen.1002570-Falconer1" id="pgen.1002570-Falconer1" class="link-target"></a>Falconer DS, Mackay TF (1996) Introduction to quantitative genetics (4th edition). Harlow, England: Pearson Education Limited.   <ul class="find-nolinks"></ul></li><li id="ref2"><span class="order">2.
+            </span><a name="pgen.1002570-Manolio1" id="pgen.1002570-Manolio1" class="link-target"></a>Manolio TA, Collins FS, Cox NJ, Goldstein DB, Hindorff LA, et al.  (2009) Finding the missing heritability of complex diseases. Nature  461: 747–753.  <ul class="reflinks"><li><a href="#" data-author="Manolio" data-cit="ManolioTACollinsFSCoxNJGoldsteinDBHindorffLA2009Finding%20the%20missing%20heritability%20of%20complex%20diseases.Nature461747753" data-title="Finding%20the%20missing%20heritability%20of%20complex%20diseases." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Finding+the+missing+heritability+of+complex+diseases.+Manolio+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref3"><span class="order">3.
+            </span><a name="pgen.1002570-Mackay1" id="pgen.1002570-Mackay1" class="link-target"></a>Mackay TF, Stone EA, Ayroles JF (2009) The genetics of quantitative traits: challenges and prospects. Nat Rev Genet  10: 565–577.  <ul class="reflinks"><li><a href="#" data-author="Mackay" data-cit="MackayTFStoneEAAyrolesJF2009The%20genetics%20of%20quantitative%20traits%3A%20challenges%20and%20prospects.Nat%20Rev%20Genet10565577" data-title="The%20genetics%20of%20quantitative%20traits%3A%20challenges%20and%20prospects." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=The+genetics+of+quantitative+traits%3A+challenges+and+prospects.+Mackay+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref4"><span class="order">4.
+            </span><a name="pgen.1002570-Brem1" id="pgen.1002570-Brem1" class="link-target"></a>Brem RB, Kruglyak L (2005) The landscape of genetic complexity across 5,700 gene expression traits in yeast. Proc Natl Acad Sci U S A  102: 1572–1577.  <ul class="reflinks"><li><a href="#" data-author="Brem" data-cit="BremRBKruglyakL2005The%20landscape%20of%20genetic%20complexity%20across%205%2C700%20gene%20expression%20traits%20in%20yeast.Proc%20Natl%20Acad%20Sci%20U%20S%20A10215721577" data-title="The%20landscape%20of%20genetic%20complexity%20across%205%2C700%20gene%20expression%20traits%20in%20yeast." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=The+landscape+of+genetic+complexity+across+5%2C700+gene+expression+traits+in+yeast.+Brem+2005" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref5"><span class="order">5.
+            </span><a name="pgen.1002570-Ehrenreich1" id="pgen.1002570-Ehrenreich1" class="link-target"></a>Ehrenreich IM, Torabi N, Jia Y, Kent J, Martis S, et al.  (2010) Dissection of genetically complex traits with extremely large pools of yeast segregants. Nature  464: 1039–1042.  <ul class="reflinks"><li><a href="#" data-author="Ehrenreich" data-cit="EhrenreichIMTorabiNJiaYKentJMartisS2010Dissection%20of%20genetically%20complex%20traits%20with%20extremely%20large%20pools%20of%20yeast%20segregants.Nature46410391042" data-title="Dissection%20of%20genetically%20complex%20traits%20with%20extremely%20large%20pools%20of%20yeast%20segregants." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Dissection+of+genetically+complex+traits+with+extremely+large+pools+of+yeast+segregants.+Ehrenreich+2010" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref6"><span class="order">6.
+            </span><a name="pgen.1002570-Parts1" id="pgen.1002570-Parts1" class="link-target"></a>Parts L, Cubillos FA, Warringer J, Jain K, Salinas F, et al.  (2011) Revealing the genetic structure of a trait by sequencing a population under selection. Genome Res  21: 1131–1138.  <ul class="reflinks"><li><a href="#" data-author="Parts" data-cit="PartsLCubillosFAWarringerJJainKSalinasF2011Revealing%20the%20genetic%20structure%20of%20a%20trait%20by%20sequencing%20a%20population%20under%20selection.Genome%20Res2111311138" data-title="Revealing%20the%20genetic%20structure%20of%20a%20trait%20by%20sequencing%20a%20population%20under%20selection." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Revealing+the+genetic+structure+of+a+trait+by+sequencing+a+population+under+selection.+Parts+2011" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref7"><span class="order">7.
+            </span><a name="pgen.1002570-Doniger1" id="pgen.1002570-Doniger1" class="link-target"></a>Doniger SW, Kim HS, Swain D, Corcuera D, Williams M, et al.  (2008) A catalog of neutral and deleterious polymorphism in yeast. PLoS Genet  4: e1000183.  <ul class="reflinks" data-doi="10.1371/journal.pgen.1000183"><li><a href="https://doi.org/10.1371/journal.pgen.1000183" data-author="doi-provided" data-cit="doi-provided" data-title="doi-provided" target="_new" title="Go to article">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=A+catalog+of+neutral+and+deleterious+polymorphism+in+yeast.+Doniger+2008" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref8"><span class="order">8.
+            </span><a name="pgen.1002570-Wei1" id="pgen.1002570-Wei1" class="link-target"></a>Wei W, McCusker JH, Hyman RW, Jones T, Ning Y, et al.  (2007) Genome sequencing and comparative analysis of Saccharomyces cerevisiae strain YJM789. Proc Natl Acad Sci U S A  104: 12825–12830.  <ul class="reflinks"><li><a href="#" data-author="Wei" data-cit="WeiWMcCuskerJHHymanRWJonesTNingY2007Genome%20sequencing%20and%20comparative%20analysis%20of%20Saccharomyces%20cerevisiae%20strain%20YJM789.Proc%20Natl%20Acad%20Sci%20U%20S%20A1041282512830" data-title="Genome%20sequencing%20and%20comparative%20analysis%20of%20Saccharomyces%20cerevisiae%20strain%20YJM789." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Genome+sequencing+and+comparative+analysis+of+Saccharomyces+cerevisiae+strain+YJM789.+Wei+2007" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref9"><span class="order">9.
+            </span><a name="pgen.1002570-Ruderfer1" id="pgen.1002570-Ruderfer1" class="link-target"></a>Ruderfer DM, Pratt SC, Seidel HS, Kruglyak L (2006) Population genomic analysis of outcrossing and recombination in yeast. Nat Genet  38: 1077–1081.  <ul class="reflinks"><li><a href="#" data-author="Ruderfer" data-cit="RuderferDMPrattSCSeidelHSKruglyakL2006Population%20genomic%20analysis%20of%20outcrossing%20and%20recombination%20in%20yeast.Nat%20Genet3810771081" data-title="Population%20genomic%20analysis%20of%20outcrossing%20and%20recombination%20in%20yeast." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Population+genomic+analysis+of+outcrossing+and+recombination+in+yeast.+Ruderfer+2006" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref10"><span class="order">10.
+            </span><a name="pgen.1002570-Liti1" id="pgen.1002570-Liti1" class="link-target"></a>Liti G, Carter DM, Moses AM, Warringer J, Parts L, et al.  (2009) Population genomics of domestic and wild yeasts. Nature  458: 337–341.  <ul class="reflinks"><li><a href="#" data-author="Liti" data-cit="LitiGCarterDMMosesAMWarringerJPartsL2009Population%20genomics%20of%20domestic%20and%20wild%20yeasts.Nature458337341" data-title="Population%20genomics%20of%20domestic%20and%20wild%20yeasts." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Population+genomics+of+domestic+and+wild+yeasts.+Liti+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref11"><span class="order">11.
+            </span><a name="pgen.1002570-Schacherer1" id="pgen.1002570-Schacherer1" class="link-target"></a>Schacherer J, Shapiro JA, Ruderfer DM, Kruglyak L (2009) Comprehensive polymorphism survey elucidates population structure of Saccharomyces cerevisiae. Nature  458: 342–345.  <ul class="reflinks"><li><a href="#" data-author="Schacherer" data-cit="SchachererJShapiroJARuderferDMKruglyakL2009Comprehensive%20polymorphism%20survey%20elucidates%20population%20structure%20of%20Saccharomyces%20cerevisiae.Nature458342345" data-title="Comprehensive%20polymorphism%20survey%20elucidates%20population%20structure%20of%20Saccharomyces%20cerevisiae." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Comprehensive+polymorphism+survey+elucidates+population+structure+of+Saccharomyces+cerevisiae.+Schacherer+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref12"><span class="order">12.
+            </span><a name="pgen.1002570-Brem2" id="pgen.1002570-Brem2" class="link-target"></a>Brem RB, Yvert G, Clinton R, Kruglyak L (2002) Genetic dissection of transcriptional regulation in budding yeast. Science  296: 752–755.  <ul class="reflinks"><li><a href="#" data-author="Brem" data-cit="BremRBYvertGClintonRKruglyakL2002Genetic%20dissection%20of%20transcriptional%20regulation%20in%20budding%20yeast.Science296752755" data-title="Genetic%20dissection%20of%20transcriptional%20regulation%20in%20budding%20yeast." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Genetic+dissection+of+transcriptional+regulation+in+budding+yeast.+Brem+2002" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref13"><span class="order">13.
+            </span><a name="pgen.1002570-Steinmetz1" id="pgen.1002570-Steinmetz1" class="link-target"></a>Steinmetz LM, Sinha H, Richards DR, Spiegelman JI, Oefner PJ, et al.  (2002) Dissecting the architecture of a quantitative trait locus in yeast. Nature  416: 326–330.  <ul class="reflinks"><li><a href="#" data-author="Steinmetz" data-cit="SteinmetzLMSinhaHRichardsDRSpiegelmanJIOefnerPJ2002Dissecting%20the%20architecture%20of%20a%20quantitative%20trait%20locus%20in%20yeast.Nature416326330" data-title="Dissecting%20the%20architecture%20of%20a%20quantitative%20trait%20locus%20in%20yeast." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Dissecting+the+architecture+of+a+quantitative+trait+locus+in+yeast.+Steinmetz+2002" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref14"><span class="order">14.
+            </span><a name="pgen.1002570-Perlstein1" id="pgen.1002570-Perlstein1" class="link-target"></a>Perlstein EO, Ruderfer DM, Roberts DC, Schreiber SL, Kruglyak L (2007) Genetic basis of individual differences in the response to small-molecule drugs in yeast. Nat Genet  39: 496–502.  <ul class="reflinks"><li><a href="#" data-author="Perlstein" data-cit="PerlsteinEORuderferDMRobertsDCSchreiberSLKruglyakL2007Genetic%20basis%20of%20individual%20differences%20in%20the%20response%20to%20small-molecule%20drugs%20in%20yeast.Nat%20Genet39496502" data-title="Genetic%20basis%20of%20individual%20differences%20in%20the%20response%20to%20small-molecule%20drugs%20in%20yeast." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Genetic+basis+of+individual+differences+in+the+response+to+small-molecule+drugs+in+yeast.+Perlstein+2007" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref15"><span class="order">15.
+            </span><a name="pgen.1002570-Kim1" id="pgen.1002570-Kim1" class="link-target"></a>Kim HS, Fay JC (2007) Genetic variation in the cysteine biosynthesis pathway causes sensitivity to pharmacological compounds. Proc Natl Acad Sci U S A  104: 19387–19391.  <ul class="reflinks"><li><a href="#" data-author="Kim" data-cit="KimHSFayJC2007Genetic%20variation%20in%20the%20cysteine%20biosynthesis%20pathway%20causes%20sensitivity%20to%20pharmacological%20compounds.Proc%20Natl%20Acad%20Sci%20U%20S%20A1041938719391" data-title="Genetic%20variation%20in%20the%20cysteine%20biosynthesis%20pathway%20causes%20sensitivity%20to%20pharmacological%20compounds." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Genetic+variation+in+the+cysteine+biosynthesis+pathway+causes+sensitivity+to+pharmacological+compounds.+Kim+2007" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref16"><span class="order">16.
+            </span><a name="pgen.1002570-Gerke1" id="pgen.1002570-Gerke1" class="link-target"></a>Gerke J, Lorenz K, Cohen B (2009) Genetic interactions between transcription factors cause natural variation in yeast. Science  323: 498–501.  <ul class="reflinks"><li><a href="#" data-author="Gerke" data-cit="GerkeJLorenzKCohenB2009Genetic%20interactions%20between%20transcription%20factors%20cause%20natural%20variation%20in%20yeast.Science323498501" data-title="Genetic%20interactions%20between%20transcription%20factors%20cause%20natural%20variation%20in%20yeast." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Genetic+interactions+between+transcription+factors+cause+natural+variation+in+yeast.+Gerke+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref17"><span class="order">17.
+            </span><a name="pgen.1002570-Kim2" id="pgen.1002570-Kim2" class="link-target"></a>Kim HS, Fay JC (2009) A combined-cross analysis reveals genes with drug-specific and background-dependent effects on drug sensitivity in Saccharomyces cerevisiae. Genetics  183: 1141–1151.  <ul class="reflinks"><li><a href="#" data-author="Kim" data-cit="KimHSFayJC2009A%20combined-cross%20analysis%20reveals%20genes%20with%20drug-specific%20and%20background-dependent%20effects%20on%20drug%20sensitivity%20in%20Saccharomyces%20cerevisiae.Genetics18311411151" data-title="A%20combined-cross%20analysis%20reveals%20genes%20with%20drug-specific%20and%20background-dependent%20effects%20on%20drug%20sensitivity%20in%20Saccharomyces%20cerevisiae." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=A+combined-cross+analysis+reveals+genes+with+drug-specific+and+background-dependent+effects+on+drug+sensitivity+in+Saccharomyces+cerevisiae.+Kim+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref18"><span class="order">18.
+            </span><a name="pgen.1002570-McCusker1" id="pgen.1002570-McCusker1" class="link-target"></a>McCusker JH, Clemons KV, Stevens DA, Davis RW (1994) Genetic characterization of pathogenic Saccharomyces cerevisiae isolates. Genetics  136: 1261–1269.  <ul class="reflinks"><li><a href="#" data-author="McCusker" data-cit="McCuskerJHClemonsKVStevensDADavisRW1994Genetic%20characterization%20of%20pathogenic%20Saccharomyces%20cerevisiae%20isolates.Genetics13612611269" data-title="Genetic%20characterization%20of%20pathogenic%20Saccharomyces%20cerevisiae%20isolates." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Genetic+characterization+of+pathogenic+Saccharomyces+cerevisiae+isolates.+McCusker+1994" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref19"><span class="order">19.
+            </span><a name="pgen.1002570-Ehrenreich2" id="pgen.1002570-Ehrenreich2" class="link-target"></a>Ehrenreich IM, Gerke JP, Kruglyak L (2009) Genetic dissection of complex traits in yeast: insights from studies of gene expression and other phenotypes in the BYxRM cross. Cold Spring Harb Symp Quant Biol  74: 145–153.  <ul class="reflinks"><li><a href="#" data-author="Ehrenreich" data-cit="EhrenreichIMGerkeJPKruglyakL2009Genetic%20dissection%20of%20complex%20traits%20in%20yeast%3A%20insights%20from%20studies%20of%20gene%20expression%20and%20other%20phenotypes%20in%20the%20BYxRM%20cross.Cold%20Spring%20Harb%20Symp%20Quant%20Biol74145153" data-title="Genetic%20dissection%20of%20complex%20traits%20in%20yeast%3A%20insights%20from%20studies%20of%20gene%20expression%20and%20other%20phenotypes%20in%20the%20BYxRM%20cross." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Genetic+dissection+of+complex+traits+in+yeast%3A+insights+from+studies+of+gene+expression+and+other+phenotypes+in+the+BYxRM+cross.+Ehrenreich+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref20"><span class="order">20.
+            </span><a name="pgen.1002570-Cubillos1" id="pgen.1002570-Cubillos1" class="link-target"></a>Cubillos FA, Billi E, Zorgo E, Parts L, Fargier P, et al.  (2011) Assessing the complex architecture of polygenic traits in diverged yeast populations. Mol Ecol  20: 1401–1413.  <ul class="reflinks"><li><a href="#" data-author="Cubillos" data-cit="CubillosFABilliEZorgoEPartsLFargierP2011Assessing%20the%20complex%20architecture%20of%20polygenic%20traits%20in%20diverged%20yeast%20populations.Mol%20Ecol2014011413" data-title="Assessing%20the%20complex%20architecture%20of%20polygenic%20traits%20in%20diverged%20yeast%20populations." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Assessing+the+complex+architecture+of+polygenic+traits+in+diverged+yeast+populations.+Cubillos+2011" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref21"><span class="order">21.
+            </span><a name="pgen.1002570-Saccharomyces1" id="pgen.1002570-Saccharomyces1" class="link-target"></a><em>Saccharomyces</em> Genome Database (2011)  <a href="http://www.yeastgenome.org/">http://www.yeastgenome.org/</a>.  <ul class="find-nolinks"></ul></li><li id="ref22"><span class="order">22.
+            </span><a name="pgen.1002570-Orr1" id="pgen.1002570-Orr1" class="link-target"></a>Orr HA (1998) Testing natural selection vs. genetic drift in phenotypic evolution using quantitative trait locus data. Genetics  149: 2099–2104.  <ul class="reflinks"><li><a href="#" data-author="Orr" data-cit="OrrHA1998Testing%20natural%20selection%20vs.%20genetic%20drift%20in%20phenotypic%20evolution%20using%20quantitative%20trait%20locus%20data.Genetics14920992104" data-title="Testing%20natural%20selection%20vs.%20genetic%20drift%20in%20phenotypic%20evolution%20using%20quantitative%20trait%20locus%20data." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Testing+natural+selection+vs.+genetic+drift+in+phenotypic+evolution+using+quantitative+trait+locus+data.+Orr+1998" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref23"><span class="order">23.
+            </span><a name="pgen.1002570-Fay1" id="pgen.1002570-Fay1" class="link-target"></a>Fay JC, McCullough HL, Sniegowski PD, Eisen MB (2004) Population genetic variation in gene expression is associated with phenotypic variation in Saccharomyces cerevisiae. Genome Biol  5: R26.  <ul class="reflinks"><li><a href="#" data-author="Fay" data-cit="FayJCMcCulloughHLSniegowskiPDEisenMB2004Population%20genetic%20variation%20in%20gene%20expression%20is%20associated%20with%20phenotypic%20variation%20in%20Saccharomyces%20cerevisiae.Genome%20Biol5R26" data-title="Population%20genetic%20variation%20in%20gene%20expression%20is%20associated%20with%20phenotypic%20variation%20in%20Saccharomyces%20cerevisiae." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Population+genetic+variation+in+gene+expression+is+associated+with+phenotypic+variation+in+Saccharomyces+cerevisiae.+Fay+2004" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref24"><span class="order">24.
+            </span><a name="pgen.1002570-Kvitek1" id="pgen.1002570-Kvitek1" class="link-target"></a>Kvitek DJ, Will JL, Gasch AP (2008) Variations in stress sensitivity and genomic expression in diverse S. cerevisiae isolates. PLoS Genet  4: e1000223.  <ul class="reflinks" data-doi="10.1371/journal.pgen.1000223"><li><a href="https://doi.org/10.1371/journal.pgen.1000223" data-author="doi-provided" data-cit="doi-provided" data-title="doi-provided" target="_new" title="Go to article">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Variations+in+stress+sensitivity+and+genomic+expression+in+diverse+S.+cerevisiae+isolates.+Kvitek+2008" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref25"><span class="order">25.
+            </span><a name="pgen.1002570-Warringer1" id="pgen.1002570-Warringer1" class="link-target"></a>Warringer J, Zorgo E, Cubillos FA, Zia A, Gjuvsland A, et al.  (2011) Trait variation in yeast is defined by population history. PLoS Genet  7: e1002111.  <ul class="reflinks" data-doi="10.1371/journal.pgen.1002111"><li><a href="https://doi.org/10.1371/journal.pgen.1002111" data-author="doi-provided" data-cit="doi-provided" data-title="doi-provided" target="_new" title="Go to article">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Trait+variation+in+yeast+is+defined+by+population+history.+Warringer+2011" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref26"><span class="order">26.
+            </span><a name="pgen.1002570-Gu1" id="pgen.1002570-Gu1" class="link-target"></a>Gu Z, David L, Petrov D, Jones T, Davis RW, et al.  (2005) Elevated evolutionary rates in the laboratory strain of Saccharomyces cerevisiae. Proc Natl Acad Sci U S A  102: 1092–1097.  <ul class="reflinks"><li><a href="#" data-author="Gu" data-cit="GuZDavidLPetrovDJonesTDavisRW2005Elevated%20evolutionary%20rates%20in%20the%20laboratory%20strain%20of%20Saccharomyces%20cerevisiae.Proc%20Natl%20Acad%20Sci%20U%20S%20A10210921097" data-title="Elevated%20evolutionary%20rates%20in%20the%20laboratory%20strain%20of%20Saccharomyces%20cerevisiae." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Elevated+evolutionary+rates+in+the+laboratory+strain+of+Saccharomyces+cerevisiae.+Gu+2005" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref27"><span class="order">27.
+            </span><a name="pgen.1002570-Fraser1" id="pgen.1002570-Fraser1" class="link-target"></a>Fraser HB, Moses AM, Schadt EE (2010) Evidence for widespread adaptive evolution of gene expression in budding yeast. Proc Natl Acad Sci U S A  107: 2977–2982.  <ul class="reflinks"><li><a href="#" data-author="Fraser" data-cit="FraserHBMosesAMSchadtEE2010Evidence%20for%20widespread%20adaptive%20evolution%20of%20gene%20expression%20in%20budding%20yeast.Proc%20Natl%20Acad%20Sci%20U%20S%20A10729772982" data-title="Evidence%20for%20widespread%20adaptive%20evolution%20of%20gene%20expression%20in%20budding%20yeast." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Evidence+for+widespread+adaptive+evolution+of+gene+expression+in+budding+yeast.+Fraser+2010" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref28"><span class="order">28.
+            </span><a name="pgen.1002570-Tong1" id="pgen.1002570-Tong1" class="link-target"></a>Tong AH, Evangelista M, Parsons AB, Xu H, Bader GD, et al.  (2001) Systematic genetic analysis with ordered arrays of yeast deletion mutants. Science  294: 2364–2368.  <ul class="reflinks"><li><a href="#" data-author="Tong" data-cit="TongAHEvangelistaMParsonsABXuHBaderGD2001Systematic%20genetic%20analysis%20with%20ordered%20arrays%20of%20yeast%20deletion%20mutants.Science29423642368" data-title="Systematic%20genetic%20analysis%20with%20ordered%20arrays%20of%20yeast%20deletion%20mutants." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Systematic+genetic+analysis+with+ordered+arrays+of+yeast+deletion+mutants.+Tong+2001" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref29"><span class="order">29.
+            </span><a name="pgen.1002570-Bradley1" id="pgen.1002570-Bradley1" class="link-target"></a>Bradley RK, Roberts A, Smoot M, Juvekar S, Do J, et al.  (2009) Fast statistical alignment. PLoS Comput Biol  5: e1000392.  <ul class="reflinks" data-doi="10.1371/journal.pcbi.1000392"><li><a href="https://doi.org/10.1371/journal.pcbi.1000392" data-author="doi-provided" data-cit="doi-provided" data-title="doi-provided" target="_new" title="Go to article">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Fast+statistical+alignment.+Bradley+2009" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref30"><span class="order">30.
+            </span><a name="pgen.1002570-Gresham1" id="pgen.1002570-Gresham1" class="link-target"></a>Gresham D, Curry B, Ward A, Gordon DB, Brizuela L, et al.  (2010) Optimized detection of sequence variation in heterozygous genomes using DNA microarrays with isothermal-melting probes. Proc Natl Acad Sci U S A  107: 1482–1487.  <ul class="reflinks"><li><a href="#" data-author="Gresham" data-cit="GreshamDCurryBWardAGordonDBBrizuelaL2010Optimized%20detection%20of%20sequence%20variation%20in%20heterozygous%20genomes%20using%20DNA%20microarrays%20with%20isothermal-melting%20probes.Proc%20Natl%20Acad%20Sci%20U%20S%20A10714821487" data-title="Optimized%20detection%20of%20sequence%20variation%20in%20heterozygous%20genomes%20using%20DNA%20microarrays%20with%20isothermal-melting%20probes." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=Optimized+detection+of+sequence+variation+in+heterozygous+genomes+using+DNA+microarrays+with+isothermal-melting+probes.+Gresham+2010" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li><li id="ref31"><span class="order">31.
+            </span><a name="pgen.1002570-Storici1" id="pgen.1002570-Storici1" class="link-target"></a>Storici F, Lewis LK, Resnick MA (2001) In vivo site-directed mutagenesis using oligonucleotides. Nat Biotechnology  19: 773–776.  <ul class="reflinks"><li><a href="#" data-author="Storici" data-cit="StoriciFLewisLKResnickMA2001In%20vivo%20site-directed%20mutagenesis%20using%20oligonucleotides.Nat%20Biotechnology19773776" data-title="In%20vivo%20site-directed%20mutagenesis%20using%20oligonucleotides." target="_new" title="Go to article in CrossRef">
+                      View Article
+                    </a></li><li><a href="http://scholar.google.com/scholar?q=In+vivo+site-directed+mutagenesis+using+oligonucleotides.+Storici+2001" target="_new" title="Go to article in Google Scholar">
+                      Google Scholar
+                    </a></li></ul></li></ol></div>
+
+
+
+          <div class="ref-tooltip">
+            <div class="ref_tooltip-content">
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <aside class="article-aside">
+
+
+<!--[if IE 9]>
+<style>
+.dload-xml {margin-top: 38px}
+</style>
+<![endif]-->
+<div class="dload-menu">
+  <div class="dload-pdf">
+    <a href="/plosgenetics/article/file?id=10.1371/journal.pgen.1002570&type=printable"
+       id="downloadPdf" target="_blank">Download PDF</a>
+  </div>
+  <div data-js-tooltip-hover="trigger" class="dload-hover">&nbsp;
+    <ul class="dload-xml" data-js-tooltip-hover="target">
+      <li><a href="/plosgenetics/article/citation?id=10.1371/journal.pgen.1002570"
+             id="downloadCitation">Citation</a></li>
+      <li><a href="/plosgenetics/article/file?id=10.1371/journal.pgen.1002570&type=manuscript"
+             id="downloadXml">XML</a>
+      </li>
+    </ul>
+
+  </div>
+</div>
+
+<div class="aside-container">
+  <div class="print-article" id="printArticle" data-js-tooltip-hover="trigger">
+    <a href="#" onclick="window.print(); return false;" class="preventDefault" id="printBrowser">Print</a>
+  </div>
+  <div class="share-article" id="shareArticle" data-js-tooltip-hover="trigger">
+    Share
+    <ul data-js-tooltip-hover="target" class="share-options" id="share-options">
+
+      <li><a href="https://www.reddit.com/submit?url=https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pgen.1002570" id="shareReddit" target="_blank" title="Submit to Reddit"><img src="/resource/img/icon.reddit.16.png" width="16" height="16" alt="Reddit">Reddit</a></li>
+
+      <li><a href="https://www.facebook.com/share.php?u=https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pgen.1002570&t=Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains" id="shareFacebook" target="_blank" title="Share on Facebook"><img src="/resource/img/icon.fb.16.png" width="16" height="16" alt="Facebook">Facebook</a></li>
+
+      <li><a href="https://www.linkedin.com/shareArticle?url=https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pgen.1002570&title=Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains&summary=Checkout this article I found at PLOS"  id="shareLinkedIn" target="_blank" title="Add to LinkedIn"><img src="/resource/img/icon.linkedin.16.png" width="16" height="16" alt="LinkedIn">LinkedIn</a></li>
+
+      <li><a href="https://www.mendeley.com/import/?url=https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pgen.1002570"  id="shareMendeley" target="_blank" title="Add to Mendeley"><img src="/resource/img/icon.mendeley.16.png" width="16" height="16" alt="Mendeley">Mendeley</a></li>
+
+      <li><a href="https://bsky.app/intent/compose?text=Checkout%20this%20article%20I%20found%20at%20PLOS:%20https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pgen.1002570"  id="shareBluesky" target="_blank" title="Share on Bluesky"><img src="/resource/img/icon.bluesky.light.png" width="16" height="16" alt="Bluesky">Bluesky</a></li>
+
+      <li><a href="mailto:?subject=Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains&body=I%20thought%20you%20would%20find%20this%20article%20interesting.%20From%20PLOS Genetics:%20https%3A%2F%2Fdx.plos.org%2F10.1371%2Fjournal.pgen.1002570"  id="shareEmail" rel="noreferrer" aria-label="Email"><img src="/resource/img/icon.email.16.png" width="16" height="16" alt="Email">Email</a></li>
+    </ul>
+  </div>
+</div>
+
+
+     <!-- Crossmark 2.0 widget -->
+    <script src="https://crossmark-cdn.crossref.org/widget/v2.0/widget.js"></script>
+    <a aria-label="Check for updates via CrossMark" data-target="crossmark">
+      <img alt="Check for updates via CrossMark" width="150" src="https://crossmark-cdn.crossref.org/widget/v2.0/logos/CROSSMARK_BW_horizontal.svg">
+    </a>
+    <!-- End Crossmark 2.0 widget -->
+
+
+
+<div class="aside-container collections-aside-container"><!-- React Magic --></div>
+
+
+<div class="skyscraper-container">
+  <div class="title">Advertisement</div>
+<!-- DoubleClick Ad Zone -->
+  <div class='advertisement' id='div-gpt-ad-1458247671871-1' style='width:160px; height:600px;'>
+    <script type='text/javascript'>
+      googletag.cmd.push(function() { googletag.display('div-gpt-ad-1458247671871-1'); });
+    </script>
+  </div>
+</div>
+
+
+
+
+<div class="subject-areas-container">
+  <h3>Subject Areas <div id="subjInfo">?</div>
+    <div id="subjInfoText">
+      <p>For more information about PLOS Subject Areas, click
+        <a href="https://github.com/PLOS/plos-thesaurus/blob/master/README.md" target="_blank" title="Link opens in new window">here</a>.</p>
+      <span class="inline-intro">We want your feedback.</span> Do these Subject Areas make sense for this article? Click the target next to the incorrect Subject Area and let us know. Thanks for your help!
+
+
+    </div>
+  </h3>
+  <ul id="subjectList">
+      <li>
+              <a class="taxo-term" title="Search for articles about Genetic loci"
+                 href="/plosgenetics/search?filterSubjects=Genetic+loci&filterJournals=PLoSGenetics&q=">Genetic loci</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Genetic loci"><p class="taxo-explain">Is the Subject Area <strong>"Genetic loci"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Quantitative trait loci"
+                 href="/plosgenetics/search?filterSubjects=Quantitative+trait+loci&filterJournals=PLoSGenetics&q=">Quantitative trait loci</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Quantitative trait loci"><p class="taxo-explain">Is the Subject Area <strong>"Quantitative trait loci"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Genomics"
+                 href="/plosgenetics/search?filterSubjects=Genomics&filterJournals=PLoSGenetics&q=">Genomics</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Genomics"><p class="taxo-explain">Is the Subject Area <strong>"Genomics"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Alleles"
+                 href="/plosgenetics/search?filterSubjects=Alleles&filterJournals=PLoSGenetics&q=">Alleles</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Alleles"><p class="taxo-explain">Is the Subject Area <strong>"Alleles"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Saccharomyces cerevisiae"
+                 href="/plosgenetics/search?filterSubjects=Saccharomyces+cerevisiae&filterJournals=PLoSGenetics&q=">Saccharomyces cerevisiae</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Saccharomyces cerevisiae"><p class="taxo-explain">Is the Subject Area <strong>"Saccharomyces cerevisiae"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Single nucleotide polymorphisms"
+                 href="/plosgenetics/search?filterSubjects=Single+nucleotide+polymorphisms&filterJournals=PLoSGenetics&q=">Single nucleotide polymorphisms</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Single nucleotide polymorphisms"><p class="taxo-explain">Is the Subject Area <strong>"Single nucleotide polymorphisms"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Yeast"
+                 href="/plosgenetics/search?filterSubjects=Yeast&filterJournals=PLoSGenetics&q=">Yeast</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Yeast"><p class="taxo-explain">Is the Subject Area <strong>"Yeast"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+      <li>
+              <a class="taxo-term" title="Search for articles about Complex traits"
+                 href="/plosgenetics/search?filterSubjects=Complex+traits&filterJournals=PLoSGenetics&q=">Complex traits</a>
+        <span class="taxo-flag">&nbsp;</span>
+        <div class="taxo-tooltip" data-categoryname="Complex traits"><p class="taxo-explain">Is the Subject Area <strong>"Complex traits"</strong> applicable to this article?
+          <button id="noFlag" data-action="remove">Yes</button>
+          <button id="flagIt" value="flagno" data-action="add">No</button></p>
+          <p class="taxo-confirm">Thanks for your feedback.</p>
+        </div>
+      </li>
+  </ul>
+</div>
+<div id="subjectErrors"></div>
+  </aside>
+</div>
+
+
+
+
+</main>
+<footer id="pageftr">
+  <div class="row">
+    <div class="block x-small">
+
+<ul class="nav nav-secondary">
+    <li class="ftr-header"><a href="https://plos.org/our-journals/">Publications</a></li>
+    <li><a href="/agingandhealth/" id="ftr-age">PLOS Aging and Health</a></li>
+    <li><a href="/plosbiology/" id="ftr-bio">PLOS Biology</a></li>
+    <li><a href="/climate/" id="ftr-climate">PLOS Climate</a></li>
+    <li><a href="/complexsystems/" id="ftr-complex-systems">PLOS Complex Systems</a></li>
+    <li><a href="/ploscompbiol/" id="ftr-compbio">PLOS Computational Biology</a></li>
+    <li><a href="/digitalhealth/" id="ftr-digitalhealth">PLOS Digital Health</a></li>
+    <li><a href="/ecosystems/" id="ftr-eco">PLOS Ecosystems</a></li>
+    <li><a href="/plosgenetics/" id="ftr-gen">PLOS Genetics</a></li>
+  </ul>
+    </div>
+    <div class="block x-small">
+
+<ul class="nav nav-secondary">
+    <li class="ftr-header">&nbsp;</li>
+    <li><a href="/globalpublichealth/" id="ftr-globalpublichealth">PLOS Global Public Health</a></li>
+    <li><a href="/plosmedicine/" id="ftr-med">PLOS Medicine</a></li>
+    <li><a href="/mentalhealth/" id="ftr-mental-health">PLOS Mental Health</a></li>
+    <li><a href="/plosntds/" id="ftr-ntds">PLOS Neglected Tropical Diseases</a></li>
+    <li><a href="/plosone/" id="ftr-one">PLOS One</a></li>
+    <li><a href="/plospathogens/" id="ftr-path">PLOS Pathogens</a></li>
+    <li><a href="/sustainabilitytransformation/" id="ftr-sustainabilitytransformation">PLOS Sustainability and Transformation</a></li>
+    <li><a href="/water/" id="ftr-water">PLOS Water</a></li>
+</ul>
+    </div>
+    <div class="block xx-small">	
+
+
+<ul class="nav nav-tertiary">
+  <li>
+    <a href="https://plos.org" id="ftr-home">Home</a>
+  </li>
+  <li>
+    <a href="https://blogs.plos.org" id="ftr-blog">Blogs</a>
+  </li>
+  <li>
+    <a href="https://collections.plos.org/" id="ftr-collections">Collections</a>
+  </li>
+  <li>
+    <a href="mailto:customercare@plos.org" id="ftr-feedback">Give feedback</a>
+  </li>
+  <li>
+    <a href="/plosgenetics/lockss-manifest" id="ftr-lockss">LOCKSS</a>
+  </li>
+</ul>
+    </div>
+    <div class="block xx-small">
+
+<ul class="nav nav-primary">
+  <li><a href="https://plos.org/privacy-policy" id="ftr-privacy">Privacy Policy</a></li>
+  <li><a href="https://plos.org/terms-of-use" id="ftr-terms">Terms of Use</a></li>
+  <li><a href="https://plos.org/advertise/" id="ftr-advertise">Advertise</a></li>
+  <li><a href="https://plos.org/media-inquiries" id="ftr-media">Media Inquiries</a></li>
+  <li><a href="https://plos.org/contact" id="ftr-contact">Contact</a></li>
+</ul>
+    </div>
+  </div>
+  <div class="row">
+    <p>
+
+<img src="/resource/img/logo-plos-footer.png" alt="PLOS" class="logo-footer"/>
+
+
+<span class="footer-non-profit-statement">PLOS is a nonprofit 501(c)(3) corporation, #C2354500, based in California, US</span>    </p>
+    <div class="block">
+    </div>
+  </div>
+ 
+<script src="/resource/js/global.js" type="text/javascript"></script>
+</footer>
+
+
+
+
+<script type="text/javascript">
+  var ArticleData = {
+    doi: '10.1371/journal.pgen.1002570',
+    title: '<article-title xmlns:mml=\"http://www.w3.org/1998/Math/MathML\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">Genetic Architecture of Highly Complex Chemical Resistance Traits across Four Yeast Strains<\/article-title>',
+    date: 'Mar 15, 2012'
+  };
+</script>
+<script src="/resource/js/components/show_onscroll.js" type="text/javascript"></script>
+<script src="/resource/js/components/pagination.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/spin.js" type="text/javascript"></script>
+<script src="/resource/js/pages/article.js" type="text/javascript"></script>
+<script src="/resource/js/pages/article_references.js" type="text/javascript"></script>
+<script src="/resource/js/pages/article_sidebar.js" type="text/javascript"></script>
+<script src="/resource/js/vendor/foundation/foundation.dropdown.js" type="text/javascript"></script>
+  <script src="/resource/js/components/table_open.js" type="text/javascript"></script>
+
+        <script src="/resource/js/components/figshare.js" type="text/javascript"></script>
+  <script src="/resource/js/vendor/jquery.panzoom.min.js" type="text/javascript"></script>
+  <script src="/resource/js/vendor/jquery.mousewheel.js" type="text/javascript"></script>
+
+  <script src="/resource/js/components/lightbox.js" type="text/javascript"></script>
+
+  <script src="/resource/js/pages/article_body.js" type="text/javascript"></script>
+
+
+<!-- This file should be loaded before the renderJs, to avoid conflicts with the FigShare, that implements the MathJax also. -->
+
+<!--  mathjax configuration options  -->
+<!-- more can be found at http://docs.mathjax.org/en/latest/ -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  "HTML-CSS": {
+    scale: 100,
+    availableFonts: ["STIX","TeX"],
+    preferredFont: "STIX",
+    webFont: "STIX-Web",
+    linebreaks: { automatic: false }
+  },
+  jax: ["input/MathML", "output/HTML-CSS"]
+});
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=MML_HTMLorMML"></script>
+
+<div class="reveal-modal-bg"></div>
+</body>
+</html>

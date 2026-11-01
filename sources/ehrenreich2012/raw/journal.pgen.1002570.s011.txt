@@ -1,0 +1,43 @@
+# set directory, and load required libraries and packages
+setwd("~/peakcalling") # set this to the directory in which you have the data
+source("submit_fx.R")
+library("RColorBrewer") # used for color palette
+mypalette = c(brewer.pal(8, "Dark2"), brewer.pal(9, "Set1")[1:5], brewer.pal(9, "Set1")[7:9]) #sets color palette
+
+# load data
+datafiles <- c("BYxRM.txt", "BYxYJM.txt", "BYxYPS.txt", "RMxYJM.txt", "RMxYPS.txt", "YJMxYPS.txt") # log10 array intensity values are in R binary files
+
+# conduct peakcalling
+npt.window <- 100 # size of window used for SG filter
+peak.window <- 2.5E5 # size of window in which there can be only one peak
+npts.min <- 12 # minimum number of points above threshold to call a peak
+moments <- c(0, .005, .01, .015, .02, .025, .03, .035, .04, .045, .05, .055, .06, .065, .07, .075, .08, .085, .09, .095, .1, .15, .2, .25, .3, .35, .4)
+#moments <- c(.01, .02, .03, .04, .045, .05)
+selections <- c("Benomyl", "Cadmium.chloride", "Chlorpromazine", "Copper.sulfate", "Cycloheximide", "Diamide", "Hydrogen.peroxide", "LY", "NQO", "Paraquat", "Sodium.dodecyl.sulfate", "Tunicamycin", "Zeocin")
+controls <- c("YPD", "YPD.1", "YPD.2", "YPD.3", "YPD.4", "YPD.5", "YPD.6")
+
+
+results <- lapply(datafiles, function(datafile) {
+	d <- read.delim(datafile, header = T, sep = "\t", as.is = T)
+	trait.res <- lapply(selections, function(trait) {
+		calls <- data.frame(Chromosome = d$Chromosome, Position = d$Position, GenomePosition = d$GenomePosition, Cross = d$Cross, Trait = trait, Sel = d[,trait], d[,controls], stringsAsFactors = F) # reformats the data
+		calls$Dif = calls$Sel - rowMeans(calls[,controls])
+		calls$SG = unlist(by(calls, list(calls$Chromosome), function(chromdata) {sav.gol(chromdata$Dif, npt.window)}))
+		calls <- conf.ints(calls, npt.window = npt.window, moments = c(moments, rev(1 - moments)))
+		nThresholds <- length(moments)
+		#out <- lapply(nThresholds, )
+		for (k in 1:nThresholds) {
+			lower.thresh = paste((moments[k] * 100), "%", sep = "")
+			upper.thresh = paste(((1 - moments[k]) * 100), "%", sep = "")
+			ranges = calls[,upper.thresh] - calls[,lower.thresh]
+			median.range = median(ranges)
+			col.name = paste("t", k, sep = "_")
+			calls$IsPeak = (calls$SG <= - median.range/2) | (calls$SG >= median.range/2)
+			calls = do.call("rbind", by(calls, list(calls$Chromosome), groupPeaks, median.range, quant.thres = 0.5))
+			calls = do.call("rbind", by(calls, list(calls$Chromosome), distanceGrouper, peak.window))
+			calls[,paste("t", as.character(k), sep = "_")] = calls$IsPeak
+			nPeaks = sum(calls$IsPeak == TRUE)
+			print(paste(strsplit(datafile, "\\.")[[1]][1], trait, lower.thresh, upper.thresh, nPeaks), sep = " ")			
+		}
+	})
+})
