@@ -689,6 +689,76 @@ The paper prints 4NQO at "0.1 mg/ml" (Materials and Methods and the Figure 4 leg
 4NQO at 0.125 µg/mL and Ehrenreich 2010 at 5 µg/ml, so 0.1 mg/ml would be 800-fold higher than the
 earlier BY × RM work. It may be meant as µg/ml. **Atlas:** kept as printed.
 
+## Albert et al. 2014
+
+Sources: the four supplementary files in `sources/albert2014/raw/` (Supplementary Information
+PDF, Supplementary Data 1-3) and the Nature article page `sources/albert2014/article.html`. The
+main text and Methods are paywalled; semantics come from the abstract, the Extended Data figure
+legends and the Supplementary Information, quoted in `sources/albert2014/extracted/text_facts.tsv`.
+
+### Q1. No hotspot table, so no hotspot rows and no causative genes
+The abstract says most X-pQTL "were clustered in 'hotspots'", and Extended Data Figure 8 refers
+to hotspots "labelled with the names of the causative genes", but the hotspots and their genes are
+listed only in Extended Data Table 2 ("Hotspot regulators of protein expression"), which is on the
+paywalled article page and not in the bundle. **Atlas:** no rows in `qtl`, no candidate genes; the
+hotspots are visible as dense bins in the heatmap rows built from the X-pQTL.
+
+### Q2. Sign of the effect
+Settled by the Extended Data Figure 3 legend: "Positive difference values correspond to a higher
+frequency of the BY allele in the high GFP population, which we interpret as higher expression
+being caused by the BY allele at that locus." `ef` is `alleleFrequencyDifference` as given, so
+positive = BY allele raises protein abundance. This is the opposite orientation to Albert 2018's
+`r` (positive = RM allele raises expression); the dataset rows say so.
+
+### Q3. Local versus distant
+In the genome-wide experiments the tagged gene is fixed for the BY allele (Extended Data Figure 3
+legend), so its own locus cannot produce an X-pQTL there; local effects were measured in separate
+"local" experiments for 41 genes (Supplementary Table 2, kept verbatim in the extra file, with an
+allele frequency difference and a local LOD but no interval). Supplementary Data 2 has no
+local/distant column. **Atlas (definition, labelled):** `loc = 1` when the 2-LOD interval overlaps
+the tagged gene's coordinates from Supplementary Data 1. That gives 5 of 1,025; only one of them
+(YDL126C) is among the five genes whose genome-wide data came from a local experiment (Supplementary
+Data 1 comment "distant experiment failed, local experiment used in analyses across all genes").
+
+### Q4. X-pQTL for genes the paper excluded
+Supplementary Data 2 has 66 X-pQTL for 9 genes that Supplementary Data 1 marks "failed" or
+"exclude due to …" (nonsynonymous GFP mutation, possible nonfixation of the GFP cassette). The
+paper's 160 genes exclude them. **Atlas:** all 1,025 rows are kept in the lazy file with the gene's
+status in column `st`; the heatmap density counts only the 959 X-pQTL of the 160 analysed genes.
+
+### Q5. What Supplementary Data 1's eQTL/pQTL columns describe
+`number_of_trans_pQTL` matches the number of Supplementary Data 2 rows for only 4 of the 91 analysed
+genes that have a value, and `local_pQTL_LOD` is missing for 72 of 174 genes. **Most defensible
+reading:** these columns (and the eQTL columns) report earlier eQTL and mass-spectrometry pQTL
+studies used for comparison, not this study's X-pQTL. Kept verbatim; not used.
+
+### Q6. Supplementary Table 3 effects versus Supplementary Data 2
+The 49 proteins affected by the chromosome II hotspot: 48 have a chrII X-pQTL of the same sign in
+Supplementary Data 2 (SUR4 has no SGD standard-name match in the R64-5-1 table), but only 24 equal
+the nearest chrII peak's allele frequency difference at two decimals. Probably the table's effect
+is read at the hotspot position, not at each gene's own peak; not settled without the Methods.
+
+### Q7. Intervals starting at 0
+69 of 1,025 intervals have `2LODIntervalLeft = 0`, the chromosome start. Kept as given (the
+atlas's coordinates are otherwise 1-based).
+
+### Q8. Genome build
+Not stated. All peaks and interval ends lie within R64 chromosome lengths, and the tagged genes'
+coordinates in Supplementary Data 1 lie within 1.9 kb of their R64-5-1 genes (162 of 174 inside the
+SGD gene span, consistent with coding-sequence rather than gene-feature coordinates). Used as R64,
+no transform.
+
+### Q9. Numbers not checkable from the files
+Supplementary Note 1 (27 replicated genes, 240 X-pQTL in detection sets, 234 concordant) and
+Supplementary Table 1 come from the replicate count data in Supplementary Data 3, which the atlas
+does not re-map. Supplementary Note 2's 701 X-pQTL also depend on overlap with published eQTL whose
+positions are not in the bundle; the other two filters (not chrII/III, not the gene's own chromosome)
+leave at least 701, which is consistent.
+
+### Q10. Pool sizes
+No segregant count is given for the sorted pools (the abstract says "thousands of individuals with
+high versus low protein abundance"). `crosses.n` is null.
+
 ## Blocked steps
 
 ### B1. GitHub Pages

@@ -1,0 +1,100 @@
+# Supplementary Tables 1-3 transcribed line by line from sources/albert2014/raw/41586_2014_BFnature12904_MOESM48_ESM.pdf (pdfplumber text);
+# ST1: col1 LOD threshold, col2 X-pQTL in detection set, col3 replicated at genome-wide significance, col4 replicated at relaxed criterion.
+# ST2: col1 gene, col2 allele frequency difference, col3 local LOD. ST3: col1 gene name, col2 hotspot effect, col3 function, col4 translation/ribosome related.
+# ST3 function text that wraps onto the previous PDF line is kept only in 'text' of that line's row when it is on the same line.
+table	page	line	col1	col2	col3	col4	text
+ST1	3	7	4.5	240	139	191	4.5 240 139 (58%) 191 (80%)
+ST1	3	8	5	216	128	176	5 216 128 (59%) 176 (81%)
+ST1	3	9	10	86	69	78	10 86 69 (80%) 78 (91%)
+ST1	3	10	20	30	29	30	20 30 29 (97%) 30 (100%)
+ST1	3	11	50	10	10	10	50 10 10 (100%) 10 (100%)
+ST2	6	5	YAL005C	0.06	2.4		YAL005C 0.06 2.4
+ST2	6	6	YAL060W	0.24	23.9		YAL060W 0.24 23.9
+ST2	6	7	YBR067C	-0.18	12.9		YBR067C -0.18 12.9
+ST2	6	8	YCL040W	0.31	31.5		YCL040W 0.31 31.5
+ST2	6	9	YDL126C	-0.15	13.7		YDL126C -0.15 13.7
+ST2	6	10	YDL171C	-0.03	0.5		YDL171C -0.03 0.5
+ST2	6	11	YEL002C	0.01	0.4		YEL002C 0.01 0.4
+ST2	6	12	YER069W	0.11	2.6		YER069W 0.11 2.6
+ST2	6	13	YGL026C	-0.17	8.6		YGL026C -0.17 8.6
+ST2	6	14	YGL195W	0.15	11.4		YGL195W 0.15 11.4
+ST2	6	15	YGL202W	-0.23	27.7		YGL202W -0.23 27.7
+ST2	6	16	YGL253W	0.88	84.9		YGL253W 0.88 84.9
+ST2	6	17	YGR086C	0.02	0.5		YGR086C 0.02 0.5
+ST2	6	18	YGR204W	0.50	101.9		YGR204W 0.50 101.9
+ST2	6	19	YGR234W	-0.75	252.0		YGR234W -0.75 252.0
+ST2	6	20	YHL011C	0.03	1.1		YHL011C 0.03 1.1
+ST2	6	21	YIR022W	-0.12	7.9		YIR022W -0.12 7.9
+ST2	6	22	YJL052W	0.11	3.8		YJL052W 0.11 3.8
+ST2	6	23	YJL130C	-0.13	6.4		YJL130C -0.13 6.4
+ST2	6	24	YJL201W	0.01	0.5		YJL201W 0.01 0.5
+ST2	6	25	YJR048W	0.02	0.8		YJR048W 0.02 0.8
+ST2	6	26	YKL029C	-0.75	184.2		YKL029C -0.75 184.2
+ST2	6	27	YKL035W	-0.05	0.9		YKL035W -0.05 0.9
+ST2	6	28	YKR059W	0.05	1.8		YKR059W 0.05 1.8
+ST2	6	29	YKR080W	0.06	1.5		YKR080W 0.06 1.5
+ST2	6	30	YLL026W	0.74	246.5		YLL026W 0.74 246.5
+ST2	6	31	YLR075W	-0.02	0.4		YLR075W -0.02 0.4
+ST2	6	32	YLR179C	-0.81	169.0		YLR179C -0.81 169.0
+ST2	6	33	YLR244C	0.43	72.0		YLR244C 0.43 72.0
+ST2	6	34	YLR325C	-0.04	1.4		YLR325C -0.04 1.4
+ST2	6	35	YLR438W	0.05	1.0		YLR438W 0.05 1.0
+ST2	6	36	YML024W	0.03	1.1		YML024W 0.03 1.1
+ST2	6	37	YMR315W	0.16	12.7		YMR315W 0.16 12.7
+ST2	6	38	YNL044W	0.03	0.5		YNL044W 0.03 0.5
+ST2	6	39	YNL055C	0.66	134.0		YNL055C 0.66 134.0
+ST2	6	40	YNL061W	-0.20	20.0		YNL061W -0.20 20.0
+ST2	6	41	YNL134C	0.49	73.8		YNL134C 0.49 73.8
+ST2	6	42	YNR016C	0.00	0.4		YNR016C 0.00 0.4
+ST2	6	43	YPL028W	0.01	0.7		YPL028W 0.01 0.7
+ST2	6	44	YPL048W	-0.02	0.4		YPL048W -0.02 0.4
+ST2	6	45	YPR156C	0.07	1.5		YPR156C 0.07 1.5
+ST3	7	7	RPS17A	0.30	ribosomal protein small subunit	yes	RPS17A 0.30 ribosomal protein small subunit yes
+ST3	7	8	TIF1	0.23	translation initiation factor eIF4A	yes	TIF1 0.23 translation initiation factor eIF4A yes
+ST3	7	9	PRT1	0.22	translation initiation factor subunit eIF3b	yes	PRT1 0.22 translation initiation factor subunit eIF3b yes
+ST3	7	10	TEF4	0.21	translational elongation factor	yes	TEF4 0.21 translational elongation factor yes
+ST3	7	11	RPS25A	0.19	ribosomal protein small subunit	yes	RPS25A 0.19 ribosomal protein small subunit yes
+ST3	7	12	ADO1	0.18	adenosine kinase		ADO1 0.18 adenosine kinase
+ST3	7	14	UTP4	0.18	18S rRNA production	yes	UTP4 0.18 18S rRNA production yes
+ST3	7	15	RPL9A	0.16	ribosomal protein large subunit	yes	RPL9A 0.16 ribosomal protein large subunit yes
+ST3	7	16	RPL19A	0.16	ribosomal protein large subunit	yes	RPL19A 0.16 ribosomal protein large subunit yes
+ST3	7	17	SUP45	0.16	Polypeptide release factor eRF1	yes	SUP45 0.16 Polypeptide release factor eRF1 yes
+ST3	7	18	RPL21B	0.16	ribosomal protein large subunit	yes	RPL21B 0.16 ribosomal protein large subunit yes
+ST3	7	19	LEU4	0.16	leucine biosynthesis		LEU4 0.16 leucine biosynthesis
+ST3	7	20	ILS1	0.15	Isoleucine tRNA synthetase		ILS1 0.15 Isoleucine tRNA synthetase
+ST3	7	21	RPL13B	0.15	ribosomal protein large subunit	yes	RPL13B 0.15 ribosomal protein large subunit yes
+ST3	7	22	CAM1	0.15	transcription factor involved in ribosome biogenesis	yes	CAM1 0.15 transcription factor involved in ribosome biogenesis yes
+ST3	7	23	YOP1	0.15	membrane traffic		YOP1 0.15 membrane traffic
+ST3	7	25	SUR4	0.14	biosynthesis		SUR4 0.14 biosynthesis
+ST3	7	26	URA5	0.14	pyrimidine biosynthesis		URA5 0.14 pyrimidine biosynthesis
+ST3	7	27	RPL10	0.14	ribosomal protein large subunit	yes	RPL10 0.14 ribosomal protein large subunit yes
+ST3	7	29	ADE3	0.13	histidine		ADE3 0.13 histidine
+ST3	7	31	NOP58	0.13	synthesis	yes	NOP58 0.13 synthesis yes
+ST3	7	32	ILV6	0.12	branched-chain amino acid biosynthesis		ILV6 0.12 branched-chain amino acid biosynthesis
+ST3	7	33	SMI1	0.12	cell wall synthesis		SMI1 0.12 cell wall synthesis
+ST3	7	35	PUB1	0.11	stability		PUB1 0.11 stability
+ST3	7	36	TPI1	0.11	Triose phosphate isomerase involved in glycolysis		TPI1 0.11 Triose phosphate isomerase involved in glycolysis
+ST3	7	37	LHP1	0.11	tRNA processing		LHP1 0.11 tRNA processing
+ST3	7	38	YIP3	0.11	ER to Golgi transport		YIP3 0.11 ER to Golgi transport
+ST3	7	39	TIF3	0.11	Translation initiation factor eIF-4B	yes	TIF3 0.11 Translation initiation factor eIF-4B yes
+ST3	7	40	TRX2	0.11	cell redox homeostasis		TRX2 0.11 cell redox homeostasis
+ST3	7	41	URA2	0.11	pyrimidine biosynthesis		URA2 0.11 pyrimidine biosynthesis
+ST3	7	42	ERG10	0.11	ergosterol biosynthesis		ERG10 0.11 ergosterol biosynthesis
+ST3	7	43	TRX1	0.10	cell redox homeostasis		TRX1 0.10 cell redox homeostasis
+ST3	7	44	CPR1	0.10	cellular protein metabolism		CPR1 0.10 cellular protein metabolism
+ST3	7	45	YLR413W	0.10	unknown		YLR413W 0.10 unknown
+ST3	7	46	DBP3	0.10	rRNA processing	yes	DBP3 0.10 rRNA processing yes
+ST3	7	47	YLR179C	0.10	unknown		YLR179C 0.10 unknown
+ST3	8	3	PFY1	0.09	cytoskeleton organization		PFY1 0.09 cytoskeleton organization
+ST3	8	4	LIA1	0.09	cytoskeleton organization		LIA1 0.09 cytoskeleton organization
+ST3	8	5	COX17	0.09	copper transport, mitochondrial respiration		COX17 0.09 copper transport, mitochondrial respiration
+ST3	8	6	PRS3	0.09	nucleotide, histidine, and tryptophan biosynthesis		PRS3 0.09 nucleotide, histidine, and tryptophan biosynthesis
+ST3	8	7	TDH3	0.08	glycolysis		TDH3 0.08 glycolysis
+ST3	8	8	PDB1	0.08	pyruvate dehydrogenase		PDB1 0.08 pyruvate dehydrogenase
+ST3	8	9	TPO1	0.08	transmembrane transporter		TPO1 0.08 transmembrane transporter
+ST3	8	10	PHO86	0.08	ER to Golgi transport		PHO86 0.08 ER to Golgi transport
+ST3	8	11	ZWF1	0.07	pentose phosphate pathway		ZWF1 0.07 pentose phosphate pathway
+ST3	8	12	WBP1	0.07	protein glycosylation		WBP1 0.07 protein glycosylation
+ST3	8	13	CIT1	-0.10	citrate synthase, TCA cycle		CIT1 -0.10 citrate synthase, TCA cycle
+ST3	8	14	HSP104	-0.13	chaperone		HSP104 -0.13 chaperone
+ST3	8	15	GPH1	-0.15	glycogen phosphorylase		GPH1 -0.15 glycogen phosphorylase

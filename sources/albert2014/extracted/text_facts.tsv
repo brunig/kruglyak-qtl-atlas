@@ -1,0 +1,16 @@
+kind	where	quote	found_in
+design	abstract	We applied this method to 160 genes and detected many more loci per gene than previous studies.	article.html
+design	abstract	use pooled sequencing to compare allele frequencies across the genome in thousands of individuals with high versus low protein abundance	article.html
+hotspots	abstract	Most loci that we detected were clustered in ‘hotspots’ that influence multiple proteins, and some hotspots were found to influence more than half of the proteins that we examined.	article.html
+sign	Extended Data Figure 3 legend	Positive difference values correspond to a higher frequency of the BY allele in the high GFP population, which we interpret as higher expression being caused by the BY allele at that locus.	article.html
+threshold	Extended Data Figure 3 legend	Bottom panel: lod scores obtained from MULTIPOOL 16 . The red horizontal line is the genome-wide significance threshold (lod = 4.5).	article.html
+interval	Extended Data Figure 3 legend	The blue vertical boxes indicate positions of genome-wide X-pQTL, with the width representing the 2-lod drop interval.	article.html
+fixation	Extended Data Figure 3 legend	Note the fixation of the BY allele in all segregants at the gene position and at the mating type locus on chromosome III, as well as the fixation of the RM allele at the synthetic genetic array marker integrated at the CAN1 locus on the left arm of chromosome V.	article.html
+LEU1	Extended Data Figure 3 legend	For this gene, 14 X-pQTL are called.	article.html
+local	Extended Data Figure 4 legend	note that YMR315W and GCN1 were ‘local’ experiments where peaks at the gene position are visible.	article.html
+FACS	Extended Data Figure 2 legend	The low GFP (blue) and high GFP (red) gates sample extreme levels of GFP within a defined range of cell sizes.	article.html
+reproducibility	Supplementary Note 1	We performed replication experiments for 27 genes.	MOESM48_ESM.pdf
+reproducibility	Supplementary Note 1	Across the 27 detection experiments, we discovered 240 X-pQTL at genome-wide significance.	MOESM48_ESM.pdf
+reproducibility	Supplementary Note 1	The direction of effect was concordant at 234 (97.5%) of the X-pQTL.	MOESM48_ESM.pdf
+eQTL	Supplementary Note 2	The analyses were restricted to the 701 X-pQTL that did not overlap a significant eQTL, were not located on chromosomes II and III, and were not located on the chromosome on which the given gene is located.	MOESM48_ESM.pdf
+eQTL	Supplementary Note 2	We obtained an estimate of π = 36%.	MOESM48_ESM.pdf

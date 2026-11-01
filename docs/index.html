@@ -338,7 +338,12 @@ function loadLazy(k) {
 const GKINDS = { eqtl: ["mRNA (eQTL)", "eQTL"], pqtl: ["protein (pQTL)", "pQTL"] };
 function geneKinds() { return Object.keys(GKINDS).filter(n => lazyRows(n).length); }
 function dsKind(d) { const L = D.lazy; if (!L || !L.ds) return null; const k = L.ds.indexOf(d); return k >= 0 ? L.name[k] : null; }
-const EQ = { g: null, rows: null, err: null };   // the gene whose eQTL are drawn, and its rows once loaded: [{t, i}]
+const EQ = { g: null, rows: null, err: null };
+// which parent's allele a positive effect favours, read from the dataset's own sign convention ("positive = the BY allele ...")
+function posParent(d) { const m = /positive = the (\w+) allele/.exec(D.datasets.effect[d] || ""); return m ? m[1] : null; }
+function lzFavours(t, i) { const pp = posParent(t.ds); if (!pp || t.ef[i] == null || t.ef[i] === 0) return ""; const pr = D.parents.name.filter((n, k) => D.parents.ds[k] === t.ds);
+  const other = pr.find(n => n !== pp); return t.ef[i] > 0 ? pp : (other || ""); }
+function lzStatus(t, i) { return t.st && t.st[i] && t.st[i] !== "analysed" ? t.st[i] : ""; }   // the gene whose eQTL are drawn, and its rows once loaded: [{t, i}]
 function setExprGene(g, quiet) {
   S.eg = g; EQ.g = g; EQ.rows = null; EQ.err = null;
   const ks = geneKinds().flatMap(n => lazyRows(n)); if (g == null || !ks.length) { if (!quiet) go(); return; }
@@ -492,6 +497,7 @@ function drawGenome() {
     if (multi && d !== lastDs) { hrows.push({ h: d }); lastDs = d; }
     if (placedT.has(t)) hrows.push({ t });
     else if (anyT.has(t)) { if (!unplaced[d]) { unplaced[d] = 0; hrows.push({ u: d }); } unplaced[d]++; }
+    else if (dsKind(d)) { /* per-gene QTL on demand: shown by its density rows */ }
     else { if (!empty[d]) { empty[d] = []; hrows.push({ z: d }); } empty[d].push(t); } }
   const DZ = dens();
   for (const d of Object.keys(DZ).map(Number).sort((a, b) => a - b)) {
@@ -545,7 +551,7 @@ function drawGenome() {
     ctx.font = "11px " + css("--sans"); ctx.fillStyle = muted; ctx.textAlign = "left";
     const summary = kinds.map(n => { const rs = rows.filter(r => r.t.kind === n), nl = rs.filter(r => r.t.loc[r.i] === 1).length; return rs.length + " " + GKINDS[n][1] + " (" + nl + " local)"; }).join(", ");
     ctx.fillText(EQ.err ? "File did not load (" + EQ.err + ")" : EQ.rows == null ? "Loading QTL for " + gname(g) + "…" :
-      "Genetic effects on " + gname(g) + ": " + summary + "; ▲ marks the gene itself; stem height = LOD; blue local, orange distant", L, eqTop - 12);
+      "Genetic effects on " + gname(g) + ": " + summary + "; ▲ marks the gene itself; stem height = LOD; blue local, orange distant; hollow = gene the paper excluded", L, eqTop - 12);
     const hits = [];
     kinds.forEach((n, row) => {
       const top = eqTop + row * eqH;
@@ -557,7 +563,8 @@ function drawGenome() {
         const x0 = X(CHSTART[t.c[i]] + t.a[i]), x1 = Math.max(X(CHSTART[t.c[i]] + t.e[i]), x0 + 1), xp = X(CHSTART[t.c[i]] + t.p[i]);
         const v = Math.max(0.05, Math.min(1, (Math.log10(Math.max(1, t.lod[i])) - LOD_LO) / (LOD_HI - LOD_LO))), yt = yb - v * (eqH - 8);
         ctx.globalAlpha = 0.35; ctx.fillStyle = col; ctx.fillRect(x0, yb - 1.5, x1 - x0, 3); ctx.globalAlpha = 1;
-        ctx.strokeStyle = col; ctx.lineWidth = 1.25; ctx.beginPath(); ctx.moveTo(xp, yb); ctx.lineTo(xp, yt); ctx.stroke(); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(xp, yt, 2.6, 0, 7); ctx.fill();
+        ctx.strokeStyle = col; ctx.lineWidth = 1.25; ctx.beginPath(); ctx.moveTo(xp, yb); ctx.lineTo(xp, yt); ctx.stroke(); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(xp, yt, 2.6, 0, 7);
+        if (lzStatus(t, i)) { ctx.fillStyle = css("--panel"); ctx.fill(); ctx.stroke(); } else ctx.fill();   // gene the paper excluded: hollow
         hits.push({ r, row, xs: xp }); }
     });
     EQH = { top: eqTop, h: eqH, n: kinds.length, hits };
@@ -640,7 +647,8 @@ gcan.addEventListener("click", ev => {
 });
 function eqTip(r) { const t = r.t, i = r.i;
   return ["<b>" + esc(gname(t.g[i])) + " " + esc(GKINDS[t.kind] ? GKINDS[t.kind][0] : "") + "</b> · " + (t.loc[i] === 1 ? "local" : t.loc[i] === 0 ? "distant" : "") + " " + esc(GKINDS[t.kind] ? GKINDS[t.kind][1] : "QTL") + " · " + esc(D.datasets.label[t.ds]),
-    '<span class="mono">' + t.c[i] + ":" + fmt(t.a[i]) + "–" + fmt(t.e[i]) + "</span> · LOD " + num(t.lod[i], 1) + (t.ef[i] != null ? " · effect " + sgn(t.ef[i], 2) : "")]; }
+    '<span class="mono">' + t.c[i] + ":" + fmt(t.a[i]) + "–" + fmt(t.e[i]) + "</span> · LOD " + num(t.lod[i], 1) + (t.ef[i] != null ? " · effect " + sgn(t.ef[i], 2) : "") + (lzFavours(t, i) ? " · raised by the " + lzFavours(t, i) + " allele" : ""),
+    ...(lzStatus(t, i) ? ["gene status in the paper: " + esc(lzStatus(t, i))] : [])]; }
 function toggleTrait(t) { if (S.traits.has(t)) S.traits.delete(t); else S.traits.add(t); go(); }
 function qtlTip(i) {
   const q = Q(); const out = ["<b>" + esc(tname(q.t[i])) + "</b> · " + esc(qcross(i))];
@@ -806,7 +814,7 @@ function renderGeneCard() {
       eq = '<br><b>Genetic effects on its expression</b> <button class="btn" data-eg="clear" style="padding:1px 7px">hide</button>';
       for (const n of geneKinds()) { const rs = EQ.rows.filter(r => r.t.kind === n).sort((a, b) => b.t.lod[b.i] - a.t.lod[a.i]);
         eq += '<br>' + esc(GKINDS[n][0]) + ': ' + rs.length + (rs.length ? '' : ' (none reported)') +
-          (rs.length ? '<div class="list" style="max-height:140px;margin-top:2px">' + rs.map(r => '<a href="#" data-eqc="' + r.t.c[r.i] + '" data-eqa="' + r.t.a[r.i] + '" data-eqe="' + r.t.e[r.i] + '"><span>' + (r.t.loc[r.i] === 1 ? "local" : r.t.loc[r.i] === 0 ? "distant" : "") + ' · <span class="mono">' + r.t.c[r.i] + ':' + fmt(r.t.p[r.i]) + '</span></span><span class="k">LOD ' + num(r.t.lod[r.i], 1) + '</span></a>').join("") + '</div>' : ''); }
+          (rs.length ? '<div class="list" style="max-height:140px;margin-top:2px">' + rs.map(r => '<a href="#" data-eqc="' + r.t.c[r.i] + '" data-eqa="' + r.t.a[r.i] + '" data-eqe="' + r.t.e[r.i] + '"><span>' + (r.t.loc[r.i] === 1 ? "local" : r.t.loc[r.i] === 0 ? "distant" : "") + ' · <span class="mono">' + r.t.c[r.i] + ':' + fmt(r.t.p[r.i]) + '</span></span><span class="k">' + (lzFavours(r.t, r.i) ? esc(lzFavours(r.t, r.i)) + ' ↑ · ' : '') + 'LOD ' + num(r.t.lod[r.i], 1) + (lzStatus(r.t, r.i) ? ' · ' + esc(lzStatus(r.t, r.i)) : '') + '</span></a>').join("") + '</div>' : ''); }
     }
     else if (S.eg === i) eq = '<br>' + (EQ.err ? 'File did not load (' + esc(EQ.err) + ')' : 'Loading…');
     else eq = '<br><button class="btn" data-eg="' + i + '" style="margin-top:4px">Show ' + geneKinds().map(n => GKINDS[n][1]).join(" and ") + ' for its expression</button>';

@@ -2,8 +2,8 @@
 
 A static browser for every QTL the Kruglyak lab has mapped in yeast, one dataset at a time,
 in the visual language of the
-[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). Nine datasets so far
-(14,356 QTL drawn, 180 traits, plus 36,498 eQTL loaded per gene on demand):
+[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). Ten datasets so far
+(14,356 QTL drawn, 180 traits, plus 36,498 eQTL and 1,025 pQTL loaded per gene on demand):
 
 | dataset | design | QTL |
 |---|---|---|
@@ -11,6 +11,7 @@ in the visual language of the
 | Bloom et al. 2015, Nat Commun | BY × RM, 4,390 segregants | 797, 20 traits |
 | Bloom et al. 2013, Nature | BY × RM, ~1,000 segregants | 591, 46 traits |
 | Albert et al. 2018, eLife | BY × RM eQTL, 1,012 segregants | 102 trans-eQTL hotspots; 36,498 eQTL on demand |
+| Albert et al. 2014, Nature | X-pQTL for 160 GFP-tagged proteins in BY × RM pools | 1,025 pQTL on demand |
 | Treusch et al. 2015, PLoS Genet | X-QTL in a 12-strain round robin, plus BY × RM | 97 (60 grouped across crosses), caffeine and salt |
 | Ehrenreich et al. 2012, PLoS Genet | X-QTL in all 6 crosses of BY, RM, YJM789, YPS163 | 411 loci, 13 chemicals |
 | Ehrenreich et al. 2010, Nature | X-QTL in BY × RM pools | 2 tabulated loci (the rest are figures only) |
@@ -45,9 +46,10 @@ below). Locally: `python3 -m http.server --directory docs` and open http://local
   and the verbatim source row with file, sheet and row number.
 - **Table view.** The full QTL table, filterable by dataset, model, trait, cross,
   chromosome, LOD and |effect|, sortable, with a download of the filtered rows as TSV.
-- **eQTL on demand.** Search `TDH3 expression` (or open a gene and press "Show eQTL for its
-  expression") to draw that gene's eQTL from Albert 2018 genome-wide, local and distant, with
-  the gene marked. The heatmap carries eQTL density rows for the whole set.
+- **eQTL and pQTL on demand.** Search `TDH3 expression` (or open a gene and press "Show eQTL
+  and pQTL for its expression") to draw that gene's mRNA eQTL (Albert 2018) and protein pQTL
+  (Albert 2014) genome-wide on adjacent tracks, local and distant, with the gene marked and the
+  parent whose allele raises the level named for each. The heatmap carries eQTL density rows for the whole set.
 - **Search.** Genes (`IRA2`, `YOL081W`), coordinates (`chrIV:509600`, `IV:400k-600k`),
   traits (`caffeine`), crosses (`375`, `M22 x BY`), parent strains (`YJM454`) and datasets
   (`Bloom 2019`, `round robin`).
@@ -98,6 +100,7 @@ with `python3 -I` and reads only from `sources/`.
 | Bloom et al. 2015 | Nature Communications supplementary information and Data 1-5 (including genotypes and phenotypes) | R64, no transform |
 | Ehrenreich et al. 2010 | Nature supplementary information PDF and the article page | consistent with R64, no transform |
 | Albert et al. 2018 | eLife bundle `elife-35471-supp-v1.zip`, unpacked (zip checksum in `SOURCE_ZIP.tsv`) | R64, no transform |
+| Albert et al. 2014 | Nature supplementary information and Data 1-3 and the article page | consistent with R64, no transform |
 | Gou et al. 2019 | article PDF and supplement zip supplied by the user; QTL notebooks from `gouliangke/Mutation-rate` @ `bcaf987` | none (chromosome only) |
 | genes | SGD S288C annotation R64-5-1, via `brunig/microscale-xqtl` `docs/data.json` | R64 |
 
@@ -116,7 +119,7 @@ settled a question the atlas uses the most defensible reading and says so in `OP
 Each dataset has `tests/test_<id>.py`, which checks the paper's own reported numbers
 against the ingested tables, coordinate sanity (inside R64 chromosomes, start ≤ peak ≤ end),
 provenance, and that every source row is kept verbatim. Run them all with `./build.sh test`:
-205 pass, 2 are skipped (not checkable from the files), and 23 are strict expected failures,
+225 pass, 3 are skipped (not checkable from the files), and 24 are strict expected failures,
 each a number in a paper that its own supplementary files do not reproduce, named with file
 and column (for example Bloom 2019's 105 candidate genes at FDR 5%, 102 in the table;
 Breunig 2014's 52 linkages, 53 in Table S1). `OPEN_QUESTIONS.md` explains each one.
