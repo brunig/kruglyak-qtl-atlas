@@ -2,9 +2,17 @@
 
 A static browser for every QTL the Kruglyak lab has mapped in yeast, one dataset at a time,
 in the visual language of the
-[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). The first dataset is
-the 16-parent round-robin segregant panel of Bloom et al. 2019 (eLife 8:e49212): 4,552
-joint-model QTL and 7,751 within-cross QTL for 38 traits in 16 crosses (13,950 segregants).
+[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). Four datasets so far
+(12,864 QTL, 95 traits):
+
+| dataset | design | QTL |
+|---|---|---|
+| Bloom et al. 2019, eLife | 16-parent round-robin segregant panel, 13,950 segregants | 4,552 joint-model + 7,751 within-cross, 38 traits |
+| Treusch et al. 2015, PLoS Genet | X-QTL in a 12-strain round robin, plus BY × RM | 97 (60 grouped across crosses), caffeine and salt |
+| Ehrenreich et al. 2012, PLoS Genet | X-QTL in all 6 crosses of BY, RM, YJM789, YPS163 | 411 loci, 13 chemicals |
+| Breunig et al. 2014, PLoS Genet | BY × RM segregants, metabolite levels | 53 linkages, 34 metabolites (genetic positions only) |
+
+Details, counts and the queue of papers still to ingest: `DATASETS.md`.
 
 **Open it:** https://brunig.github.io/kruglyak-qtl-atlas/ (once GitHub Pages is enabled; see
 below). Locally: `python3 -m http.server --directory docs` and open http://localhost:8000.
@@ -16,7 +24,11 @@ below). Locally: `python3 -m http.server --directory docs` and open http://local
   track: a stem at each reported peak over a strip for its 1.5-LOD interval. Stem height is
   the LOD (log scale) or the signed effect, switchable; up means the second-named parent's
   allele (joint track: the alternate allele) makes larger colonies. These are the paper's
-  reported QTL, not LOD curves: the bundle has no genome-wide scans.
+  reported QTL, not LOD curves: no paper so far published genome-wide scans. With several
+  datasets selected, tracks are grouped by paper; a QTL a paper grouped across crosses is
+  drawn in each of those crosses, and one reported without LOD or without an effect size is a
+  hollow marker. QTL with a genetic position only (Breunig 2014) are listed in the table and
+  card, not drawn.
 - **Region view.** The same per-cross tracks for the selected traits, then every QTL from
   every trait and cross overlapping the region (or only the selected traits), the paper's candidate genes coloured by evidence tier, and the SGD gene
   track.
@@ -31,7 +43,7 @@ below). Locally: `python3 -m http.server --directory docs` and open http://local
 - **Search.** Genes (`IRA2`, `YOL081W`), coordinates (`chrIV:509600`, `IV:400k-600k`),
   traits (`caffeine`), crosses (`375`, `M22 x BY`), parent strains (`YJM454`) and datasets
   (`Bloom 2019`, `round robin`).
-- **Dataset chips**, a model switch (joint / within-cross / both), trait and cross filters,
+- **Dataset chips**, a model switch (all / within-cross / joint / X-QTL), trait and cross filters,
   and a URL hash that carries the full state, with copy-link buttons.
 
 The atlas shows what the papers reported. Candidate genes carry the paper's evidence tier
@@ -70,25 +82,32 @@ with `python3 -I` and reads only from `sources/`.
 
 | dataset | source | build |
 |---|---|---|
-| Bloom et al. 2019 | eLife supplementary bundle `elife-49212-supp-v1.zip` (Figure 1-4 source data, Supplementary files 1-3), checksums in `sources/bloom2019/MANIFEST.tsv` | S288C R64 (sacCer3), no transform |
+| Bloom et al. 2019 | eLife bundle `elife-49212-supp-v1.zip` | S288C R64 (sacCer3), no transform |
+| Treusch et al. 2015 | PLOS supporting information S1-S14 and the article page | R64, no transform |
+| Ehrenreich et al. 2012 | PLOS supporting information S1-S17 and the article page | consistent with R64 at locus resolution; no transform |
+| Breunig et al. 2014 | PLOS supporting information S1-S8 and the article page | none (cM only) |
 | genes | SGD S288C annotation R64-5-1, via `brunig/microscale-xqtl` `docs/data.json` | R64 |
 
-Column semantics (interval method, effect units and signs, FDR procedure, how candidate
+Each dataset's raw files sit untouched in `sources/<id>/raw/` with checksums in
+`sources/<id>/MANIFEST.tsv`.
+
+For Bloom 2019, column semantics (interval method, effect units and signs, FDR procedure, how candidate
 genes were assigned) come from the authors' analysis code,
 [joshsbloom/yeast-16-parents](https://github.com/joshsbloom/yeast-16-parents) at commit
-`c913c9a`, and are written out in `SCHEMA.md`. Where the code did not settle a question the
-atlas uses the most defensible reading and says so in `OPEN_QUESTIONS.md`.
+`c913c9a`; for Ehrenreich 2012, from the peak caller published with the paper; for the others,
+from the paper's methods. They are written out in `SCHEMA.md` and each ingest. Where nothing
+settled a question the atlas uses the most defensible reading and says so in `OPEN_QUESTIONS.md`.
 
 ## Validation
 
-`tests/test_bloom2019.py` checks the paper's numbers against the ingested tables: 16
-parents in 16 crosses, 13,950 segregants (mean 872), 38 traits, 4,552 joint QTL (mean 120 per
-trait, range 52-195), a median of 12 within-cross QTL per trait and cross, numbers the
-authors recorded in their code, coordinates inside R64 chromosomes, start ≤ peak ≤ end,
-candidate-gene placement, the cAMP-pathway genes, Supplementary file 3's per-trait counts,
-and that every row keeps its source row. Six paper numbers the data do not reproduce are
-strict expected failures that name the file and column (105 genes at FDR 5%, 458
-joint-only QTL, 24 of 26 validated genes, and others); see `OPEN_QUESTIONS.md`.
+Each dataset has `tests/test_<id>.py`, which checks the paper's own reported numbers
+against the ingested tables, coordinate sanity (inside R64 chromosomes, start ≤ peak ≤ end),
+provenance, and that every source row is kept verbatim. Run them all with `./build.sh test`:
+100 pass, 1 is skipped (not checkable from the files), and 14 are strict expected failures,
+each a number in a paper that its own supplementary files do not reproduce, named with file
+and column (for example Bloom 2019's 105 candidate genes at FDR 5%, 102 in the table;
+Breunig 2014's 52 linkages, 53 in Table S1). `OPEN_QUESTIONS.md` explains each one.
+`node tests/render.mjs` checks the browser (36 checks).
 
 ## Adding a dataset
 

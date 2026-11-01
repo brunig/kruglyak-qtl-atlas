@@ -7,9 +7,9 @@ set -euo pipefail
 cd "$(dirname "$0")"
 rm -rf build/fragments
 python3 -I ingest/inventory.py
-for f in ingest/bloom2019.py; do   # add new dataset ingests here; each merges into docs/data.json
+for f in ingest/bloom2019.py ingest/breunig2014.py ingest/ehrenreich2012.py ingest/treusch2015.py; do   # each merges into docs/data.json
   python3 -I "$f"
 done
 if [[ "${1:-}" == "test" ]]; then
-  python3 -I -m pytest -q tests/test_bloom2019.py
+  python3 -I -m pytest -q tests/
 fi

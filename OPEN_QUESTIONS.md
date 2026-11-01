@@ -127,11 +127,244 @@ it. `mapping.R` drops plate A11 from cross A for within-cross mapping "so statis
 is similar to other crosses", so fewer segregants entered that model. The atlas reports 951
 as the source does.
 
+## Treusch et al. 2015
+
+Sources: the 14 supporting-information files in `sources/treusch2015/raw/` and the article
+page `sources/treusch2015/article.html`. The paper's VCFs, mapping data and R scripts are on
+Dryad (doi:10.5061/dryad.j20f0), which is not reachable from the build environment, so no
+code could settle the questions below.
+
+### T1. What the grouped QTL's LOD, peak and interval are
+S4 gives one row per region per condition, grouped over crosses: "Combined LOD score of
+grouped QTL", "Position with highest LOD score across grouped QTL", and a 2-LOD interval
+built from "the mean of replicated QTL intervals" (Methods). How LODs were combined across
+crosses, mating types and doses is not stated beyond "a conservative estimate"; values such as
+41.2375 suggest averages over replicate selections. **Atlas:** stored as given in `qtl.lod`,
+`qtl.p`, `qtl.a`/`qtl.e`; the region is one row with `x = -1` and `xs` = the crosses listed.
+The per-cross LOD and interval of a grouped QTL are not in the bundle.
+
+### T2. 155 per-cross QTL vs 118 in S4
+The paper reports 155 QTL "identified across the twelve crosses and the different
+conditions". Summing "# Crosses with QTL" over the 60 regions of S4 gives 118. The 155 count
+QTL per cross before doses of the same condition were merged (0.5 M with 1 M NaCl, 15 mM with
+20 mM caffeine); those per-cross rows are not published. Not reproducible from the bundle.
+
+### T3. 13 vs 14 regions shared between salt and caffeine
+The paper reports 13 regions recurring between conditions. Overlapping 2-LOD intervals in S4
+give 14 (in both directions). The paper does not define recurrence; it may require more than
+interval overlap.
+
+### T4. S8 bold flags do not mark all multi-condition MAT QTL
+The S8 caption says QTL found in multiple conditions are in bold; 11 rows are bold. The text
+says 14 of the 19 stress MAT QTL were found at another dose or in the other stress, and
+interval overlap within a cross reproduces exactly 14 (the bold rows plus Cross 4 chr12,
+Cross 8 chr11 and Cross 10 chr13, which are not bold). **Atlas:** the bold flag is kept in
+`qtl.k` and as an extra column of the verbatim row; the 14 is tested by overlap.
+
+### T5. Candidate genes outside their interval
+Two of the paper's named candidates fall outside the row's 2-LOD interval (SGD R64-5-1):
+CYR1 for Caff.chr10.2 by 63 bp, and GPA1 for Cross 10 / 15 mM caffeine / chr08 by 9.5 kb
+(the other five GPA1 MAT rows contain it). Kept as the paper assigned them.
+
+### T6. Candidate-gene tokens that are not single SGD genes
+"ENA locus" (NaCl.chr04.1) names the multi-copy ENA region, not one gene, and "STK2"
+(NaCl.chr10.1) matches no SGD R64-5-1 standard or systematic name. Both are kept as text in
+`causal.name` with `g = -1`; `qtl.g` takes the first listed token that is an SGD gene. "YJL107c &
+YJL108c" is split into the two systematic names.
+
+### T7. Evidence tiers for this dataset
+Tier `x` = confirmed by allele replacement in this paper ("(confirmed)" in S4: TOR1, WHI2);
+tier `c` = candidate gene named by the paper (S4 and S8 "Candidate QTG"). There is no FDR:
+QTL were called at LOD 5 (`datasets.fdr` is null).
+
+### T8. Direction of effects
+X-QTL give no effect size. For grouped QTL, S7 lists the strains carrying beneficial and
+deleterious alleles (`qtl.ups`, `qtl.dns`). At multi-allelic loci a strain can appear in both
+lists (ENA: CLIB219 and M22), which is kept as given. For S3 and S8 rows no direction is
+reported.
+
+### T9. Strain names and identities
+Parents use Bloom 2019's display names where the background is the same (273614X → `273614`);
+`parents.s1` keeps the isolate label used in S1 (e.g. `M22_1b`, `273614X_b`). Whether these
+are the same isolates as the Bloom 2019 parents (which list different strain IDs and markers)
+is not established by either bundle. Ecological origin (`parents.org`) comes from the side
+table in S7 ("Subgroup: Source"). BY and RM, used only in the replicate experiments (S3), have
+no S1 or S7 entry.
+
+### T10. Positions at 14,900
+Many lower bounds (and some peaks) are 14,900 or 15,000, at the left end of chromosomes. This
+looks like the first marker after masking the chromosome ends rather than a true interval
+bound; it is kept as given.
+
+### T11. MAT QTL traits
+S8 LODs compare MATa with MATα pools under one condition, a different quantity from the
+selection-vs-YPD LOD of S3/S4. They are stored as separate traits ("MATa vs MATα, <condition>").
+
+### T12. Trait matching across datasets
+Grouped QTL combine doses, so their condition key is `caffeine 15-20mM` / `nacl 0.5-1M`
+rather than a single dose; S3's `15mM Caffeine` row is keyed `caffeine 15mM` like Bloom 2019.
+
+
+## Ehrenreich et al. 2012
+
+Files are the PLOS supporting-information files in `sources/ehrenreich2012/raw/`
+(`journal.pgen.1002570.sNNN`); "the text" is the article page `sources/ehrenreich2012/article.html`.
+
+### Q1. Genome build of the positions
+The arrays were designed from "the BY genome sequence obtained from the Saccharomyces Genome
+Database" (Methods); the release is not stated. The S288C reference was revised to R64 in
+February 2011, and the paper was received in July 2011, so the design may predate R64. What the
+files show: no position in File S10 or in the intensity files (S2-S7) exceeds an R64 chromosome
+length; the loci the text places near CAN1, ENT3/RSF2/VPS70 and MKT1 sit at those genes' R64
+positions; and every File S11 candidate gene is on the locus chromosome within 15 kb in R64.
+**Atlas (most defensible reading):** positions are used as given, with no transform, and
+`datasets.build` says the release is unknown. Any offset between the design release and R64 is far
+smaller than the 200 kb grouping window and the 50 kb heatmap bins, but single-gene placement near
+a locus should not be read more finely than that.
+
+### Q2. What `position` is
+File S10 gives one position per distinct locus. The Methods group peaks "starting with the most
+strongly selected peak on each chromosome" within 200 kb. **Atlas (most defensible reading):** the
+position is that strongest peak's position. Loci are stored as points (`a = e = p`); there is no
+interval, LOD or effect size anywhere in the files, and the peak caller (Files S8/S9) never
+computes one.
+
+### Q3. Direction
+`<cross>_sign` is +1 when the first-named (MATalpha) parent's allele is enriched, -1 for the MATa
+parent's, 0 when no peak was detected (always consistent with the TRUE/FALSE columns). This
+follows from the Methods (log10 MATalpha minus MATa probe intensity, selection minus controls) and
+is confirmed by the data: the BY-resistant singleton pattern `1_1_1_0_0_0` has count 10 in both
+File S10 and Table S1, and Copper sulfate in BYxRM has 18 BY-favoured and 2 RM-favoured loci, as in
+the text. **Atlas:** `qtl.xs` lists the crosses with a peak and `qtl.ups` / `qtl.dns` hold, element
+by element, the favoured and disfavoured parent in that cross. This pairing is a convention of this
+dataset that the schema text does not yet state.
+
+### Q4. 837 vs 836 peaks
+The text reports 837 peaks; File S10 has 836 detected per-cross peaks. Not reproducible from the
+files. The text's mean of 10.7 peaks per experiment holds either way.
+
+### Q5. Pleiotropic 50-kb bins
+The text names three bins with 8 or more distinct loci (chrV near CAN1, chrX near ENT3/RSF2/VPS70,
+chrXIV near MKT1). Binning File S10 positions from each chromosome start gives chrV 0-50 kb,
+chrX 650-700 kb, chrXII 650-700 kb and chrXV 600-650 kb; the MKT1 bin has fewer than 8. The
+paper's bin boundaries (and whether it counted distinct loci or traits) are not given.
+
+### Q6. Candidate genes and the two validated genes
+File S11 ("candidate genes for bi-allelic loci") covers the 135 allelic-singleton loci only, not the
+28 doubletons, with 1-14 genes per locus (mean 6.4), which matches the text's list restricted to
+genes with nonsynonymous polymorphisms ("average ... 6 per locus"), not the broader list (mean 10,
+range 1-18). **Atlas:** each gene is a `causal` row with tier `c` (candidate named by the paper);
+no single gene is assigned to a locus (`qtl.g = -1`). The text validates RED1 (tunicamycin) and
+HXT6 (rich medium) by allele replacement, but RED1 (YLR263W) appears in File S11 only for 4-NQO,
+benomyl, copper sulfate, cycloheximide and LY83583, and HXT6 not at all; no row is therefore
+given a "validated" tier. `causal.eff` (whether the singleton strain's allele increases
+resistance) is derived from that locus's File S10 signs.
+
+### Q7. YER109C
+One File S11 gene, YER109C, is not in the SGD R64-5-1 gene table the atlas uses; its row is kept
+with `causal.g = -1` and no coordinates.
+
+### Q8. Tables S1 and S2 are pictures
+Both are images inside Word files. The singleton/doubleton rules of Table S1 reproduce the text's
+135 singletons and 28 doubletons from File S10, and its legible class totals (BY 26/16, YJM 7/11,
+YPS 9/17, BY=RM 7/5, BY=YPS 7/3) were transcribed by eye for the tests. Table S2 (allelic series)
+is not ingested; the 248 loci outside the two simple classes equal the text's 210 uninterpretable
+loci plus 29 + 9 allelic series.
+
+### Q9. Doses and condition keys
+Each chemical was used at a cross-specific dose (File S1), so a trait has no single dose:
+`traits.cond` lists the six doses, and `traits.ck` is the compound alone (`sds` for sodium dodecyl
+sulfate, to match Bloom 2019's spelling). The SDS doses in File S1 are bare numbers (0.001,
+0.00125), most likely fractions (0.1%); kept as written.
+
+### Q10. Intensity files not in docs/
+Files S2-S7 (6 MB each, about 20,000 probes per cross) are checksummed in `MANIFEST.tsv` but not
+copied into `docs/`. Five values in them (one or two in each of S3-S6) are written in R's scientific notation (`1e+06`); a
+reader must parse them as numbers.
+
+
+## Breunig et al. 2014
+
+Sources: `sources/breunig2014/raw/` (PLOS Genetics supporting information) and the article page
+`sources/breunig2014/article.html`. Statements taken from the article text are transcribed, with
+their quotes and sections, in `sources/breunig2014/extracted/text_facts.tsv`.
+
+### Q1. No physical positions: linkages are not placed on R64
+Table S1 (`journal.pgen.1004142.s006.pdf`) gives, for each linkage, the closest marker's
+chromosome (as a number) and its position in **cM** (column `Position (cM)`). No base-pair
+position appears in any table or in the text, and the 2,820-marker genotype map (Brem &
+Kruglyak 2005, ref. [32]) is not in the bundle. Converting with the paper's average spacing
+(4.3 kb per 1.5 cM) would invent positions.
+**Atlas:** `qtl.a`, `e`, `p` are `null`, `qtl.c` is the chromosome and the new column `qtl.cm`
+holds the cM position. The dataset's `build` says "none". The genome and region views
+cannot draw these rows until a marker map with physical positions is added as a source
+(`sources/breunig2014/` would need the BY×RM marker table from Brem & Kruglyak 2005 or
+Smith & Kruglyak 2008; blocked here). The table view and the QTL card can show them.
+
+### Q2. Confidence intervals are only in figures
+95% Bayes credible intervals (R/qtl `bayesint`) are drawn in Figures S2-S4 (EPS images) for the
+chrV, chrVIII and chrXV hot spots. They are not tabulated and are not read off the images.
+
+### Q3. 53 rows in Table S1, not 52
+The text and the table caption say "All 52 linkages"; the table has 53 data rows. By compound,
+21 have one linkage and 9 have two (as stated), but two have three (ribose-phosphate, valine)
+and two have four (hexose-phosphate, Sedoheptulose 7-phosphate), where the text says three and
+one. The fourth hexose-phosphate row (chr13, 14.31 cM) is the only one of its rows with
+parental p-value `N/A`, which may mean it came from a separate measurement (as the `*` rows for
+S-adenosyl homocysteine did), but the table does not say so. **Atlas:** all 53 rows kept.
+
+### Q4. Compounds and footnote marks
+Names keep their footnote marks in `traits.raw`. `*` (S-adenosyl homocysteine): "same compound
+but in different ionization modes"; its two rows (chrVIII 98.70 and 92.85 cM) are one trait
+with two QTL, labelled in `qtl.k`. `†` (glutathione, glutathione disulfide): "considered same
+compound"; they stay two traits, as Table S1 lists them under two names, which is how the count
+of 34 compounds in the text comes out. `NAD+_posi`, `NADP+_posi` are read as positive-ion-mode
+measurements (most defensible reading of the suffix).
+
+### Q5. Parental differences: 28 of 34, not 29
+The text says 29 of the 34 compounds with mQTL differed between parents at FDR 5%. With the
+caption's cutoff (p = 0.0898) applied to column `Parent's P-value`, 28 compounds pass on any of
+their rows; the others are `N/A` (not detected in both parents) or larger.
+
+### Q6. Direction and candidate genes come from the text
+Effect sizes are not reported. Direction (`qtl.up`) is set only where the text states it for a
+specific linkage: BY allele higher for the five chrXV (ira2) metabolites; RM allele (the
+engineered ura3 deletion) higher for orotate and orotidine-5'-phosphate (allele replacement);
+RM allele higher for SAM on chrVIII (Figure 5 title). Candidate genes (tier `c`, "candidate
+named by the paper") are IRA2 for the five chrXV linkages, URA3 for the five chrV linkages, and
+SLT2 and ERC1 for SAM and SAH on chrVIII. Thiamine shares the chrVIII hot spot but the paper
+does not tie it to slt2/erc1, so it has no candidate. The candidate rows have no FDR.
+
+### Q7. Hot spots
+The text defines 8 hot spots (m1-m8) by binning linkage peaks into 10 kb bins. Without physical
+positions the bins cannot be rebuilt, and hot-spot labels are not in Table S1, so they are not
+stored.
+
+### Q8. Compounds tested without linkage
+74 compounds were tested; only the 34 with a linkage are named in a table. The other 40 are not
+in the atlas.
+
+### Q9. Text-derived provenance
+Provenance keys for candidate genes, directions and the cross point to rows of
+`sources/breunig2014/extracted/text_facts.tsv` (`b14:TF#<row>`), a transcription from the
+article page rather than a file of the bundle. `sources.file` for it is
+`../extracted/text_facts.tsv` (relative to `raw/`), with its own SHA-256.
+
 ## Blocked steps
 
 ### B1. GitHub Pages
-The first push was refused (403) until GitHub access was connected; the branch
-`claude/focused-albattani-bvuv83` is now pushed and is the repository's only branch.
-Enabling Pages is a repository setting the build session cannot change: Settings → Pages →
-Deploy from a branch → this branch (or `main` after a merge), folder `/docs`.
-`docs/.nojekyll` is present. The site will be at https://brunig.github.io/kruglyak-qtl-atlas/.
+Done: Pages serves branch `claude/main`, folder `/docs`, at https://brunig.github.io/kruglyak-qtl-atlas/.
+Work from this session is pushed to `claude/focused-albattani-bvuv83` and reaches the site
+when merged into `claude/main`.
+
+### B2. Papers whose supplements could not be fetched
+From the build environment (network policy as of 2026-11-01):
+- **Nature / Nature Communications** (Bloom 2013, Bloom 2015, Ehrenreich 2010): `www.nature.com`
+  sends every article request through `idp.nature.com`, which is not an allowed host.
+- **eLife** (Albert 2018): `elifesciences.org` answers 406 to plain requests; disguising the
+  request as a browser was refused as bot-check circumvention and was not attempted further.
+- **Genetics / OUP** (Gou 2019): `academic.oup.com` answers 403; `gsajournals.figshare.com`,
+  `figshare.com` and `doi.org` are not allowed hosts.
+- **Dryad** (Treusch 2015 code and mapping data): not an allowed host.
+Fix: add `idp.nature.com`, `doi.org`, `*.figshare.com`, `datadryad.org` to the environment's
+allowed domains, or supply the files directly (upload, or a shared folder).

@@ -164,9 +164,10 @@ footer a { color: var(--muted); }
       </div>
       <div class="chips" id="dschips" aria-label="Datasets"></div>
       <div class="seg" role="group" aria-label="Model">
-        <button id="m-both" aria-pressed="true" title="Joint-model and within-cross QTL">Both</button>
-        <button id="m-j" aria-pressed="false" title="Joint model: all crosses mapped together; one lead variant per QTL">Joint</button>
-        <button id="m-w" aria-pressed="false" title="Within-cross model: each cross mapped on its own; 1.5-LOD intervals">Within-cross</button>
+        <button id="m-both" aria-pressed="true" title="Every QTL">All</button>
+        <button id="m-w" aria-pressed="false" title="Linkage in one cross of individually genotyped segregants">Within-cross</button>
+        <button id="m-j" aria-pressed="false" title="Joint model: several crosses mapped together; one lead variant per QTL">Joint</button>
+        <button id="m-x" aria-pressed="false" title="X-QTL: bulk-segregant pools selected under a condition">X-QTL</button>
       </div>
       <div class="popwrap"><button class="btn" id="b-traits" aria-expanded="false">Traits</button><div class="pop" id="p-traits" hidden></div></div>
       <div class="popwrap"><button class="btn" id="b-crosses" aria-expanded="false">Crosses</button><div class="pop" id="p-crosses" hidden></div></div>
@@ -258,10 +259,12 @@ footer a { color: var(--muted); }
 "use strict";
 const ARTIFACT_URL = "";
 const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI"];
-const CAT_ORDER = ["drug/chemical", "osmotic stress", "carbon source", "temperature", "pH", "reference medium"];
+const CAT_ORDER = ["drug/chemical", "osmotic stress", "carbon source", "temperature", "pH", "reference medium", "metabolite"];
+const DS_COLS = ["--accent", "--contrast", "--ace", "--t-cnv", "--t-dam", "--caf"];
+const MODEL = { w: "Within-cross", j: "Joint model", x: "X-QTL" };
 const TRAIT_COLS = ["--accent", "--contrast", "--ace", "--t-cnv", "--t-dam", "--thresh", "--caf", "--nacl"];
-const TIER = { v: ["Previously identified", "--t-cnv", "P"], "5": ["Local FDR < 5%", "--accent", "5%"], "20": ["Local FDR < 20%", "--faint", "20%"] };
-const TIER_RANK = { v: 0, "5": 1, "20": 2 };
+const TIER = { v: ["Previously identified", "--t-cnv", "P"], "5": ["Local FDR < 5%", "--accent", "5%"], "20": ["Local FDR < 20%", "--faint", "20%"], c: ["Candidate named by the paper", "--ace", "C"], x: ["Confirmed by allele replacement", "--t-cnv", "R"] };
+const TIER_RANK = { x: 0, v: 1, "5": 2, c: 3, "20": 4 };
 const CHGAP = 120000;
 const DEFAULT_TRAIT = "Cadmium_Chloride;75uM;2";
 let D, CH, CHL, CHSTART = {}, GLEN = 0, NQ = 0, HB = 50000;
@@ -273,7 +276,7 @@ function css(v) { return getComputedStyle(document.documentElement).getPropertyV
 function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
 function fmtkb(n) { return n >= 1e6 ? (n / 1e6).toFixed(n % 1e6 ? 2 : 0) + " Mb" : n >= 1000 ? (n / 1e3).toFixed(n % 1e3 ? 1 : 0).replace(/\.0$/, "") + " kb" : n + " bp"; }
 function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
-function sgn(v, d) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d == null ? 3 : d); }
+function sgn(v, d) { if (v == null) return ""; return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d == null ? 3 : d); }
 function num(v, d) { return v == null ? "" : (+v).toFixed(d); }
 function pct(v) { return v == null ? "" : (100 * v).toFixed(1) + "%"; }
 
@@ -282,6 +285,13 @@ const Q = () => D.qtl;
 function pname(i) { return i == null || i < 0 ? "" : D.parents.name[i]; }
 function xlabel(x) { return x < 0 ? "Joint model" : pname(D.crosses.p1[x]) + " × " + pname(D.crosses.p2[x]); }
 function xshort(x) { return x < 0 ? "joint" : D.crosses.code[x]; }
+// where a QTL was found, in words: one cross, several crosses, or the joint model
+function qcross(i) { const q = Q(); if (q.x[i] >= 0) return xlabel(q.x[i]); const xs = qxs(i); if (xs) return xs.length + " crosses (" + xs.map(x => D.crosses.code[x]).join(", ") + ")"; return q.m[i] === "j" ? "all crosses (joint model)" : "pooled"; }
+function qcrossShort(i) { const q = Q(); if (q.x[i] >= 0) return D.crosses.code[q.x[i]]; const xs = qxs(i); if (xs) return xs.length + " crosses"; return q.m[i] === "j" ? "joint" : "pooled"; }
+// Some sources give the favoured parent cross by cross: ups[k], dns[k] then belong to xs[k]
+function alignedDir(i) { const q = Q(), xs = qxs(i); if (!xs || !q.ups || !q.ups[i] || !q.dns || !q.dns[i]) return false;
+  return q.ups[i].length === xs.length && q.dns[i].length === xs.length && xs.every((c, k) => [D.crosses.p1[c], D.crosses.p2[c]].includes(q.ups[i][k])); }
+function mname(i) { return MODEL[Q().m[i]] || Q().m[i]; }
 function tname(t) { return D.traits.name[t]; }
 function tcol(t) { const arr = [...S.traits]; const k = arr.indexOf(t); return k >= 0 && k < TRAIT_COLS.length ? css(TRAIT_COLS[k]) : css("--muted"); }
 function gname(g) { return g < 0 || g == null ? "" : D.genes.n[g] || D.genes.id[g]; }
@@ -293,7 +303,9 @@ function qv(i) {
   const m = q.m[i]; if (S.model !== "both" && S.model !== m) return false;
   if (S.crosses.size) {
     if (m === "w") { if (!S.crosses.has(q.x[i])) return false; }
-    else { const js = JB[i] || []; if (!js.some(j => S.crosses.has(D.jeff.x[j]))) return false; }
+    else if (qxs(i)) { if (!qxs(i).some(x => S.crosses.has(x))) return false; }
+    else if (m === "j") { const js = JB[i] || []; if (!js.some(j => S.crosses.has(D.jeff.x[j]))) return false; }
+    else if (q.x[i] < 0) return false;
   }
   return true;
 }
@@ -308,7 +320,7 @@ function heat() {
   const out = {}; const q = Q();
   for (const t of TORDER) { out[t] = {}; for (const ch of CH) out[t][ch] = new Uint16Array(Math.ceil(CHL[ch] / HB)); }
   let max = 1;
-  for (let i = 0; i < NQ; i++) { if (!qv(i)) continue; const row = out[q.t[i]][q.c[i]];
+  for (let i = 0; i < NQ; i++) { if (q.p[i] == null || !qv(i)) continue; const row = out[q.t[i]][q.c[i]];
     for (let b = Math.floor(q.a[i] / HB); b <= Math.min(row.length - 1, Math.floor(q.e[i] / HB)); b++) { row[b]++; if (row[b] > max) max = row[b]; } }
   out.max = max;
   return (heatCache[key] = out);
@@ -324,7 +336,7 @@ function heatColor(n, max) { return mako(Math.sqrt((n - 1) / Math.max(1, max - 1
 /* ---------- encodings ---------- */
 function lodAlpha(lod) { return 0.3 + 0.7 * Math.min(1, Math.log10(Math.max(1, lod)) / 2); }   // LOD 1 → .3, LOD ≥ 100 → 1
 function efAlpha(ef) { return 0.3 + 0.7 * Math.min(1, Math.abs(ef) / 0.5); }                   // |β| ≥ 0.5 SD → 1
-function qAlpha(i) { const q = Q(); return q.m[i] === "w" ? lodAlpha(q.lod[i]) : efAlpha(q.ef[i]); }
+function qAlpha(i) { const q = Q(); return q.lod[i] != null ? lodAlpha(q.lod[i]) : q.ef[i] != null ? efAlpha(q.ef[i]) : 0.7; }
 
 /* ---------- canvas helpers ---------- */
 function sizeCanvas(cv, h) {
@@ -334,53 +346,93 @@ function sizeCanvas(cv, h) {
 }
 function fitText(ctx, s, w) { if (ctx.measureText(s).width <= w) return s; while (s.length > 1 && ctx.measureText(s + "…").width > w) s = s.slice(0, -1); return s + "…"; }
 
-/* ---------- lollipop tracks: one per cross (plus the joint model), for the selected traits ----------
+/* ---------- lollipop tracks: one per cross, grouped by dataset, for the selected traits ----------
    The interval is a thin strip on the baseline, the peak a stem. Height is LOD on a log scale (LOD 3 to 500)
-   or the signed effect (±0.5 SD; larger effects are clipped and ringed). Joint QTL have no LOD, so their track always shows signed effect. */
+   or the signed effect (±0.5 SD; larger effects are clipped and ringed). A QTL the source reports without that
+   number (a joint-model QTL has no LOD, an X-QTL peak has no effect size) is drawn as a hollow marker. */
 const LOD_LO = Math.log10(3), LOD_HI = Math.log10(500), EF_MAX = 0.5;
-// effect oriented so that up means the second-named parent's allele (within-cross) or the alternate allele (joint) increases colony size
-function upEf(i) { const q = Q(); if (q.m[i] === "j") return q.ef[i]; const x = q.x[i]; return D.crosses.g1[x] === D.crosses.p1[x] ? q.ef[i] : -q.ef[i]; }
-function trackEff(x) { return S.h === "ef" || x < 0; }
+// effect oriented so that up means the second-named parent's allele (one cross) or the alternate allele (joint) increases the trait
+function upEf(i) {
+  const q = Q(), ef = q.ef[i]; if (ef == null) return null;
+  if (q.m[i] === "j") return ef;
+  const x = q.x[i]; if (x < 0) return null;
+  const g1 = D.crosses.g1 ? D.crosses.g1[x] : null;
+  if (g1 != null) return g1 === D.crosses.p1[x] ? ef : -ef;
+  const up = q.up ? q.up[i] : -1;                                   // no genotype coding: use the favoured parent if the source names it
+  return up === D.crosses.p2[x] ? Math.abs(ef) : up === D.crosses.p1[x] ? -Math.abs(ef) : null;
+}
+function qxs(i) { const q = Q(); return q.xs && q.xs[i] && q.xs[i].length ? q.xs[i] : null; }
+function trackRows() {
+  const q = Q(), sel = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
+  const dss = [...new Set(sel.map(t => D.traits.ds[t]))].sort((a, b) => a - b);
+  const rows = [];
+  for (const d of dss) {
+    if (dss.length > 1) rows.push({ k: "h", ds: d });
+    let pooled = false, joint = false, lod = false;
+    for (let i = 0; i < NQ; i++) if (q.ds[i] === d && S.traits.has(q.t[i]) && q.x[i] < 0 && !qxs(i)) { pooled = true; if (q.m[i] === "j") joint = true; if (q.lod[i] != null) lod = true; }
+    if (pooled) rows.push({ k: "p", ds: d, joint, noLod: !lod });
+    for (const x of visCrosses()) if (D.crosses.ds[x] === d) rows.push({ k: "x", x, ds: d });
+  }
+  return rows;
+}
+function rowLabel(r, narrow) {
+  if (r.k === "h") return D.datasets.label[r.ds];
+  if (r.k === "p") return narrow ? (r.joint ? "joint" : "pooled") : (r.joint ? "Joint model" : "Not tied to one cross");
+  return narrow ? D.crosses.code[r.x] : xlabel(r.x);
+}
 function drawTracks(ctx, o) {
-  // o: { L, R, w, top, th, rows, X (i, pos) -> px, inView (i) -> bool, narrow, bands (fn) }
-  const muted = css("--muted"), faint = css("--faint"), rule = css("--rule"), fg = css("--fg");
-  const hits = [];
+  // o: { L, R, w, top, th, rows (from trackRows), X (i, pos) -> px, inView (i) -> bool, narrow, bands (fn) }
+  const muted = css("--muted"), rule = css("--rule"), fg = css("--fg");
+  const hits = [], rowX = {}, rowP = {};
+  o.rows.forEach((r, k) => { if (r.k === "x") rowX[r.x] = k; else if (r.k === "p") rowP[r.ds] = k; });
+  const effRow = r => S.h === "ef" || (r.k === "p" && r.noLod);
   if (o.bands) o.bands(o.top, o.rows.length * o.th);
-  ctx.font = (o.narrow ? "9.5px " : "11px ") + css("--sans"); ctx.textBaseline = "middle";
-  o.rows.forEach((x, r) => {
-    const y0 = o.top + r * o.th, eff = trackEff(x);
-    ctx.fillStyle = x < 0 ? fg : muted; ctx.textAlign = "right";
-    ctx.fillText(fitText(ctx, o.narrow ? (x < 0 ? "joint" : D.crosses.code[x]) : xlabel(x), o.L - 8), o.L - 8, y0 + o.th / 2);
+  ctx.textBaseline = "middle";
+  o.rows.forEach((r, k) => {
+    const y0 = o.top + k * o.th;
+    if (r.k === "h") { ctx.font = "600 " + (o.narrow ? "9.5px " : "11px ") + css("--sans"); ctx.fillStyle = fg; ctx.textAlign = "left"; ctx.fillText(rowLabel(r, o.narrow), 4, y0 + o.th - 7);
+      ctx.fillStyle = rule; ctx.fillRect(0, y0 + o.th - 1, o.w, 1); return; }
+    ctx.font = (o.narrow ? "9.5px " : "11px ") + css("--sans");
+    ctx.fillStyle = r.k === "p" ? fg : muted; ctx.textAlign = "right";
+    ctx.fillText(fitText(ctx, rowLabel(r, o.narrow), o.L - 8), o.L - 8, y0 + o.th / 2);
     ctx.strokeStyle = rule; ctx.lineWidth = 1;
     const line = (y, dash) => { ctx.setLineDash(dash ? [2, 3] : []); ctx.beginPath(); ctx.moveTo(o.L, y); ctx.lineTo(o.w - o.R, y); ctx.stroke(); };
-    if (eff) { line(y0 + o.th / 2, false); line(y0 + o.th / 2 - 0.5 * (o.th / 2 - 4), true); line(y0 + o.th / 2 + 0.5 * (o.th / 2 - 4), true); }
+    if (effRow(r)) { line(y0 + o.th / 2, false); line(y0 + o.th / 2 - 0.5 * (o.th / 2 - 4), true); line(y0 + o.th / 2 + 0.5 * (o.th / 2 - 4), true); }
     else { const yb = y0 + o.th - 3; line(yb, false); for (const l of [10, 100]) line(yb - (Math.log10(l) - LOD_LO) / (LOD_HI - LOD_LO) * (o.th - 8), true); }
     ctx.setLineDash([]);
   });
   const q = Q();
   for (let i = 0; i < NQ; i++) {
-    if (!S.traits.has(q.t[i]) || !qv(i) || !o.inView(i)) continue;
-    const r = q.x[i] < 0 ? 0 : o.rows.indexOf(q.x[i]); if (r < 0) continue;
-    const y0 = o.top + r * o.th, eff = trackEff(q.x[i]), col = tcol(q.t[i]);
-    let yb, yt;
-    if (eff) { yb = y0 + o.th / 2; const v = Math.max(-1, Math.min(1, upEf(i) / EF_MAX)); yt = yb - v * (o.th / 2 - 4); }
-    else { yb = y0 + o.th - 3; const v = Math.max(0.05, Math.min(1, (Math.log10(Math.max(1, q.lod[i])) - LOD_LO) / (LOD_HI - LOD_LO))); yt = yb - v * (o.th - 8); }
-    const xs = o.X(i, q.p[i]);
-    let x0 = xs, x1 = xs;
-    if (q.a[i] !== q.e[i]) { x0 = Math.max(o.L, o.X(i, q.a[i])); x1 = Math.min(o.w - o.R, Math.max(o.X(i, q.e[i]), x0 + 1)); ctx.globalAlpha = 0.35; ctx.fillStyle = col; ctx.fillRect(x0, yb - 1.5, x1 - x0, 3); ctx.globalAlpha = 1; }
-    if (xs >= o.L - 3 && xs <= o.w - o.R + 3) {
-      ctx.strokeStyle = col; ctx.lineWidth = 1.25; ctx.beginPath(); ctx.moveTo(xs, yb); ctx.lineTo(xs, yt); ctx.stroke();
-      ctx.fillStyle = col; ctx.beginPath(); ctx.arc(xs, yt, i === S.q ? 3.6 : 2.6, 0, 7); ctx.fill();
-      if (eff && Math.abs(upEf(i)) > EF_MAX) { ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(xs, yt, 4.6, 0, 7); ctx.stroke(); }
-      if (i === S.q) { ctx.strokeStyle = fg; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(xs, yt, 5.5, 0, 7); ctx.stroke(); }
+    if (q.p[i] == null || !S.traits.has(q.t[i]) || !qv(i) || !o.inView(i)) continue;
+    const xs = qxs(i);
+    const rs = q.x[i] >= 0 ? [rowX[q.x[i]]] : xs ? xs.map(x => rowX[x]) : [rowP[q.ds[i]]];
+    for (const k of rs) {
+      if (k == null) continue;
+      const row = o.rows[k], y0 = o.top + k * o.th, eff = effRow(row), col = tcol(q.t[i]);
+      let yb, yt, hollow = false;
+      if (eff) { yb = y0 + o.th / 2; const u = upEf(i); if (u == null) { yt = yb; hollow = true; } else { const v = Math.max(-1, Math.min(1, u / EF_MAX)); yt = yb - v * (o.th / 2 - 4); } }
+      else { yb = y0 + o.th - 3; if (q.lod[i] == null) { yt = yb; hollow = true; } else { const v = Math.max(0.05, Math.min(1, (Math.log10(Math.max(1, q.lod[i])) - LOD_LO) / (LOD_HI - LOD_LO))); yt = yb - v * (o.th - 8); } }
+      const xp = o.X(i, q.p[i]);
+      let x0 = xp, x1 = xp;
+      if (q.a[i] !== q.e[i]) { x0 = Math.max(o.L, o.X(i, q.a[i])); x1 = Math.min(o.w - o.R, Math.max(o.X(i, q.e[i]), x0 + 1)); ctx.globalAlpha = 0.35; ctx.fillStyle = col; ctx.fillRect(x0, yb - 1.5, x1 - x0, 3); ctx.globalAlpha = 1; }
+      if (xp >= o.L - 3 && xp <= o.w - o.R + 3) {
+        if (hollow) { ctx.strokeStyle = col; ctx.lineWidth = 1.25; ctx.beginPath(); ctx.arc(xp, yt, 2.8, 0, 7); ctx.stroke(); }
+        else {
+          ctx.strokeStyle = col; ctx.lineWidth = 1.25; ctx.beginPath(); ctx.moveTo(xp, yb); ctx.lineTo(xp, yt); ctx.stroke();
+          ctx.fillStyle = col; ctx.beginPath(); ctx.arc(xp, yt, i === S.q ? 3.6 : 2.6, 0, 7); ctx.fill();
+          if (eff && Math.abs(upEf(i)) > EF_MAX) { ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(xp, yt, 4.6, 0, 7); ctx.stroke(); }
+        }
+        if (i === S.q) { ctx.strokeStyle = fg; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(xp, yt, 5.5, 0, 7); ctx.stroke(); }
+      }
+      hits.push({ i, r: k, xs: xp, x0, x1, ya: Math.min(yt, yb) - 5, yb: Math.max(yt, yb) + 4 });
     }
-    hits.push({ i, r, xs, x0, x1, ya: Math.min(yt, yb) - 5, yb: Math.max(yt, yb) + 4 });
   }
   return { top: o.top, th: o.th, rows: o.rows, hits, L: o.L };
 }
 function trackHit(T, x, y) {
   if (!T || y < T.top || y >= T.top + T.rows.length * T.th || x < T.L) return null;
-  const r = Math.floor((y - T.top) / T.th); let best = null, bd = 6;
+  const r = Math.floor((y - T.top) / T.th); if (T.rows[r].k === "h") return -1;
+  let best = null, bd = 6;
   for (const h of T.hits) { if (h.r !== r) continue;
     const ds = Math.abs(x - h.xs) + (y >= h.ya && y <= h.yb ? 0 : 3);
     if (ds < bd) { bd = ds; best = h; } }
@@ -389,9 +441,10 @@ function trackHit(T, x, y) {
 }
 function heightSeg(id) { return '<div class="seg" role="group" aria-label="Stem height"><button data-h="lod" aria-pressed="' + (S.h === "lod") + '" title="Stem height: LOD at the peak, log scale">LOD</button><button data-h="ef" aria-pressed="' + (S.h === "ef") + '" title="Stem height: signed effect, SD units">Effect</button></div>'; }
 function trackLegend() {
-  return '<span><i class="sw" style="--c:var(--accent);width:2px;height:12px;border:0;background:var(--c)"></i>peak; ' + (S.h === "lod" ? "height = LOD (log scale; dotted lines at 10 and 100). The joint track has no LOD and shows signed effect" : "height = effect, ±0.5 SD, larger effects clipped and ringed; dotted lines at ±0.25") + '</span>' +
-    '<span>up = the second-named parent\'s allele (joint track: the alternate allele) makes larger colonies</span>' +
-    '<span><i class="sw box" style="--c:var(--accent);opacity:.4;height:3px"></i>1.5-LOD interval</span>';
+  return '<span><i class="sw" style="--c:var(--accent);width:2px;height:12px;border:0;background:var(--c)"></i>peak; ' + (S.h === "lod" ? "height = LOD (log scale; dotted lines at 10 and 100); a joint-model track has no LOD and shows signed effect" : "height = effect, ±0.5 SD, larger effects clipped and ringed; dotted lines at ±0.25") + '</span>' +
+    '<span><i class="sw box" style="--c:transparent;width:8px;height:8px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--accent)"></i>QTL the source reports without that number</span>' +
+    '<span>effect up = the second-named parent\'s allele (joint: the alternate allele) increases the trait</span>' +
+    '<span><i class="sw box" style="--c:var(--accent);opacity:.4;height:3px"></i>reported interval</span>';
 }
 
 /* ---------- genome view ---------- */
@@ -400,22 +453,32 @@ function drawGenome() {
   const cv = document.getElementById("gcan");
   const narrow = cv.parentElement.clientWidth < 640;
   const L = narrow ? 74 : 168, R = 10, hTop = 22;
-  const traits = visTraits(), crosses = visCrosses();
-  const rowH = narrow ? 8 : 12, heatH = rowH * traits.length;
-  const ivTop = hTop + heatH + 40, ivRows = [-1, ...crosses], ivH = narrow ? 26 : 36, axY = ivTop + ivRows.length * ivH + 8;
+  const traits = visTraits(), multi = S.ds.size > 1 && new Set(traits.map(t => D.traits.ds[t])).size > 1;
+  const hrows = []; let lastDs = -1;
+  const placedT = new Set(); for (let i = 0; i < NQ; i++) if (Q().p[i] != null) placedT.add(Q().t[i]);
+  const unplaced = {};
+  for (const t of traits) { const d = D.traits.ds[t];
+    if (multi && d !== lastDs) { hrows.push({ h: d }); lastDs = d; }
+    if (placedT.has(t)) hrows.push({ t }); else { if (!unplaced[d]) { unplaced[d] = 0; hrows.push({ u: d }); } unplaced[d]++; } }
+  const rowH = narrow ? 8 : 12, heatH = rowH * hrows.length;
+  const ivRows = trackRows(), ivH = narrow ? 26 : 36, ivTop = hTop + heatH + 40, axY = ivTop + ivRows.length * ivH + 8;
   const { ctx, w, h } = sizeCanvas(cv, axY + 26);
   const X = g => L + (g / GLEN) * (w - L - R);
   ctx.clearRect(0, 0, w, h);
   ctx.textBaseline = "middle";
   const H = heat(), muted = css("--muted"), band = css("--band"), nopeak = css("--nopeak"), fg = css("--fg");
   ctx.font = "11px " + css("--sans"); ctx.fillStyle = muted; ctx.textAlign = "left";
-  ctx.fillText("QTL per 50 kb bin, by trait" + (S.model === "both" ? " (joint and within-cross)" : S.model === "j" ? " (joint model)" : " (within-cross)") + (S.crosses.size ? ", selected crosses" : ""), L, hTop - 11);
+  ctx.fillText("QTL per 50 kb bin, by trait" + (S.model === "both" ? "" : " (" + MODEL[S.model].toLowerCase() + " only)") + (S.crosses.size ? ", selected crosses" : ""), L, hTop - 11);
   // heatmap
   ctx.font = (narrow ? "9px " : "10.5px ") + css("--sans");
   let lastCat = null;
-  traits.forEach((t, r) => {
-    const y = hTop + r * rowH, sel = S.traits.has(t);
-    if (!narrow && D.traits.cat[t] !== lastCat && r > 0) { ctx.fillStyle = css("--rule"); ctx.fillRect(L, y, w - L - R, 0.6); }
+  hrows.forEach((hr, r) => {
+    const y = hTop + r * rowH;
+    if (hr.u != null) { ctx.fillStyle = muted; ctx.font = "italic " + (narrow ? "9px " : "10.5px ") + css("--sans"); ctx.textAlign = "left";
+      ctx.fillText(unplaced[hr.u] + " trait" + (unplaced[hr.u] === 1 ? "" : "s") + " with genetic positions only (cM): not placed on the genome; listed in the Table view", L, y + rowH / 2); return; }
+    if (hr.h != null) { ctx.fillStyle = css("--fg"); ctx.font = "600 " + (narrow ? "9px " : "10.5px ") + css("--sans"); ctx.textAlign = "left"; ctx.fillText(fitText(ctx, D.datasets.label[hr.h], L + 200), 4, y + rowH / 2); ctx.fillStyle = css("--rule"); ctx.fillRect(0, y + rowH - 0.5, w, 0.8); lastCat = null; return; }
+    const t = hr.t, sel = S.traits.has(t);
+    if (!narrow && D.traits.cat[t] !== lastCat && lastCat != null) { ctx.fillStyle = css("--rule"); ctx.fillRect(L, y, w - L - R, 0.6); }
     lastCat = D.traits.cat[t];
     ctx.fillStyle = sel ? tcol(t) : muted; ctx.font = (sel ? "600 " : "") + (narrow ? "9px " : "10.5px ") + css("--sans");
     ctx.textAlign = "right"; ctx.fillText(fitText(ctx, tname(t), L - 12), L - 8, y + rowH / 2);
@@ -427,22 +490,22 @@ function drawGenome() {
   // interval panel
   ctx.font = "11px " + css("--sans"); ctx.fillStyle = muted; ctx.textAlign = "left";
   const selT = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
-  ctx.fillText(selT.length ? "QTL of the selected trait" + (selT.length > 1 ? "s" : "") + " by cross: stems at peaks, strips for 1.5-LOD intervals; joint model on the top track" : "Select a trait (click its name above, or Traits) to draw its QTL", L, ivTop - 12);
+  ctx.fillText(selT.length ? "QTL of the selected trait" + (selT.length > 1 ? "s" : "") + " by cross: stems at peaks over strips for reported intervals" : "Select a trait (click its name above, or Traits) to draw its QTL", L, ivTop - 12);
   const T = drawTracks(ctx, { L, R, w, top: ivTop, th: ivH, rows: ivRows, narrow, X: (i, pos) => X(CHSTART[Q().c[i]] + pos), inView: () => true,
     bands: (top, hh) => CH.forEach((ch, k) => { if (k % 2 === 0) { ctx.fillStyle = band; ctx.fillRect(X(CHSTART[ch]), top, X(CHSTART[ch] + CHL[ch]) - X(CHSTART[ch]), hh); } }) });
   // axis labels
   ctx.textAlign = "center"; ctx.fillStyle = muted; ctx.font = "11px " + css("--sans");
   CH.forEach((ch, i) => { const xm = X(CHSTART[ch] + CHL[ch] / 2); if (!narrow || i % 2 === 0 || CHL[ch] > 700000) ctx.fillText(ch.slice(3), xm, axY + 8); });
-  G = { L, R, w, X, hTop, rowH, heatH, traits, T };
+  G = { L, R, w, X, hTop, rowH, heatH, hrows, T };
 }
 function renderGenome() {
   const sel = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
-  const q = Q(); let nj = 0, nw = 0;
-  for (let i = 0; i < NQ; i++) if (S.traits.has(q.t[i]) && qv(i)) { if (q.m[i] === "j") nj++; else nw++; }
+  const q = Q();
+  const cnt = {}; for (let i = 0; i < NQ; i++) if (S.traits.has(q.t[i]) && qv(i)) cnt[q.m[i]] = (cnt[q.m[i]] || 0) + 1;
   document.getElementById("g-title").textContent = sel.length === 0 ? "Genome" : sel.length === 1 ? tname(sel[0]) : sel.length + " traits";
   const bits = [];
   if (sel.length) bits.push(sel.map(t => '<span class="dot" style="--c:' + tcol(t) + '"></span>' + esc(tname(t))).join(" · "));
-  if (sel.length) bits.push(fmt(nj) + " joint-model and " + fmt(nw) + " within-cross QTL drawn");
+  if (sel.length) bits.push(Object.keys(MODEL).filter(m => cnt[m]).map(m => fmt(cnt[m]) + " " + MODEL[m].toLowerCase()).join(", ") + " QTL drawn");
   bits.push("click a trait name to add or remove it · click a QTL or the heatmap to open the region");
   document.getElementById("g-meta").innerHTML = bits.join(" · ");
   document.getElementById("g-legend").innerHTML = rampLegend() + trackLegend();
@@ -453,9 +516,10 @@ function rampLegend() { const H = heat(); const stops = [0, .25, .5, .75, 1].map
 function renderDsInfo() {
   const d = D.datasets; let h = "";
   for (let i = 0; i < d.id.length; i++) {
-    const nj = Q().m.filter((m, k) => m === "j" && Q().ds[k] === i).length, nw = Q().m.filter((m, k) => m === "w" && Q().ds[k] === i).length;
+    const cnt = {}; Q().m.forEach((m, k) => { if (Q().ds[k] === i) cnt[m] = (cnt[m] || 0) + 1; });
+    const counts = Object.keys(MODEL).filter(m => cnt[m]).map(m => fmt(cnt[m]) + " " + MODEL[m].toLowerCase()).join(", ");
     h += '<div style="margin-bottom:10px' + (S.ds.has(i) ? "" : ";opacity:.55") + '"><b>' + esc(d.label[i]) + '</b> <span style="color:var(--muted)">· ' + esc(d.cite[i]) + ' · <a style="color:var(--accent)" href="https://doi.org/' + esc(d.doi[i]) + '" target="_blank" rel="noopener">doi:' + esc(d.doi[i]) + '</a></span>' +
-      '<p class="note" style="margin:4px 0">' + esc(d.notes[i]) + ' ' + fmt(nj) + ' joint-model QTL and ' + fmt(nw) + ' within-cross QTL at FDR ' + (100 * d.fdr[i]) + '%.</p>' +
+      '<p class="note" style="margin:4px 0">' + esc(d.notes[i]) + ' ' + counts + ' QTL' + (d.fdr[i] != null ? ' at FDR ' + (100 * d.fdr[i]) + '%' : '') + '.</p>' +
       '<p class="note" style="margin:4px 0"><b>Design.</b> ' + esc(d.design[i]) + '. <b>Build.</b> ' + esc(d.build[i]) + '</p>' +
       '<p class="note" style="margin:4px 0"><b>Method.</b> ' + esc(d.method[i]) + '</p>' +
       '<p class="note" style="margin:4px 0"><b>Intervals.</b> ' + esc(d.interval[i]) + ' <b>Effects.</b> ' + esc(d.effect[i]) + '</p></div>';
@@ -468,7 +532,7 @@ function gPos(ev) { const r = gcan.getBoundingClientRect(); const x = ev.clientX
   if (g >= 0 && g < GLEN) { ch = CH[0]; for (const c of CH) if (CHSTART[c] <= g) ch = c; if (g - CHSTART[ch] > CHL[ch]) ch = null; else pos = Math.round(g - CHSTART[ch]); }
   return { x, y, ch, pos }; }
 function gHit(p) {
-  if (p.y >= G.hTop && p.y < G.hTop + G.heatH) { const t = G.traits[Math.floor((p.y - G.hTop) / G.rowH)]; return { kind: p.x < G.L ? "tlabel" : "heat", t }; }
+  if (p.y >= G.hTop && p.y < G.hTop + G.heatH) { const hr = G.hrows[Math.floor((p.y - G.hTop) / G.rowH)]; if (!hr || hr.t == null) return { kind: "none" }; return { kind: p.x < G.L ? "tlabel" : "heat", t: hr.t }; }
   const ti = trackHit(G.T, p.x, p.y);
   if (ti != null) return ti >= 0 ? { kind: "qtl", i: ti } : { kind: "row" };
   return { kind: "none" };
@@ -492,9 +556,10 @@ gcan.addEventListener("click", ev => {
 });
 function toggleTrait(t) { if (S.traits.has(t)) S.traits.delete(t); else S.traits.add(t); go(); }
 function qtlTip(i) {
-  const q = Q(); const out = ["<b>" + esc(tname(q.t[i])) + "</b> · " + esc(xlabel(q.x[i]))];
-  if (q.m[i] === "w") out.push('<span class="mono">' + q.c[i] + ":" + fmt(q.a[i]) + "–" + fmt(q.e[i]) + "</span> · LOD " + num(q.lod[i], 1) + " · β " + sgn(q.ef[i], 2) + " · " + esc(pname(q.up[i])) + " allele larger colonies");
-  else out.push('<span class="mono">' + esc(q.lv[i]) + "</span> · mean β " + sgn(q.ef[i], 2) + " · " + q.cc[i] + " crosses");
+  const q = Q(); const out = ["<b>" + esc(tname(q.t[i])) + "</b> · " + esc(qcross(i))];
+  if (q.m[i] === "j") out.push('<span class="mono">' + esc(q.lv[i]) + "</span> · mean β " + sgn(q.ef[i], 2) + " · " + q.cc[i] + " crosses");
+  else out.push('<span class="mono">' + q.c[i] + ":" + fmt(q.a[i]) + "–" + fmt(q.e[i]) + "</span>" + (q.lod[i] != null ? " · LOD " + num(q.lod[i], 1) : "") + (q.ef[i] != null ? " · β " + sgn(q.ef[i], 2) : "") + (favours(i) ? " · increased by " + esc(favours(i)) : ""));
+  out.push(esc(D.datasets.label[q.ds[i]]) + " · " + esc(mname(i)) + (q.k && q.k[i] ? " · " + esc(q.k[i]) : ""));
   if (q.g[i] >= 0) out.push("candidate gene " + esc(gname(q.g[i])) + " (" + TIER[q.gt[i]][0].toLowerCase() + ")");
   return out;
 }
@@ -506,10 +571,12 @@ function clampRegion() {
   let c = (S.start + S.end) / 2; S.start = Math.round(Math.max(0, Math.min(len - w, c - w / 2))); S.end = S.start + Math.round(w);
 }
 function openLocus(ch, a, e) { S.chrom = ch; S.start = a; S.end = e; S.view = "locus"; clampRegion(); go(); window.scrollTo(0, 0); }
+function placed(i) { return Q().p[i] != null; }
 function openQTL(i, scroll) {
-  const q = Q(); S.q = i; S.src = false; const w = Math.max(q.e[i] - q.a[i], 0), pad = Math.max(40000, w * 0.6);
+  const q = Q(); S.q = i; S.src = false;
   if (!S.ds.has(q.ds[i])) S.ds.add(q.ds[i]);
-  openLocus(q.c[i], q.a[i] - pad, q.e[i] + pad);
+  if (!placed(i)) { openLocus(q.c[i], 0, CHL[q.c[i]]); }   // genetic position only: show the whole chromosome with the card
+  else { const w = Math.max(q.e[i] - q.a[i], 0), pad = Math.max(40000, w * 0.6); openLocus(q.c[i], q.a[i] - pad, q.e[i] + pad); }
   if (scroll) setTimeout(() => document.getElementById("qcard").scrollIntoView({ block: "start" }), 0);
 }
 function packLanes(items, gap) { const lanes = []; for (const it of items) { let l = 0; while (lanes[l] != null && lanes[l] > it.x0 - gap) l++; lanes[l] = it.x1; it.lane = l; } return lanes.length; }
@@ -540,7 +607,7 @@ function drawLocus() {
   const nGL = Math.max(1, packLanes(geneItems, 2));
   const rowH = rows.length > 400 ? 3 : rows.length > 140 ? 5 : 11;
   const selT = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
-  const trRows = selT.length ? [-1, ...visCrosses()] : [], trTh = narrow ? 28 : 40;
+  const trRows = selT.length ? trackRows() : [], trTh = narrow ? 28 : 40;
   const axH = 22, trTop = axH + 22, qTop = trTop + (trRows.length ? trRows.length * trTh + 30 : 0), qH = Math.max(16, rows.length * rowH);
   const cTop = qTop + qH + 26, cLH = 16, gTop = cTop + nCL * cLH + 26, gLH = 18;
   const Hh = gTop + nGL * gLH + 8;
@@ -576,7 +643,7 @@ function drawLocus() {
       const xs = X(q.p[i]); if (xs >= L && xs <= w - R) { ctx.globalAlpha = 1; ctx.fillStyle = fg; ctx.fillRect(xs - .75, y + 1, 1.5, rowH - 2); } }
     ctx.globalAlpha = 1;
     if (i === S.q) { const pt = q.a[i] === q.e[i], x0 = pt ? X(q.p[i]) - 5 : Math.max(L, X(q.a[i])), x1 = pt ? X(q.p[i]) + 5 : Math.min(w - R, X(q.e[i])); ctx.strokeStyle = fg; ctx.lineWidth = 1.5; ctx.strokeRect(x0 - 2, y - 1, Math.max(2, x1 - x0) + 4, rowH + 2); }
-    if (!narrow && rowH >= 11) { ctx.fillStyle = faint; ctx.textAlign = "right"; ctx.font = "10px " + css("--sans"); ctx.fillText(q.m[i] === "j" ? "joint" : D.crosses.code[q.x[i]], L - 4, y + rowH / 2); }
+    if (!narrow && rowH >= 11) { ctx.fillStyle = faint; ctx.textAlign = "right"; ctx.font = "10px " + css("--sans"); ctx.fillText(qcrossShort(i), L - 4, y + rowH / 2); }
     rr.push({ i, y, h: rowH });
   });
   if (!rows.length) { ctx.fillStyle = muted; ctx.textAlign = "left"; ctx.fillText("No QTL matching the current filters overlaps this region.", L, qTop + 7); }
@@ -604,10 +671,11 @@ function renderLocus() {
   document.getElementById("only").checked = S.only;
   document.getElementById("l-meta").innerHTML = fmtkb(S.end - S.start) + (S.only ? " · selected traits only" : " · every trait") +
     (S.model === "both" ? "" : S.model === "j" ? " · joint model" : " · within-cross") + (S.crosses.size ? " · " + S.crosses.size + " crosses" : "") +
+    (() => { let n = 0; const q = Q(); for (let i = 0; i < NQ; i++) if (q.p[i] == null && q.c[i] === S.chrom && qv(i)) n++; return n ? " · " + n + " QTL on " + S.chrom + " have a genetic position only and are listed in the Table view, not drawn" : ""; })() +
     " · click a QTL for its card · drag to pan · double-click or ctrl-scroll to zoom";
   document.getElementById("l-height").innerHTML = heightSeg();
-  document.getElementById("l-legend").innerHTML = (S.traits.size ? trackLegend() : "") + '<span><i class="sw box" style="--c:var(--accent)"></i>within-cross 1.5-LOD interval, opacity by LOD, dark tick at the peak</span>' +
-    '<span><i class="sw box" style="--c:var(--contrast);width:9px;height:9px;transform:rotate(45deg)"></i>joint-model lead variant, opacity by |effect|</span>' +
+  document.getElementById("l-legend").innerHTML = (S.traits.size ? trackLegend() : "") + '<span><i class="sw box" style="--c:var(--accent)"></i>reported interval, opacity by LOD (or |effect|), dark tick at the peak</span>' +
+    '<span><i class="sw box" style="--c:var(--contrast);width:9px;height:9px;transform:rotate(45deg)"></i>QTL without an interval (joint-model lead variant, or a peak reported alone)</span>' +
     '<span>selected traits in their own colours</span>' +
     Object.keys(TIER).map(k => '<span><i class="sw box" style="--c:var(' + TIER[k][1] + ')"></i>' + TIER[k][0].toLowerCase() + '</span>').join("");
   drawLocus(); renderLocusTables(); renderCard();
@@ -618,7 +686,7 @@ function renderLocusTables() {
   let h = '<thead><tr><th>Trait</th><th>Model</th><th>Cross</th><th class="num">Peak</th><th class="num">Interval</th><th class="num">LOD</th><th class="num">Effect</th><th>Increased by</th><th>Candidate</th></tr></thead><tbody>';
   const lim = Math.min(rows.length, 400);
   for (let k = 0; k < lim; k++) { const i = rows[k];
-    h += '<tr class="row' + (i === S.q ? " sel" : "") + '" data-q="' + i + '"><td><span class="dot" style="--c:' + (S.traits.has(q.t[i]) ? tcol(q.t[i]) : "var(--faint)") + '"></span>' + esc(tname(q.t[i])) + '</td><td>' + (q.m[i] === "j" ? "joint" : "within") + '</td><td>' + esc(q.m[i] === "j" ? "all" : xlabel(q.x[i])) + '</td><td class="num">' + fmt(q.p[i]) + '</td><td class="num">' + (q.m[i] === "j" ? "lead variant" : fmtkb(q.e[i] - q.a[i])) + '</td><td class="num">' + num(q.lod[i], 1) + '</td><td class="num">' + sgn(q.ef[i], 2) + '</td><td>' + esc(favours(i)) + '</td><td>' + (q.g[i] >= 0 ? esc(gname(q.g[i])) + " " + tierPill(q.gt[i]) : "") + '</td></tr>'; }
+    h += '<tr class="row' + (i === S.q ? " sel" : "") + '" data-q="' + i + '"><td><span class="dot" style="--c:' + (S.traits.has(q.t[i]) ? tcol(q.t[i]) : "var(--faint)") + '"></span>' + esc(tname(q.t[i])) + '</td><td>' + esc(mname(i)) + '</td><td>' + esc(qcross(i)) + '</td><td class="num">' + fmt(q.p[i]) + '</td><td class="num">' + (q.a[i] === q.e[i] ? (q.m[i] === "j" ? "lead variant" : "not reported") : fmtkb(q.e[i] - q.a[i])) + '</td><td class="num">' + num(q.lod[i], 1) + '</td><td class="num">' + sgn(q.ef[i], 2) + '</td><td>' + esc(favours(i)) + '</td><td>' + (q.g[i] >= 0 ? esc(gname(q.g[i])) + " " + tierPill(q.gt[i]) : "") + '</td></tr>'; }
   if (lim < rows.length) h += '<tr><td colspan="9" style="color:var(--muted)">' + (rows.length - lim) + ' more; zoom in or use the Table view.</td></tr>';
   if (!rows.length) h += '<tr><td colspan="9" style="color:var(--muted)">No QTL matching the current filters overlaps this region.</td></tr>';
   t.innerHTML = h + "</tbody>";
@@ -630,8 +698,10 @@ function renderLocusTables() {
 }
 function favours(i) {
   const q = Q();
-  if (q.m[i] === "w") return pname(q.up[i]);
-  return q.ef[i] > 0 ? "alt allele" : q.ef[i] < 0 ? "ref allele" : "";
+  if (q.m[i] === "j") return q.ef[i] > 0 ? "alt allele" : q.ef[i] < 0 ? "ref allele" : "";
+  if (q.up && q.up[i] != null && q.up[i] >= 0) return pname(q.up[i]);
+  if (q.ups && q.ups[i] && q.ups[i].length) return [...new Set(q.ups[i].map(pname))].join(", ");
+  return "";
 }
 function renderGeneCard() {
   const el = document.getElementById("genecard"); const i = S.gene;
@@ -661,59 +731,82 @@ function crossFacts(x) {
   const pr = j => '<b>' + esc(pname(j)) + '</b>' + (D.parents.p18[j] ? ' <span class="mono" style="color:var(--muted)">' + esc(D.parents.p18[j]) + '</span>' : "") +
     ' · origin: ' + (D.parents.org[j] ? esc(D.parents.org[j]) : '<span style="color:var(--muted)">not in the source</span>');
   return '<dl><h3>Cross</h3><dt>Cross</dt><dd>' + esc(xlabel(x)) + ' <span class="mono" style="color:var(--muted)">(' + esc(D.crosses.code[x]) + ')</span></dd>' +
+    (D.crosses.name && D.crosses.name[x] ? '<dt>Name</dt><dd>' + esc(D.crosses.name[x]) + '</dd>' : '') +
     '<dt>Parent 1</dt><dd>' + pr(p[0]) + '</dd><dt>Parent 2</dt><dd>' + pr(p[1]) + '</dd>' +
-    '<dt>Segregants</dt><dd>' + fmt(D.crosses.n[x]) + '</dd><dt>Strains</dt><dd style="color:var(--muted)">' + esc(D.parents.s1[p[0]]) + ' × ' + esc(D.parents.s2[p[1]]) + '</dd></dl>';
+    '<dt>Segregants</dt><dd>' + (D.crosses.n[x] != null ? fmt(D.crosses.n[x]) : '<span style="color:var(--muted)">not counted (pooled)</span>') + '</dd>' + (D.parents.s1[p[0]] || D.parents.s2[p[1]] ? '<dt>Strains</dt><dd style="color:var(--muted)">' + esc(D.parents.s1[p[0]] || D.parents.name[p[0]]) + ' × ' + esc(D.parents.s2[p[1]] || D.parents.name[p[1]]) + '</dd>' : '') + '</dl>';
 }
 function overlapping(i) {
-  const q = Q(); const out = [];
-  const lo = q.m[i] === "j" ? q.p[i] - 10000 : q.a[i], hi = q.m[i] === "j" ? q.p[i] + 10000 : q.e[i];
-  for (const k of QBYCH[q.c[i]] || []) { if (k === i || q.ds[k] !== q.ds[i]) continue;
-    if (q.m[k] === "w" ? (q.a[k] <= hi && q.e[k] >= lo) && (q.m[i] === "w" || (q.a[k] <= q.p[i] && q.e[k] >= q.p[i])) : (q.p[k] >= lo && q.p[k] <= hi)) out.push(k); }
+  // intervals that overlap; points within 10 kb of each other; a point inside an interval. Every dataset switched on.
+  const q = Q(); const out = [], ip = q.a[i] === q.e[i];
+  for (const k of QBYCH[q.c[i]] || []) { if (k === i || !S.ds.has(q.ds[k])) continue;
+    const kp = q.a[k] === q.e[k];
+    const hit = ip && kp ? Math.abs(q.p[k] - q.p[i]) <= 10000 : ip ? (q.a[k] <= q.p[i] && q.e[k] >= q.p[i]) : kp ? (q.p[k] >= q.a[i] && q.p[k] <= q.e[i]) : (q.a[k] <= q.e[i] && q.e[k] >= q.a[i]);
+    if (hit) out.push(k); }
   return out;
 }
 async function renderCard() {
   const el = document.getElementById("qcard"); const i = S.q;
   if (i == null || S.view !== "locus") { el.hidden = true; return; }
-  el.hidden = false; const q = Q(), x = q.x[i], ds = q.ds[i], isJ = q.m[i] === "j";
-  const parts = q.lv[i].split("_"), ref = parts[2], alt = parts[3];
-  let h = '<div class="pk-head"><h2>' + esc(tname(q.t[i])) + ' · ' + (isJ ? "joint model" : "within " + esc(xlabel(x))) + '</h2><span class="sp"></span>' +
+  el.hidden = false; const q = Q(), x = q.x[i], ds = q.ds[i], isJ = q.m[i] === "j", pt = q.a[i] === q.e[i] || !placed(i);
+  const lv = q.lv[i] || "", parts = lv.split("_"), ref = parts[2], alt = parts[3];
+  const nX = D.crosses.ds.filter(d => d === ds).length, kind = q.k && q.k[i] ? q.k[i] : null;
+  let h = '<div class="pk-head"><h2>' + esc(tname(q.t[i])) + ' · ' + (isJ ? "joint model" : x >= 0 ? esc(mname(i).toLowerCase()) + " in " + esc(xlabel(x)) : esc(mname(i)) + " in " + esc(qcross(i))) + '</h2><span class="sp"></span>' +
     '<button class="btn" id="qc-src">' + (S.src ? "Hide source row" : "Show source row") + '</button><button class="btn" id="qc-copy">Copy link</button><button class="btn" id="qc-close">Close</button></div>';
-  h += '<div class="pk-sub"><span class="mono">' + q.c[i] + ':' + (isJ ? fmt(q.p[i]) : fmt(q.a[i]) + '–' + fmt(q.e[i])) + '</span> · ' + esc(D.datasets.label[ds]) + ' · ' + esc(D.traits.cat[q.t[i]]) + ' · <span class="mono">' + esc(q.id[i]) + '</span> · source <span class="mono">' + esc(q.pv[i]) + '</span></div>';
-  // facts
+  h += '<div class="pk-sub"><span class="mono">' + q.c[i] + (placed(i) ? ':' + (pt ? fmt(q.p[i]) : fmt(q.a[i]) + '–' + fmt(q.e[i])) : (q.cm && q.cm[i] != null ? ' · ' + num(q.cm[i], 1) + ' cM' : '')) + '</span> · ' + esc(D.datasets.label[ds]) + ' · ' + esc(D.traits.cat[q.t[i]]) + (kind ? ' · ' + esc(kind) : "") + ' · <span class="mono">' + esc(q.id[i]) + '</span> · source <span class="mono">' + esc(q.pv[i]) + '</span></div>';
+  // position
   let pos = '<dl><h3>Position</h3><dt>Chromosome</dt><dd>' + q.c[i] + '</dd>';
-  if (isJ) pos += '<dt>Lead variant</dt><dd class="mono">' + esc(q.lv[i]) + '</dd><dt>Interval</dt><dd>none reported; the joint model gives the lead variant only</dd>';
-  else pos += '<dt>1.5-LOD interval</dt><dd class="mono">' + fmt(q.a[i]) + '–' + fmt(q.e[i]) + '</dd><dt>Width</dt><dd>' + fmtkb(q.e[i] - q.a[i]) + '</dd><dt>Peak</dt><dd class="mono">' + fmt(q.p[i]) + '</dd><dt>Lead variant</dt><dd class="mono">' + esc(q.lv[i]) + '</dd>';
+  if (!placed(i)) pos += '<dt>Genetic position</dt><dd>' + (q.cm && q.cm[i] != null ? num(q.cm[i], 1) + ' cM' : "not given") + '</dd><dt>Physical position</dt><dd>not placed on R64: the source gives a genetic position only, and its marker map is not published with it</dd>';
+  else if (isJ) pos += '<dt>Lead variant</dt><dd class="mono">' + esc(lv) + '</dd><dt>Interval</dt><dd>none reported; the joint model gives the lead variant only</dd>';
+  else {
+    pos += pt ? '<dt>Interval</dt><dd>not reported in a table; drawn at the peak</dd>' : '<dt>Interval</dt><dd class="mono">' + fmt(q.a[i]) + '–' + fmt(q.e[i]) + '</dd><dt>Width</dt><dd>' + fmtkb(q.e[i] - q.a[i]) + '</dd>';
+    pos += '<dt>Peak</dt><dd class="mono">' + fmt(q.p[i]) + '</dd>' + (lv ? '<dt>Lead marker</dt><dd class="mono">' + esc(lv) + '</dd>' : "");
+    pos += '<dt>Definition</dt><dd style="color:var(--muted)">' + esc(D.datasets.interval[ds]) + '</dd>';
+  }
   pos += '</dl>';
+  // strength and effect
   let st = '<dl><h3>Strength and effect</h3>';
-  if (!isJ) {
-    const g1 = D.crosses.g1[x], g2 = D.crosses.p1[x] === g1 ? D.crosses.p2[x] : D.crosses.p1[x];
-    st += '<dt>LOD</dt><dd>' + num(q.lod[i], 2) + '</dd><dt>q-value</dt><dd>' + (q.q[i] < 0.001 ? q.q[i].toExponential(1) : num(q.q[i], 4)) + '</dd><dt>Variance explained</dt><dd>' + pct(q.ve[i]) + ' within the cross</dd>';
-    st += '<dt>Effect β</dt><dd>' + sgn(q.ef[i]) + ' SD</dd><dt>Increased by</dt><dd><b>' + esc(pname(q.up[i])) + '</b> allele (larger colonies). β &gt; 0 favours ' + esc(pname(g2)) + ', β &lt; 0 favours ' + esc(pname(g1)) + '; which parent is genotype 1 is inferred.</dd>';
-  } else {
+  if (isJ) {
     const js = JB[i] || [];
-    st += '<dt>LOD, q</dt><dd>not reported for joint QTL (passed FDR ' + (100 * D.datasets.fdr[ds]) + '%)</dd><dt>Mean effect β</dt><dd>' + sgn(q.ef[i]) + ' SD over ' + js.length + ' cross' + (js.length === 1 ? "" : "es") + '</dd>';
+    st += '<dt>LOD, q</dt><dd>not reported for joint QTL' + (D.datasets.fdr[ds] != null ? ' (passed FDR ' + (100 * D.datasets.fdr[ds]) + '%)' : '') + '</dd><dt>Mean effect β</dt><dd>' + sgn(q.ef[i]) + ' SD over ' + js.length + ' cross' + (js.length === 1 ? "" : "es") + '</dd>';
     st += '<dt>Increased by</dt><dd>the <b>' + (q.ef[i] > 0 ? "alternate allele " + esc(alt) : "reference (S288C) allele " + esc(ref)) + '</b> (' + esc(ref) + ' → ' + esc(alt) + ')</dd>';
+  } else {
+    st += '<dt>LOD</dt><dd>' + (q.lod[i] != null ? num(q.lod[i], 2) : '<span style="color:var(--muted)">not reported</span>') + '</dd>';
+    if (q.q[i] != null) st += '<dt>q-value</dt><dd>' + (q.q[i] < 0.001 ? q.q[i].toExponential(1) : num(q.q[i], 4)) + '</dd>';
+    if (q.ve[i] != null) st += '<dt>Variance explained</dt><dd>' + pct(q.ve[i]) + ' within the cross</dd>';
+    st += '<dt>Effect</dt><dd>' + (q.ef[i] != null ? sgn(q.ef[i]) + ' SD' : '<span style="color:var(--muted)">' + (q.m[i] === "x" ? "X-QTL report no effect size" : "not reported") + '</span>') + '</dd>';
+    const g1 = D.crosses.g1 && x >= 0 ? D.crosses.g1[x] : null;
+    if (q.up && q.up[i] != null && q.up[i] >= 0) {
+      st += '<dt>Increased by</dt><dd><b>' + esc(pname(q.up[i])) + '</b> allele';
+      if (g1 != null && q.ef[i] != null) { const g2 = D.crosses.p1[x] === g1 ? D.crosses.p2[x] : D.crosses.p1[x]; st += '. β &gt; 0 favours ' + esc(pname(g2)) + ', β &lt; 0 favours ' + esc(pname(g1)) + '; which parent is genotype 1 is inferred'; }
+      st += '</dd>';
+    }
+    if (alignedDir(i)) st += '<dt>Favoured allele</dt><dd>by cross, listed under Found in</dd>';
+    else if (q.ups && q.ups[i] && q.ups[i].length) st += '<dt>Beneficial allele</dt><dd>' + q.ups[i].map(p => '<b>' + esc(pname(p)) + '</b>').join(", ") + '</dd>';
+    if (!alignedDir(i) && q.dns && q.dns[i] && q.dns[i].length) st += '<dt>Deleterious allele</dt><dd>' + q.dns[i].map(p => esc(pname(p))).join(", ") + '</dd>';
   }
   st += '</dl>';
-  let al = '';
+  // third column: lead variant among parents (joint), the cross, or the crosses a grouped QTL was found in
+  let third = '';
   if (isJ) {
-    al = '<dl><h3>Lead variant among parents</h3><dt>Segregates in</dt><dd>' + q.cc[i] + ' of 16 crosses</dd><dt>Parents with minor allele</dt><dd>≈ ' + q.pa[i] + ' of 16 (crosses / 2, as the paper approximates)</dd>' +
+    third = '<dl><h3>Lead variant among parents</h3><dt>Segregates in</dt><dd>' + q.cc[i] + ' of ' + nX + ' crosses</dd><dt>Parents with minor allele</dt><dd>≈ ' + q.pa[i] + ' (crosses / 2, as the paper approximates)</dd>' +
       '<dt>Frequency, 1,011 isolates</dt><dd>' + (q.af[i] == null ? "not in the panel table" : 'MAF ' + q.af[i].toFixed(4) + ' · ' + (q.af[i] > 0.01 ? "common (> 1%)" : "rare (≤ 1%)")) + '</dd>' +
       '<dt>Ancestral state</dt><dd>' + (q.anc[i] == null ? "not determined" : q.anc[i] === 1 ? "reference ancestral, alternate derived" : "reference derived, alternate ancestral") + (q.daf[i] != null ? ' · derived allele frequency ' + q.daf[i].toFixed(4) : "") + '</dd></dl>';
-  }
+  } else if (x >= 0) third = crossFacts(x);
+  else if (qxs(i)) { const xs = qxs(i), al = alignedDir(i);
+    third = '<dl><h3>Found in</h3>' + xs.map((c, k) => '<dt class="mono">' + esc(D.crosses.code[c]) + '</dt><dd>' + esc(xlabel(c)) + (al ? ' · favours <b>' + esc(pname(q.ups[i][k])) + '</b>' : '') + '</dd>').join("") + '</dl>'; }
   let cg = '<dl><h3>Candidate gene</h3>';
   if (q.g[i] >= 0) {
     const g = q.g[i];
     cg += '<dt>Gene</dt><dd><a style="color:var(--accent)" href="https://www.yeastgenome.org/locus/' + encodeURIComponent(D.genes.id[g]) + '" target="_blank" rel="noopener">' + esc(gname(g)) + '</a> <span class="mono" style="color:var(--muted)">' + esc(D.genes.id[g]) + '</span></dd>' +
-      '<dt>Evidence</dt><dd>' + tierPill(q.gt[i]) + ' ' + esc(TIER[q.gt[i]][0]) + ' · local FDR ' + q.gf[i].toFixed(4) + '</dd>';
+      '<dt>Evidence</dt><dd>' + tierPill(q.gt[i]) + ' ' + esc(TIER[q.gt[i]] ? TIER[q.gt[i]][0] : q.gt[i]) + (q.gf[i] != null ? ' · local FDR ' + q.gf[i].toFixed(4) : "") + '</dd>';
     const links = (CBYG[g] || []).filter(k => D.causal.t[k] === q.t[i] && (D.causal.q1[k] === i || D.causal.q2[k] === i));
-    if (links.length) { const k = links[0], other = D.causal.q1[k] === i ? D.causal.q2[k] : D.causal.q1[k];
+    if (links.length && D.causal.sp[links[0]] != null) { const k = links[0], other = D.causal.q1[k] === i ? D.causal.q2[k] : D.causal.q1[k];
       cg += '<dt>Paired with</dt><dd>' + (other >= 0 ? '<a href="#" data-openq="' + other + '" style="color:var(--accent)">' + esc(xlabel(Q().x[other])) + '</a>' : "a QTL not in the within-cross table (q ≥ 0.05)") + '; shared parent <b>' + esc(pname(D.causal.sp[k])) + '</b>, whose allele ' + (D.causal.eff[k] === "increase" ? "increases" : "decreases") + ' the trait in both crosses</dd>' +
-        '<dt>PPC summed over gene</dt><dd>' + D.causal.pcs[k].toFixed(3) + ' · top variant <span class="mono">' + esc(D.causal.jv[k]) + '</span></dd>'; }
+        (D.causal.pcs[k] != null ? '<dt>PPC summed over gene</dt><dd>' + D.causal.pcs[k].toFixed(3) + ' · top variant <span class="mono">' + esc(D.causal.jv[k]) + '</span></dd>' : ""); }
     else if (isJ) cg += '<dt>How</dt><dd>the lead variant is among the fine-mapped variants of a resolved QTL pair for this trait</dd>';
   } else cg += '<dt>Assigned</dt><dd style="color:var(--muted)">none by the paper</dd>';
   cg += '</dl>';
-  h += '<div class="facts">' + pos + st + (isJ ? al : crossFacts(x)) + cg + '</div>';
+  h += '<div class="facts">' + pos + st + third + cg + '</div>';
   // per-cross effects for joint QTL
   if (isJ) {
     const js = (JB[i] || []).slice().sort((a, b) => XORDER.indexOf(D.jeff.x[a]) - XORDER.indexOf(D.jeff.x[b]));
@@ -721,15 +814,15 @@ async function renderCard() {
       js.map(j => '<tr><td class="mono">' + esc(D.crosses.code[D.jeff.x[j]]) + '</td><td>' + esc(xlabel(D.jeff.x[j])) + '</td><td class="num">' + sgn(D.jeff.b[j]) + '</td><td class="num">' + pct(D.jeff.ve[j]) + '</td></tr>').join("") + '</tbody></table></div></div>';
   }
   // genes in interval
-  const lo = isJ ? q.p[i] - 10000 : q.a[i], hi = isJ ? q.p[i] + 10000 : q.e[i];
+  const lo = !placed(i) ? 1 : pt ? q.p[i] - 10000 : q.a[i], hi = !placed(i) ? 0 : pt ? q.p[i] + 10000 : q.e[i];
   const gs = []; for (let g = 0; g < D.genes.c.length; g++) if (D.genes.c[g] === q.c[i] && D.genes.a[g] <= hi && D.genes.e[g] >= lo) gs.push(g);
-  const within = isJ ? gs.filter(g => D.genes.a[g] <= q.p[i] && D.genes.e[g] >= q.p[i]) : [];
-  h += '<div class="subtable"><p class="section-title">' + (isJ ? "Genes within 10 kb of the lead variant (orientation only; no interval is reported)" : "Genes in the interval") + ' · ' + gs.length + '</p><div class="list" style="max-height:180px">' +
+  const within = pt ? gs.filter(g => D.genes.a[g] <= q.p[i] && D.genes.e[g] >= q.p[i]) : [];
+  h += '<div class="subtable"><p class="section-title">' + (pt ? "Genes within 10 kb of the peak (orientation only; no interval is reported)" : "Genes in the interval") + ' · ' + gs.length + '</p><div class="list" style="max-height:180px">' +
     (gs.length ? gs.map(g => '<a href="#" data-gene="' + g + '"><span>' + (bestTier(g) ? tierPill(bestTier(g)) + " " : "") + esc(gname(g)) + (within.includes(g) ? ' <span class="flag">contains lead variant</span>' : "") + '</span><span class="k">' + esc(D.genes.id[g]) + '</span></a>').join("") : '<span class="note">None.</span>') + '</div></div>';
   // overlapping QTL
-  const ov = overlapping(i);
-  h += '<div class="subtable"><p class="section-title">Overlapping QTL in this dataset · ' + ov.length + (isJ ? " (within-cross intervals containing the lead variant; joint lead variants within 10 kb)" : "") + '</p><div class="tablewrap"><table><thead><tr><th>Trait</th><th>Model</th><th>Cross</th><th class="num">Position</th><th class="num">LOD</th><th class="num">Effect</th><th>Candidate</th></tr></thead><tbody>' +
-    ov.slice(0, 300).map(k => '<tr class="row" data-openq="' + k + '"><td>' + esc(tname(q.t[k])) + '</td><td>' + (q.m[k] === "j" ? "joint" : "within") + '</td><td>' + esc(q.m[k] === "j" ? "all" : xlabel(q.x[k])) + '</td><td class="num">' + (q.m[k] === "j" ? fmt(q.p[k]) : fmt(q.a[k]) + "–" + fmt(q.e[k])) + '</td><td class="num">' + num(q.lod[k], 1) + '</td><td class="num">' + sgn(q.ef[k], 2) + '</td><td>' + (q.g[k] >= 0 ? esc(gname(q.g[k])) + " " + tierPill(q.gt[k]) : "") + '</td></tr>').join("") +
+  const ov = placed(i) ? overlapping(i) : [];
+  h += '<div class="subtable"><p class="section-title">Overlapping QTL · ' + ov.length + (pt ? " (intervals containing this peak; other peaks within 10 kb)" : " (overlapping intervals; peaks inside this interval)") + (S.ds.size > 1 ? ", every dataset shown" : "") + '</p><div class="tablewrap"><table><thead><tr><th>Trait</th><th>Model</th><th>Cross</th><th class="num">Position</th><th class="num">LOD</th><th class="num">Effect</th><th>Candidate</th></tr></thead><tbody>' +
+    ov.slice(0, 300).map(k => '<tr class="row" data-openq="' + k + '"><td>' + esc(tname(q.t[k])) + (D.datasets.id.length > 1 ? ' <span style="color:var(--muted)">· ' + esc(D.datasets.label[q.ds[k]]) + '</span>' : "") + '</td><td>' + esc(mname(k)) + '</td><td>' + esc(qcross(k)) + '</td><td class="num">' + (q.a[k] === q.e[k] ? fmt(q.p[k]) : fmt(q.a[k]) + "–" + fmt(q.e[k])) + '</td><td class="num">' + num(q.lod[k], 1) + '</td><td class="num">' + sgn(q.ef[k], 2) + '</td><td>' + (q.g[k] >= 0 ? esc(gname(q.g[k])) + " " + tierPill(q.gt[k]) : "") + '</td></tr>').join("") +
     (ov.length > 300 ? '<tr><td colspan="7" style="color:var(--muted)">' + (ov.length - 300) + ' more</td></tr>' : "") + (ov.length ? "" : '<tr><td colspan="7" style="color:var(--muted)">None.</td></tr>') + '</tbody></table></div></div>';
   h += '<div class="subtable" id="qc-srcbox"' + (S.src ? "" : " hidden") + '><p class="note">Loading the source row…</p></div>';
   el.innerHTML = h;
@@ -821,13 +914,14 @@ document.addEventListener("keydown", e => {
 const TCOLS = [
   ["ds", "Dataset", i => D.datasets.label[Q().ds[i]]],
   ["t", "Trait", i => tname(Q().t[i])],
-  ["m", "Model", i => Q().m[i] === "j" ? "joint" : "within"],
-  ["x", "Cross", i => Q().x[i] < 0 ? "all" : xlabel(Q().x[i])],
+  ["m", "Model", i => mname(i)],
+  ["x", "Cross", i => qcross(i)],
   ["c", "Chr", i => Q().c[i]],
   ["a", "Start", i => Q().a[i], 1],
   ["e", "End", i => Q().e[i], 1],
   ["p", "Peak", i => Q().p[i], 1],
-  ["wd", "Width", i => Q().e[i] - Q().a[i], 1],
+  ["cm", "cM", i => Q().cm ? Q().cm[i] : null, 1],
+  ["wd", "Width", i => placed(i) ? Q().e[i] - Q().a[i] : null, 1],
   ["lod", "LOD", i => Q().lod[i], 1],
   ["q", "q", i => Q().q[i], 1],
   ["ef", "Effect", i => Q().ef[i], 1],
@@ -874,7 +968,7 @@ function renderTable() {
   let h = '<thead><tr>' + TCOLS.map(c => '<th data-sort="' + c[0] + '"' + (c[3] ? ' class="num"' : "") + '>' + esc(c[1]) + (S.tsort.k === c[0] ? (S.tsort.d > 0 ? " ▲" : " ▼") : "") + '</th>').join("") + '</tr></thead><tbody>';
   for (let k = 0; k < lim; k++) { const i = TROWS[k];
     h += '<tr class="row" data-q="' + i + '">' + TCOLS.map(c => { let v = c[2](i);
-      if (c[0] === "ef") v = sgn(v); else if (c[0] === "lod" || c[0] === "af") v = v == null ? "" : (+v).toFixed(c[0] === "af" ? 4 : 1); else if (c[0] === "q") v = v == null ? "" : (+v).toExponential(1); else if (c[0] === "ve") v = pct(v); else if (c[3] && v != null) v = fmt(v);
+      if (c[0] === "ef") v = sgn(v); else if (c[0] === "cm") v = v == null ? "" : (+v).toFixed(1); else if (c[0] === "lod" || c[0] === "af") v = v == null ? "" : (+v).toFixed(c[0] === "af" ? 4 : 1); else if (c[0] === "q") v = v == null ? "" : (+v).toExponential(1); else if (c[0] === "ve") v = pct(v); else if (c[3] && v != null) v = fmt(v);
       return '<td' + (c[3] ? ' class="num"' : "") + (c[0] === "lv" || c[0] === "pv" ? ' style="font-family:var(--mono);font-size:12px"' : "") + '>' + (c[0] === "gt" && q.gt[i] ? tierPill(q.gt[i]) : esc(v)) + '</td>'; }).join("") + '</tr>'; }
   if (!TROWS.length) h += '<tr><td colspan="' + TCOLS.length + '" style="color:var(--muted)">No QTL matches these filters.</td></tr>';
   document.getElementById("ttable").innerHTML = h + '</tbody>';
@@ -889,12 +983,12 @@ document.getElementById("ttable").addEventListener("click", e => {
 document.getElementById("tmore").addEventListener("click", e => { if (e.target.id === "tmore-b") { S.tlimit += 2000; renderTable(); } });
 document.getElementById("tsv").onclick = () => {
   const q = Q(), P = D.parents, X = D.crosses;
-  const head = ["id", "dataset", "trait", "trait_source", "category", "model", "cross", "parent1", "parent2", "chrom", "start", "end", "peak", "width", "lod", "q", "effect_sd", "increased_by", "var_explained", "lead_variant", "maf_1011", "cross_count", "candidate_orf", "candidate_name", "candidate_tier", "candidate_local_fdr", "provenance", "source_file", "source_sheet"];
+  const head = ["id", "dataset", "trait", "trait_source", "category", "model", "cross", "parent1", "parent2", "chrom", "start", "end", "peak", "width", "lod", "q", "effect_sd", "increased_by", "var_explained", "lead_variant", "maf_1011", "cross_count", "candidate_orf", "candidate_name", "candidate_tier", "candidate_local_fdr", "provenance", "source_file", "source_sheet", "subtype"];
   const lines = [head.join("\t")];
   for (const i of TROWS) { const x = q.x[i], s = D.sources.code.indexOf(q.pv[i].split("#")[0]);
-    lines.push([q.id[i], D.datasets.id[q.ds[i]], tname(q.t[i]), D.traits.raw[q.t[i]], D.traits.cat[q.t[i]], q.m[i] === "j" ? "joint" : "within-cross", x < 0 ? "joint" : X.code[x], x < 0 ? "" : P.name[X.p1[x]], x < 0 ? "" : P.name[X.p2[x]],
-      q.c[i], q.a[i], q.e[i], q.p[i], q.e[i] - q.a[i], q.lod[i] ?? "", q.q[i] ?? "", q.ef[i], favours(i), q.ve[i] ?? "", q.lv[i], q.af[i] ?? "", q.cc[i] ?? "",
-      q.g[i] >= 0 ? D.genes.id[q.g[i]] : "", q.g[i] >= 0 ? D.genes.n[q.g[i]] : "", q.gt[i] ? TIER[q.gt[i]][0] : "", q.gf[i] ?? "", q.pv[i], D.sources.file[s], D.sources.sheet[s]].join("\t")); }
+    lines.push([q.id[i], D.datasets.id[q.ds[i]], tname(q.t[i]), D.traits.raw[q.t[i]], D.traits.cat[q.t[i]], mname(i), x >= 0 ? X.code[x] : qxs(i) ? qxs(i).map(c => X.code[c]).join(",") : (q.m[i] === "j" ? "joint" : "pooled"), x < 0 ? "" : P.name[X.p1[x]], x < 0 ? "" : P.name[X.p2[x]],
+      q.c[i], q.a[i] ?? "", q.e[i] ?? "", q.p[i] ?? "", placed(i) ? q.e[i] - q.a[i] : "", q.lod[i] ?? "", q.q[i] ?? "", q.ef[i], favours(i), q.ve[i] ?? "", q.lv[i], q.af[i] ?? "", q.cc[i] ?? "",
+      q.g[i] >= 0 ? D.genes.id[q.g[i]] : "", q.g[i] >= 0 ? D.genes.n[q.g[i]] : "", q.gt[i] ? TIER[q.gt[i]][0] : "", q.gf[i] ?? "", q.pv[i], D.sources.file[s], D.sources.sheet[s], q.k && q.k[i] ? q.k[i] : ""].join("\t")); }
   const blob = new Blob([lines.join("\n") + "\n"], { type: "text/tab-separated-values" });
   const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "qtl_atlas_filtered.tsv"; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 };
@@ -903,10 +997,14 @@ document.getElementById("tsv").onclick = () => {
 let INDEX = [];
 function buildIndex() {
   for (let i = 0; i < D.genes.c.length; i++) { const n = D.genes.n[i]; const tr = CANDG[i] ? " · candidate" : ""; INDEX.push({ t: "gene", key: (n || "").toUpperCase(), alt: D.genes.id[i].toUpperCase(), label: n || D.genes.id[i], sub: (n ? D.genes.id[i] + " · " : "") + D.genes.c[i] + tr, i }); }
-  for (const t of TORDER) INDEX.push({ t: "trait", key: tname(t).toUpperCase(), alt: D.traits.raw[t].toUpperCase().replace(/_/g, " "), label: tname(t), sub: "trait · " + D.traits.cat[t] + " · " + D.datasets.label[D.traits.ds[t]], i: t });
+  for (const t of TORDER) INDEX.push({ t: "trait", key: tname(t).toUpperCase(), alt: D.traits.raw[t].toUpperCase().replace(/_/g, " "), alt2: (D.traits.ck && D.traits.ck[t] || "").toUpperCase(), label: tname(t), sub: "trait · " + D.traits.cat[t] + " · " + D.datasets.label[D.traits.ds[t]], i: t });
   for (const x of XORDER) { const a = pname(D.crosses.p1[x]), b = pname(D.crosses.p2[x]);
-    INDEX.push({ t: "cross", key: D.crosses.code[x].toUpperCase(), alt: (a + " X " + b).toUpperCase(), alt2: (a + "×" + b).toUpperCase(), alt3: (a + "X" + b).toUpperCase(), label: xlabel(x), sub: "cross " + D.crosses.code[x] + " · " + fmt(D.crosses.n[x]) + " segregants", i: x }); }
-  for (let p = 0; p < D.parents.id.length; p++) INDEX.push({ t: "parent", key: D.parents.name[p].toUpperCase(), alt: D.parents.code[p].toUpperCase(), alt2: (D.parents.p18[p] || "").toUpperCase(), label: D.parents.name[p], sub: "parent strain · in 2 crosses" + (D.parents.p18[p] ? " · " + D.parents.p18[p] : ""), i: p });
+    INDEX.push({ t: "cross", key: D.crosses.code[x].toUpperCase(), alt: (a + " X " + b).toUpperCase(), alt2: (a + "×" + b).toUpperCase(), alt3: (a + "X" + b).toUpperCase(), label: xlabel(x), sub: "cross " + D.crosses.code[x] + (D.crosses.n[x] != null ? " · " + fmt(D.crosses.n[x]) + " segregants" : "") + " · " + D.datasets.label[D.crosses.ds[x]], i: x }); }
+  // one entry per strain name: the same background in several papers is one search result covering all its crosses
+  const byName = new Map();
+  for (let p = 0; p < D.parents.id.length; p++) { const n = D.parents.name[p]; if (!byName.has(n)) byName.set(n, []); byName.get(n).push(p); }
+  for (const [n, ps] of byName) { const xs = XORDER.filter(x => ps.includes(D.crosses.p1[x]) || ps.includes(D.crosses.p2[x])); const nds = new Set(ps.map(p => D.parents.ds[p])).size;
+    INDEX.push({ t: "parent", key: n.toUpperCase(), alt: (D.parents.code[ps[0]] || "").toUpperCase(), alt2: ps.map(p => D.parents.p18[p] || "").join(" ").toUpperCase().trim(), label: n, sub: "parent strain · " + xs.length + " cross" + (xs.length === 1 ? "" : "es") + (nds > 1 ? " in " + nds + " datasets" : ""), ps, xs }); }
   for (let d = 0; d < D.datasets.id.length; d++) INDEX.push({ t: "dataset", key: D.datasets.label[d].toUpperCase(), alt: D.datasets.id[d].toUpperCase(), alt2: "ROUND ROBIN", label: D.datasets.label[d], sub: "dataset · " + D.datasets.cite[d], i: d });
 }
 function parseCoord(s) {
@@ -939,7 +1037,7 @@ function choose(s) {
   else if (s.t === "gene") { const i = s.i, len = D.genes.e[i] - D.genes.a[i], half = Math.max(40000, len * 3); S.gene = i; S.q = null; openLocus(D.genes.c[i], (D.genes.a[i] + D.genes.e[i]) / 2 - half, (D.genes.a[i] + D.genes.e[i]) / 2 + half); }
   else if (s.t === "trait") { S.ds.add(D.traits.ds[s.i]); S.traits = new Set([s.i]); S.view = "genome"; go(); }
   else if (s.t === "cross") { S.ds.add(D.crosses.ds[s.i]); S.crosses = new Set([s.i]); S.view = "genome"; go(); }
-  else if (s.t === "parent") { const xs = XORDER.filter(x => D.crosses.p1[x] === s.i || D.crosses.p2[x] === s.i); S.ds.add(D.parents.ds[s.i]); S.crosses = new Set(xs); S.view = "genome"; go(); }
+  else if (s.t === "parent") { s.ps.forEach(p => S.ds.add(D.parents.ds[p])); S.crosses = new Set(s.xs); S.view = "genome"; go(); }
   else if (s.t === "dataset") { S.ds = new Set([s.i]); S.view = "genome"; go(); }
 }
 const qin = document.getElementById("q");
@@ -953,8 +1051,8 @@ qin.addEventListener("blur", () => setTimeout(() => document.getElementById("sug
 
 /* ---------- controls ---------- */
 function renderControls() {
-  document.getElementById("dschips").innerHTML = D.datasets.id.map((id, d) => '<button class="chip" data-ds="' + d + '" aria-pressed="' + S.ds.has(d) + '" style="--c:var(--accent)" title="' + esc(D.datasets.cite[d]) + '"><i></i>' + esc(D.datasets.label[d]) + '</button>').join("");
-  for (const m of ["both", "j", "w"]) document.getElementById("m-" + m).setAttribute("aria-pressed", S.model === m);
+  document.getElementById("dschips").innerHTML = D.datasets.id.map((id, d) => '<button class="chip" data-ds="' + d + '" aria-pressed="' + S.ds.has(d) + '" style="--c:var(' + DS_COLS[d % DS_COLS.length] + ')" title="' + esc(D.datasets.cite[d]) + '"><i></i>' + esc(D.datasets.label[d]) + '</button>').join("");
+  for (const m of ["both", "j", "w", "x"]) document.getElementById("m-" + m).setAttribute("aria-pressed", S.model === m);
   for (const v of ["genome", "locus", "table"]) document.getElementById("v-" + v).setAttribute("aria-pressed", S.view === v);
   const nt = [...S.traits].filter(t => S.ds.has(D.traits.ds[t])).length;
   document.getElementById("b-traits").textContent = "Traits (" + nt + ")";
@@ -968,8 +1066,9 @@ function renderPops() {
   const pt = document.getElementById("p-traits");
   if (!pt.hidden) {
     let h = '<div class="acts"><button class="btn" data-act="tnone">None</button><button class="btn" data-act="tall">All</button><span class="note">Selected traits are drawn by cross in the genome view and coloured in the region view.</span></div>';
-    for (const cat of CAT_ORDER) { const ts = visTraits().filter(t => D.traits.cat[t] === cat); if (!ts.length) continue;
-      h += '<h4>' + esc(cat) + '</h4><div class="opts">' + ts.map(t => '<label title="' + esc(D.traits.raw[t]) + '"><input type="checkbox" data-t="' + t + '"' + (S.traits.has(t) ? " checked" : "") + '><span>' + esc(tname(t)) + '</span></label>').join("") + '</div>'; }
+    const dss = [...new Set(visTraits().map(t => D.traits.ds[t]))];
+    for (const d of dss) for (const cat of CAT_ORDER) { const ts = visTraits().filter(t => D.traits.ds[t] === d && D.traits.cat[t] === cat); if (!ts.length) continue;
+      h += '<h4>' + (dss.length > 1 ? esc(D.datasets.label[d]) + ' · ' : '') + esc(cat) + '</h4><div class="opts">' + ts.map(t => '<label title="' + esc(D.traits.raw[t]) + '"><input type="checkbox" data-t="' + t + '"' + (S.traits.has(t) ? " checked" : "") + '><span>' + esc(tname(t)) + '</span></label>').join("") + '</div>'; }
     pt.innerHTML = h;
   }
   const pc = document.getElementById("p-crosses");
@@ -994,7 +1093,7 @@ document.getElementById("p-crosses").addEventListener("click", e => { if (e.targ
 document.getElementById("dschips").addEventListener("click", e => { const b = e.target.closest(".chip"); if (!b) return; const d = +b.dataset.ds;
   if (S.ds.has(d)) { if (S.ds.size > 1) S.ds.delete(d); } else S.ds.add(d); go(); });
 document.getElementById("crossf").addEventListener("click", e => { if (e.target.id === "clrx") { S.crosses.clear(); go(); } });
-for (const m of ["both", "j", "w"]) document.getElementById("m-" + m).onclick = () => { S.model = m; go(); };
+for (const m of ["both", "j", "w", "x"]) document.getElementById("m-" + m).onclick = () => { S.model = m; go(); };
 for (const id of ["g-height", "l-height"]) document.getElementById(id).addEventListener("click", e => { const b = e.target.closest("button[data-h]"); if (b && S.h !== b.dataset.h) { S.h = b.dataset.h; go(); } });
 document.getElementById("v-genome").onclick = () => { S.view = "genome"; go(); };
 document.getElementById("v-locus").onclick = () => { S.view = "locus"; clampRegion(); go(); };
@@ -1036,7 +1135,7 @@ function readHash() {
     else if (p.startsWith("fl")) S.tf.lod = p.slice(2);
     else if (p.startsWith("fe")) S.tf.ef = p.slice(2);
     else if (p[0] === "x") S.crosses = new Set(p.slice(1).split("_").map(id => XBYID[id]).filter(v => v != null));
-    else if (p[0] === "m" && ["j", "w"].includes(p.slice(1))) S.model = p.slice(1);
+    else if (p[0] === "m" && ["j", "w", "x"].includes(p.slice(1))) S.model = p.slice(1);
     else if (p[0] === "d") { const ds = new Set(p.slice(1).split("_").map(sc => D.datasets.sc.indexOf(sc)).filter(v => v >= 0)); if (ds.size) S.ds = ds; }
     else if (p[0] === "q") { const v = QBYID[p.slice(1)]; S.q = v != null ? v : null; }
     else if (p === "o") S.only = true;
@@ -1064,7 +1163,7 @@ fetch("data.json").then(r => { if (!r.ok) throw new Error(r.status); return r.js
   XORDER = d.crosses.id.map((_, i) => i);
   d.traits.id.forEach((id, i) => TBYID[id] = i); d.crosses.id.forEach((id, i) => XBYID[id] = i); d.qtl.id.forEach((id, i) => QBYID[id] = i); d.genes.id.forEach((id, i) => GENE_BY_ID[id] = i);
   d.jeff.q.forEach((q, j) => (JB[q] = JB[q] || []).push(j));
-  for (let i = 0; i < NQ; i++) (QBYCH[d.qtl.c[i]] = QBYCH[d.qtl.c[i]] || []).push(i);
+  for (let i = 0; i < NQ; i++) if (d.qtl.p[i] != null) (QBYCH[d.qtl.c[i]] = QBYCH[d.qtl.c[i]] || []).push(i);   // unplaced QTL (genetic position only) stay out of the maps
   d.causal.g.forEach((g, k) => (CBYG[g] = CBYG[g] || []).push(k));
   d.cand.g.forEach((g, k) => CANDG[g] = k);
   const def = d.traits.raw.indexOf(DEFAULT_TRAIT); S.traits.add(def >= 0 ? def : TORDER[0]);

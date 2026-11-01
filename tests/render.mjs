@@ -111,7 +111,9 @@ try {
     f = await search(page, "M22 x BY");
     check("search cross by parents 'M22 x BY'", f.includes("M22 × BY"));
     f = await search(page, "YJM454");
-    check("search parent strain YJM454", f.includes("YJM454") && (await page.textContent("#crossf")).includes("2 crosses"));
+    const pYJM = data.parents.name.map((n, i) => n === "YJM454" ? i : -1).filter(i => i >= 0);
+    const nYJM = data.crosses.id.filter((_, x) => pYJM.includes(data.crosses.p1[x]) || pYJM.includes(data.crosses.p2[x])).length;
+    check("search parent strain YJM454 (every dataset)", f.includes("YJM454") && (await page.textContent("#crossf")).includes(nYJM + " crosses"), nYJM + " crosses expected");
     f = await search(page, "round robin");
     check("search dataset 'round robin'", f.includes("Bloom 2019") && (await page.getAttribute("#dschips .chip", "aria-pressed")) === "true");
     f = await search(page, "Bloom");
@@ -122,7 +124,8 @@ try {
     // model control
     await load(page, "#genome");
     await page.click("#m-j"); await page.waitForTimeout(150);
-    check("model control: joint only", (await page.textContent("#g-meta")).includes(" 0 within-cross"));
+    const meta = await page.textContent("#g-meta");
+    check("model control: joint only", meta.includes("joint model QTL drawn") && !meta.includes("within-cross"), meta.slice(0, 120));
     await page.click("#m-both");
     await page.click("#g-height button[data-h='ef']"); await page.waitForTimeout(150);
     check("stem height toggle: effect", (await page.evaluate(() => location.hash)).includes("~he") && (await page.getAttribute("#g-height button[data-h='ef']", "aria-pressed")) === "true");
@@ -131,7 +134,8 @@ try {
     // table: filters, sort, download
     await load(page, "#table");
     const total = await page.textContent("#tv-title");
-    check("table shows all 12,303 QTL", total.includes("12,303 of 12,303"), total);
+    const NQ = data.qtl.id.length.toLocaleString("en-US");
+    check("table shows every QTL", total.includes(`${NQ} of ${NQ}`), total);
     const caf = data.traits.raw.indexOf("Caffeine;15mM;2");
     await page.selectOption("#tf-t", String(caf)); await page.waitForTimeout(150);
     await page.selectOption("#tf-x", "-1"); await page.waitForTimeout(150);
@@ -142,7 +146,8 @@ try {
     const nCaf20 = data.qtl.t.filter((t, i) => t === caf && data.qtl.lod[i] != null && data.qtl.lod[i] >= 20).length;
     check("table filter LOD >= 20", (await page.textContent("#tv-title")).includes(`${nCaf20.toLocaleString("en-US")} of`));
     await page.click("#ttable th[data-sort='lod']");
-    const firstLod = await page.$eval("#ttable tbody tr td:nth-child(10)", td => parseFloat(td.textContent));
+    const lodCol = 1 + (await page.$$eval("#ttable thead th", ths => ths.map(t => t.dataset.sort))).indexOf("lod");
+    const firstLod = await page.$eval(`#ttable tbody tr td:nth-child(${lodCol})`, td => parseFloat(td.textContent));
     const maxLod = Math.max(...data.qtl.lod.filter((l, i) => l != null && data.qtl.t[i] === caf));
     check("table sorts by LOD", Math.abs(firstLod - maxLod) < 0.06, firstLod + " vs " + maxLod);
     const [dl] = await Promise.all([page.waitForEvent("download"), page.click("#tsv")]);

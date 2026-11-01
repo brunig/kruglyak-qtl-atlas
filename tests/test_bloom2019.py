@@ -126,10 +126,11 @@ def test_joint_per_trait_avg120_range_52_195(J):
     assert min(n.values()) == 52 and max(n.values()) == 195
 
 
-def test_joint_per_cross_effects_cover_every_joint_qtl(D, J):
-    ids = {i for i, r in enumerate(rows(D["qtl"])) if r["m"] == "j"}
-    assert set(D["jeff"]["q"]) <= ids and len(set(D["jeff"]["q"])) == len(J)
-    assert len(D["jeff"]["q"]) == 18758
+def test_joint_per_cross_effects_cover_every_joint_qtl(D, J, ds):
+    ids = {i for i, r in enumerate(rows(D["qtl"])) if r["m"] == "j" and r["ds"] == ds}
+    mine = [q for q in D["jeff"]["q"] if D["qtl"]["ds"][q] == ds]
+    assert set(mine) <= ids and len(set(mine)) == len(J)
+    assert len(mine) == 18758
 
 
 def test_code_comment_common_lead_variants_3568(J):
@@ -426,5 +427,6 @@ def test_original_rows_kept_verbatim(D):
     assert width == {"F3D1:j": 11, "F3D1:w": 14, "F3D1:pc": 9, "F4D1:cg": 66}
 
 
-def test_variance_explained_table(D):
-    assert len(D["vexp"]["t"]) == 608 == 16 * 38
+def test_variance_explained_table(D, ds):
+    n = sum(1 for t in D["vexp"]["t"] if D["traits"]["ds"][t] == ds)
+    assert n == 608 == 16 * 38

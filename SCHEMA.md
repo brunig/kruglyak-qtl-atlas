@@ -35,7 +35,7 @@ Coordinates are 1-based S288C reference positions, build R64 (UCSC sacCer3); see
 | `design` | study design (`segregant panel`, `X-QTL`, `joint model`, or a combination) |
 | `build` | genome build of the source coordinates, and how it was established |
 | `method` | mapping method, in one sentence per model |
-| `fdr` | FDR threshold at which the QTL in this dataset were called |
+| `fdr` | FDR threshold at which the QTL in this dataset were called; `null` when the paper used a LOD threshold instead (stated in `method`) |
 | `interval` | what `qtl.a`–`qtl.e` mean for this dataset |
 | `effect` | units and sign convention of `qtl.ef` |
 | `nq` | number of QTL rows the dataset contributes |
@@ -81,7 +81,7 @@ Excel shows it. `F3D1:w#2` is the first data row of the within-cross sheet.
 | `p1`, `p2` | parent indices, in source order (Parent 1, Parent 2) |
 | `name` | cross name as the source writes it (`Cross 2`), may be `null` |
 | `g1` | parent index whose allele is genotype 1 in the within-cross model (the other parent is genotype 2). Inferred; see OPEN_QUESTIONS Q2 |
-| `n` | number of segregants analysed |
+| `n` | number of segregants analysed; `null` for bulk-segregant pools that were not counted |
 | `dip` | diploid parent strain |
 | `mm` | magic-marker plasmid |
 | `pv` | provenance key |
@@ -97,7 +97,7 @@ Excel shows it. `F3D1:w#2` is the first data row of the within-cross sheet.
 | `cond` | second field of `raw` (dose, temperature or pH), may be empty |
 | `bt` | third field of `raw`. Most defensible reading: experiment batch / replicate index (OPEN_QUESTIONS Q10) |
 | `ck` | condition key for matching the same condition across datasets: lower-case compound plus dose as the source gives it (`caffeine 15mM`); `null` if unsure |
-| `cat` | category: `drug/chemical`, `carbon source`, `temperature`, `pH`, `osmotic stress`, `reference medium` |
+| `cat` | category: `drug/chemical`, `carbon source`, `temperature`, `pH`, `osmotic stress`, `reference medium`, `metabolite` |
 | `catb` | where the category comes from (`Figure 1-source data 1, Phenotypes sheet: <section>` or `atlas assignment`) |
 
 ## `qtl`
@@ -117,6 +117,7 @@ told apart by `m`.
 | `c` | chromosome |
 | `a`, `e` | interval start and end. Within-cross: positions of the left and right markers of the 1.5-LOD drop interval. Joint: both equal the lead variant position (the source reports no interval) |
 | `p` | peak position. Within-cross: the relocalized peak marker (equals the source `pos` column). Joint: the lead variant |
+| `cm` | genetic position (cM) when the source gives no physical position; `a`, `e`, `p` are then `null` and the QTL is listed but not drawn on the genome |
 | `lod` | LOD at the peak (within-cross only) |
 | `q` | FDR q-value of the forward-search step that added the QTL (within-cross only; joint QTL passed q < 0.05 but their q is not reported) |
 | `ef` | standardized effect, SD units (see sign convention below) |
@@ -129,6 +130,7 @@ told apart by `m`.
 | `daf` | derived allele frequency in the 1,011 panel (`unfolded allele frequency`); joint only |
 | `up` | within-cross: index of the parent whose allele increases the trait; joint: `-1` (the sign of `ef` says whether the alternate or reference allele increases it) |
 | `ups`, `dns` | lists of parent indices the source names as carrying the beneficial (trait-increasing) or deleterious allele, when it reports direction by strain rather than by effect size; `null` otherwise |
+|  | When a QTL has `xs` and `ups`/`dns` of the same length, entry *k* belongs to cross `xs[k]` (the favoured and disfavoured parent in that cross, as Ehrenreich 2012 reports); otherwise they are unordered strain lists (Treusch 2015). |
 | `g` | candidate gene: gene index, `-1` if the paper assigned none |
 | `gf` | local FDR of that assignment |
 | `gt` | evidence tier of that gene (see `cand`) |
@@ -205,6 +207,7 @@ parent, with the probability mass of the pair's joint posterior summed over the 
 |---|---|
 | `ds`, `g` | dataset and gene indices |
 | `tier` | best evidence tier over the gene's rows: `v` previously identified (the analysis code's list, `sources/bloom2019/code_tables/previously_identified.tsv`), `5` local FDR < 0.05, `20` local FDR < 0.2 |
+|  | Further codes from later datasets: `x` confirmed by allele replacement, `c` candidate gene named by the paper without a statistical tier. Datasets without fine-mapping leave `causal.pcs`, `sp`, `eff`, `fdr`, `jppc`, `jv` null and `q2 = -1`. |
 | `fdr` | lowest local FDR |
 | `nt` | number of traits the gene is assigned for |
 | `n` | number of rows in `causal` |

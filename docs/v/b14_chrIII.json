@@ -1,0 +1,1 @@
+{"cols":{"b14:S1":["Name","PubChem ID","LOD score","Chromosome","Position (cM)","Parent's P-value"],"b14:TF":["kind","metabolite","chromosome","gene","allele_up","section","quote"]},"rows":{"b14:S1":{"b14-w-10":["dihydroorotate","5460289","18.581","3","60.08","1.46E-11"],"b14-w-52":["valine","6287","11.957","3","60.07","6.65E-09"]},"b14:TF":{}}}
