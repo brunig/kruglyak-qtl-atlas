@@ -183,6 +183,7 @@ footer a { color: var(--muted); }
       <div class="head">
         <h2 id="g-title">Genome</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span id="g-height"></span>
           <button class="btn" id="shuffle">Show another trait</button>
           <button class="btn" id="copy-g">Copy link</button>
         </div>
@@ -208,6 +209,7 @@ footer a { color: var(--muted); }
         <button class="btn" id="zin" title="Zoom in (+)">+</button>
         <button class="btn" id="pl" title="Pan left (←)">◀</button>
         <button class="btn" id="pr" title="Pan right (→)">▶</button>
+        <span id="l-height"></span>
         <button class="btn" id="copy-l">Copy link</button>
       </div>
       <div class="head" style="padding-top:2px"><div class="meta" id="l-meta"></div></div>
@@ -265,7 +267,7 @@ const DEFAULT_TRAIT = "Cadmium_Chloride;75uM;2";
 let D, CH, CHL, CHSTART = {}, GLEN = 0, NQ = 0, HB = 50000;
 let TORDER = [], XORDER = [], JB = {}, QBYCH = {}, CBYG = {}, CANDG = {}, GENE_BY_ID = {}, TBYID = {}, XBYID = {}, QBYID = {};
 const S = { view: "genome", ds: new Set(), traits: new Set(), crosses: new Set(), model: "both", chrom: "chrIV", start: 400000, end: 620000, q: null, gene: null, only: false,
-  hover: null, tf: { t: "", x: "", c: "", lod: "", ef: "", m: "" }, tsort: { k: null, d: 1 }, tlimit: 500, src: false };
+  hover: null, h: "lod", tf: { t: "", x: "", c: "", lod: "", ef: "", m: "" }, tsort: { k: null, d: 1 }, tlimit: 500, src: false };
 
 function css(v) { return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
 function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
@@ -332,6 +334,66 @@ function sizeCanvas(cv, h) {
 }
 function fitText(ctx, s, w) { if (ctx.measureText(s).width <= w) return s; while (s.length > 1 && ctx.measureText(s + "…").width > w) s = s.slice(0, -1); return s + "…"; }
 
+/* ---------- lollipop tracks: one per cross (plus the joint model), for the selected traits ----------
+   The interval is a thin strip on the baseline, the peak a stem. Height is LOD on a log scale (LOD 3 to 500)
+   or the signed effect (±0.5 SD; larger effects are clipped and ringed). Joint QTL have no LOD, so their track always shows signed effect. */
+const LOD_LO = Math.log10(3), LOD_HI = Math.log10(500), EF_MAX = 0.5;
+// effect oriented so that up means the second-named parent's allele (within-cross) or the alternate allele (joint) increases colony size
+function upEf(i) { const q = Q(); if (q.m[i] === "j") return q.ef[i]; const x = q.x[i]; return D.crosses.g1[x] === D.crosses.p1[x] ? q.ef[i] : -q.ef[i]; }
+function trackEff(x) { return S.h === "ef" || x < 0; }
+function drawTracks(ctx, o) {
+  // o: { L, R, w, top, th, rows, X (i, pos) -> px, inView (i) -> bool, narrow, bands (fn) }
+  const muted = css("--muted"), faint = css("--faint"), rule = css("--rule"), fg = css("--fg");
+  const hits = [];
+  if (o.bands) o.bands(o.top, o.rows.length * o.th);
+  ctx.font = (o.narrow ? "9.5px " : "11px ") + css("--sans"); ctx.textBaseline = "middle";
+  o.rows.forEach((x, r) => {
+    const y0 = o.top + r * o.th, eff = trackEff(x);
+    ctx.fillStyle = x < 0 ? fg : muted; ctx.textAlign = "right";
+    ctx.fillText(fitText(ctx, o.narrow ? (x < 0 ? "joint" : D.crosses.code[x]) : xlabel(x), o.L - 8), o.L - 8, y0 + o.th / 2);
+    ctx.strokeStyle = rule; ctx.lineWidth = 1;
+    const line = (y, dash) => { ctx.setLineDash(dash ? [2, 3] : []); ctx.beginPath(); ctx.moveTo(o.L, y); ctx.lineTo(o.w - o.R, y); ctx.stroke(); };
+    if (eff) { line(y0 + o.th / 2, false); line(y0 + o.th / 2 - 0.5 * (o.th / 2 - 4), true); line(y0 + o.th / 2 + 0.5 * (o.th / 2 - 4), true); }
+    else { const yb = y0 + o.th - 3; line(yb, false); for (const l of [10, 100]) line(yb - (Math.log10(l) - LOD_LO) / (LOD_HI - LOD_LO) * (o.th - 8), true); }
+    ctx.setLineDash([]);
+  });
+  const q = Q();
+  for (let i = 0; i < NQ; i++) {
+    if (!S.traits.has(q.t[i]) || !qv(i) || !o.inView(i)) continue;
+    const r = q.x[i] < 0 ? 0 : o.rows.indexOf(q.x[i]); if (r < 0) continue;
+    const y0 = o.top + r * o.th, eff = trackEff(q.x[i]), col = tcol(q.t[i]);
+    let yb, yt;
+    if (eff) { yb = y0 + o.th / 2; const v = Math.max(-1, Math.min(1, upEf(i) / EF_MAX)); yt = yb - v * (o.th / 2 - 4); }
+    else { yb = y0 + o.th - 3; const v = Math.max(0.05, Math.min(1, (Math.log10(Math.max(1, q.lod[i])) - LOD_LO) / (LOD_HI - LOD_LO))); yt = yb - v * (o.th - 8); }
+    const xs = o.X(i, q.p[i]);
+    let x0 = xs, x1 = xs;
+    if (q.a[i] !== q.e[i]) { x0 = Math.max(o.L, o.X(i, q.a[i])); x1 = Math.min(o.w - o.R, Math.max(o.X(i, q.e[i]), x0 + 1)); ctx.globalAlpha = 0.35; ctx.fillStyle = col; ctx.fillRect(x0, yb - 1.5, x1 - x0, 3); ctx.globalAlpha = 1; }
+    if (xs >= o.L - 3 && xs <= o.w - o.R + 3) {
+      ctx.strokeStyle = col; ctx.lineWidth = 1.25; ctx.beginPath(); ctx.moveTo(xs, yb); ctx.lineTo(xs, yt); ctx.stroke();
+      ctx.fillStyle = col; ctx.beginPath(); ctx.arc(xs, yt, i === S.q ? 3.6 : 2.6, 0, 7); ctx.fill();
+      if (eff && Math.abs(upEf(i)) > EF_MAX) { ctx.strokeStyle = col; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(xs, yt, 4.6, 0, 7); ctx.stroke(); }
+      if (i === S.q) { ctx.strokeStyle = fg; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(xs, yt, 5.5, 0, 7); ctx.stroke(); }
+    }
+    hits.push({ i, r, xs, x0, x1, ya: Math.min(yt, yb) - 5, yb: Math.max(yt, yb) + 4 });
+  }
+  return { top: o.top, th: o.th, rows: o.rows, hits, L: o.L };
+}
+function trackHit(T, x, y) {
+  if (!T || y < T.top || y >= T.top + T.rows.length * T.th || x < T.L) return null;
+  const r = Math.floor((y - T.top) / T.th); let best = null, bd = 6;
+  for (const h of T.hits) { if (h.r !== r) continue;
+    const ds = Math.abs(x - h.xs) + (y >= h.ya && y <= h.yb ? 0 : 3);
+    if (ds < bd) { bd = ds; best = h; } }
+  if (!best) for (const h of T.hits) if (h.r === r && x >= h.x0 && x <= h.x1 && (!best || h.x1 - h.x0 < best.x1 - best.x0)) best = h;
+  return best ? best.i : -1;
+}
+function heightSeg(id) { return '<div class="seg" role="group" aria-label="Stem height"><button data-h="lod" aria-pressed="' + (S.h === "lod") + '" title="Stem height: LOD at the peak, log scale">LOD</button><button data-h="ef" aria-pressed="' + (S.h === "ef") + '" title="Stem height: signed effect, SD units">Effect</button></div>'; }
+function trackLegend() {
+  return '<span><i class="sw" style="--c:var(--accent);width:2px;height:12px;border:0;background:var(--c)"></i>peak; ' + (S.h === "lod" ? "height = LOD (log scale; dotted lines at 10 and 100). The joint track has no LOD and shows signed effect" : "height = effect, ±0.5 SD, larger effects clipped and ringed; dotted lines at ±0.25") + '</span>' +
+    '<span>up = the second-named parent\'s allele (joint track: the alternate allele) makes larger colonies</span>' +
+    '<span><i class="sw box" style="--c:var(--accent);opacity:.4;height:3px"></i>1.5-LOD interval</span>';
+}
+
 /* ---------- genome view ---------- */
 let G = null;
 function drawGenome() {
@@ -340,7 +402,7 @@ function drawGenome() {
   const L = narrow ? 74 : 168, R = 10, hTop = 22;
   const traits = visTraits(), crosses = visCrosses();
   const rowH = narrow ? 8 : 12, heatH = rowH * traits.length;
-  const ivTop = hTop + heatH + 40, ivRows = [-1, ...crosses], ivH = narrow ? 11 : 14, axY = ivTop + ivRows.length * ivH + 8;
+  const ivTop = hTop + heatH + 40, ivRows = [-1, ...crosses], ivH = narrow ? 26 : 36, axY = ivTop + ivRows.length * ivH + 8;
   const { ctx, w, h } = sizeCanvas(cv, axY + 26);
   const X = g => L + (g / GLEN) * (w - L - R);
   ctx.clearRect(0, 0, w, h);
@@ -365,23 +427,13 @@ function drawGenome() {
   // interval panel
   ctx.font = "11px " + css("--sans"); ctx.fillStyle = muted; ctx.textAlign = "left";
   const selT = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
-  ctx.fillText(selT.length ? "QTL of the selected trait" + (selT.length > 1 ? "s" : "") + " by cross; joint-model lead variants on the top row" : "Select a trait (click its name above, or Traits) to draw its QTL", L, ivTop - 12);
-  CH.forEach((ch, i) => { if (i % 2 === 0) { ctx.fillStyle = band; ctx.fillRect(X(CHSTART[ch]), ivTop, X(CHSTART[ch] + CHL[ch]) - X(CHSTART[ch]), ivRows.length * ivH); } });
-  ctx.font = (narrow ? "9.5px " : "11px ") + css("--sans");
-  ivRows.forEach((x, r) => { const y = ivTop + r * ivH; ctx.fillStyle = x < 0 ? fg : muted; ctx.textAlign = "right";
-    ctx.fillText(fitText(ctx, narrow ? (x < 0 ? "joint" : D.crosses.code[x]) : xlabel(x), L - 8), L - 8, y + ivH / 2); });
-  const q = Q(); const hits = [];
-  for (let i = 0; i < NQ; i++) { if (!S.traits.has(q.t[i]) || !qv(i)) continue;
-    const r = q.x[i] < 0 ? 0 : ivRows.indexOf(q.x[i]); if (r < 0) continue;
-    const y = ivTop + r * ivH, g0 = CHSTART[q.c[i]];
-    ctx.globalAlpha = qAlpha(i); ctx.fillStyle = tcol(q.t[i]);
-    if (q.a[i] === q.e[i]) { const xm = X(g0 + q.p[i]), lw = 1 + 2 * Math.min(1, Math.abs(q.ef[i]) / 0.5); ctx.fillRect(xm - lw / 2, y + 1, lw, ivH - 2); hits.push({ i, x0: xm - 2, x1: xm + 2, y, h: ivH }); }
-    else { const x0 = X(g0 + q.a[i]), x1 = Math.max(X(g0 + q.e[i]), x0 + 2); ctx.fillRect(x0, y + 2, x1 - x0, ivH - 4); hits.push({ i, x0, x1, y, h: ivH }); }
-    ctx.globalAlpha = 1; }
+  ctx.fillText(selT.length ? "QTL of the selected trait" + (selT.length > 1 ? "s" : "") + " by cross: stems at peaks, strips for 1.5-LOD intervals; joint model on the top track" : "Select a trait (click its name above, or Traits) to draw its QTL", L, ivTop - 12);
+  const T = drawTracks(ctx, { L, R, w, top: ivTop, th: ivH, rows: ivRows, narrow, X: (i, pos) => X(CHSTART[Q().c[i]] + pos), inView: () => true,
+    bands: (top, hh) => CH.forEach((ch, k) => { if (k % 2 === 0) { ctx.fillStyle = band; ctx.fillRect(X(CHSTART[ch]), top, X(CHSTART[ch] + CHL[ch]) - X(CHSTART[ch]), hh); } }) });
   // axis labels
   ctx.textAlign = "center"; ctx.fillStyle = muted; ctx.font = "11px " + css("--sans");
   CH.forEach((ch, i) => { const xm = X(CHSTART[ch] + CHL[ch] / 2); if (!narrow || i % 2 === 0 || CHL[ch] > 700000) ctx.fillText(ch.slice(3), xm, axY + 8); });
-  G = { L, R, w, X, hTop, rowH, heatH, traits, ivTop, ivH, ivRows, hits };
+  G = { L, R, w, X, hTop, rowH, heatH, traits, T };
 }
 function renderGenome() {
   const sel = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
@@ -393,7 +445,8 @@ function renderGenome() {
   if (sel.length) bits.push(fmt(nj) + " joint-model and " + fmt(nw) + " within-cross QTL drawn");
   bits.push("click a trait name to add or remove it · click a QTL or the heatmap to open the region");
   document.getElementById("g-meta").innerHTML = bits.join(" · ");
-  document.getElementById("g-legend").innerHTML = rampLegend() + '<span><i class="sw box" style="--c:var(--accent)"></i>within-cross 1.5-LOD interval, opacity by LOD</span><span><i class="sw tick" style="--c:var(--accent)"></i>joint-model lead variant, width and opacity by |effect|</span>';
+  document.getElementById("g-legend").innerHTML = rampLegend() + trackLegend();
+  document.getElementById("g-height").innerHTML = heightSeg();
   drawGenome(); renderDsInfo();
 }
 function rampLegend() { const H = heat(); const stops = [0, .25, .5, .75, 1].map(t => mako(t)).join(","); return '<span>1 <i class="ramp" style="background:linear-gradient(90deg,' + stops + ')"></i> ' + H.max + ' QTL</span><span><i class="sw box" style="--c:var(--nopeak)"></i>none</span>'; }
@@ -416,11 +469,8 @@ function gPos(ev) { const r = gcan.getBoundingClientRect(); const x = ev.clientX
   return { x, y, ch, pos }; }
 function gHit(p) {
   if (p.y >= G.hTop && p.y < G.hTop + G.heatH) { const t = G.traits[Math.floor((p.y - G.hTop) / G.rowH)]; return { kind: p.x < G.L ? "tlabel" : "heat", t }; }
-  if (p.y >= G.ivTop && p.y < G.ivTop + G.ivRows.length * G.ivH && p.x >= G.L) {
-    const r = Math.floor((p.y - G.ivTop) / G.ivH); let best = null, bd = 6;
-    for (const h of G.hits) { if (h.y !== G.ivTop + r * G.ivH) continue; const d = p.x < h.x0 ? h.x0 - p.x : p.x > h.x1 ? p.x - h.x1 : 0; if (d < bd || (d === 0 && best && h.x1 - h.x0 < best.x1 - best.x0)) { bd = d; best = h; } }
-    return best ? { kind: "qtl", i: best.i } : { kind: "row" };
-  }
+  const ti = trackHit(G.T, p.x, p.y);
+  if (ti != null) return ti >= 0 ? { kind: "qtl", i: ti } : { kind: "row" };
   return { kind: "none" };
 }
 gcan.addEventListener("mousemove", ev => {
@@ -443,7 +493,7 @@ gcan.addEventListener("click", ev => {
 function toggleTrait(t) { if (S.traits.has(t)) S.traits.delete(t); else S.traits.add(t); go(); }
 function qtlTip(i) {
   const q = Q(); const out = ["<b>" + esc(tname(q.t[i])) + "</b> · " + esc(xlabel(q.x[i]))];
-  if (q.m[i] === "w") out.push('<span class="mono">' + q.c[i] + ":" + fmt(q.a[i]) + "–" + fmt(q.e[i]) + "</span> · LOD " + num(q.lod[i], 1) + " · β " + sgn(q.ef[i], 2));
+  if (q.m[i] === "w") out.push('<span class="mono">' + q.c[i] + ":" + fmt(q.a[i]) + "–" + fmt(q.e[i]) + "</span> · LOD " + num(q.lod[i], 1) + " · β " + sgn(q.ef[i], 2) + " · " + esc(pname(q.up[i])) + " allele larger colonies");
   else out.push('<span class="mono">' + esc(q.lv[i]) + "</span> · mean β " + sgn(q.ef[i], 2) + " · " + q.cc[i] + " crosses");
   if (q.g[i] >= 0) out.push("candidate gene " + esc(gname(q.g[i])) + " (" + TIER[q.gt[i]][0].toLowerCase() + ")");
   return out;
@@ -489,7 +539,9 @@ function drawLocus() {
   const geneItems = genes.map(i => ({ i, x0: X(D.genes.a[i]), x1: X(D.genes.e[i]) + (span < 400000 ? 6 + 6.5 * gname(i).length : 2) }));
   const nGL = Math.max(1, packLanes(geneItems, 2));
   const rowH = rows.length > 400 ? 3 : rows.length > 140 ? 5 : 11;
-  const axH = 22, qTop = axH + 22, qH = Math.max(16, rows.length * rowH);
+  const selT = [...S.traits].filter(t => S.ds.has(D.traits.ds[t]));
+  const trRows = selT.length ? [-1, ...visCrosses()] : [], trTh = narrow ? 28 : 40;
+  const axH = 22, trTop = axH + 22, qTop = trTop + (trRows.length ? trRows.length * trTh + 30 : 0), qH = Math.max(16, rows.length * rowH);
   const cTop = qTop + qH + 26, cLH = 16, gTop = cTop + nCL * cLH + 26, gLH = 18;
   const Hh = gTop + nGL * gLH + 8;
   const { ctx, w, h } = sizeCanvas(cv, Hh);
@@ -499,7 +551,14 @@ function drawLocus() {
   ctx.strokeStyle = rule; ctx.fillStyle = muted; ctx.textAlign = "center"; ctx.lineWidth = 1;
   for (let t = Math.ceil(S.start / step) * step; t <= S.end; t += step) { const x = X(t); ctx.beginPath(); ctx.moveTo(x, axH - 4); ctx.lineTo(x, Hh - 4); ctx.globalAlpha = .5; ctx.stroke(); ctx.globalAlpha = 1; ctx.fillText(fmtkb(t), x, axH / 2); }
   const lbl = (t, y) => { ctx.textAlign = "left"; ctx.fillStyle = muted; ctx.font = "600 11px " + css("--sans"); ctx.fillText(t, 4, y); ctx.font = "11px " + css("--sans"); };
-  lbl("QTL · " + rows.length, qTop - 12); lbl("Candidate genes", cTop - 12); lbl("Genes", gTop - 12);
+  lbl("QTL · " + rows.length + (selT.length ? " (every trait; selected in colour)" : ""), qTop - 12); lbl("Candidate genes", cTop - 12); lbl("Genes", gTop - 12);
+  let T = null;
+  if (trRows.length) {
+    lbl("Selected trait" + (selT.length > 1 ? "s" : "") + " by cross", trTop - 12);
+    ctx.save(); ctx.beginPath(); ctx.rect(0, trTop - 2, w, trRows.length * trTh + 4); ctx.clip();
+    T = drawTracks(ctx, { L, R, w, top: trTop, th: trTh, rows: trRows, narrow, X: (i, pos) => X(pos), inView: i => Q().c[i] === S.chrom && Q().e[i] >= S.start && Q().a[i] <= S.end });
+    ctx.restore(); ctx.textBaseline = "middle"; ctx.font = "11px " + css("--sans");
+  }
   // QTL rows, grouped by trait
   const q = Q(); const rr = []; let lastT = -1; const focus = S.hover != null ? S.hover : S.q;
   ctx.font = (narrow ? "9.5px " : "11px ") + css("--sans");
@@ -538,7 +597,7 @@ function drawLocus() {
     if (x1 - x0 > 8) { ctx.fillStyle = css("--panel"); const dir = D.genes.s[i] === "-" ? -1 : 1; const ax = dir > 0 ? x1 - 3 : x0 + 3; ctx.beginPath(); ctx.moveTo(ax, y + 2 + gh / 2); ctx.lineTo(ax - dir * 4, y + 3); ctx.lineTo(ax - dir * 4, y + 1 + gh); ctx.fill(); }
     if (showNames) { ctx.fillStyle = sel ? css("--accent") : tr ? fg : dub ? faint : muted; ctx.textAlign = "left"; ctx.font = (tr ? "600 " : "") + "11px " + css("--sans"); ctx.fillText(gname(i), x1 + 3, y + 2 + gh / 2); ctx.font = "11px " + css("--sans"); }
     ctx.globalAlpha = 1; geneR.push({ x0, x1: Math.max(x1, x0 + 3), y, h: gLH, i }); });
-  LV = { L, R, w, X, rr, candR, geneR, rows, cands, genes, qTop };
+  LV = { L, R, w, X, rr, candR, geneR, rows, cands, genes, qTop, T };
 }
 function renderLocus() {
   document.getElementById("l-title").textContent = S.chrom + ":" + fmt(S.start) + "–" + fmt(S.end);
@@ -546,7 +605,8 @@ function renderLocus() {
   document.getElementById("l-meta").innerHTML = fmtkb(S.end - S.start) + (S.only ? " · selected traits only" : " · every trait") +
     (S.model === "both" ? "" : S.model === "j" ? " · joint model" : " · within-cross") + (S.crosses.size ? " · " + S.crosses.size + " crosses" : "") +
     " · click a QTL for its card · drag to pan · double-click or ctrl-scroll to zoom";
-  document.getElementById("l-legend").innerHTML = '<span><i class="sw box" style="--c:var(--accent)"></i>within-cross 1.5-LOD interval, opacity by LOD, dark tick at the peak</span>' +
+  document.getElementById("l-height").innerHTML = heightSeg();
+  document.getElementById("l-legend").innerHTML = (S.traits.size ? trackLegend() : "") + '<span><i class="sw box" style="--c:var(--accent)"></i>within-cross 1.5-LOD interval, opacity by LOD, dark tick at the peak</span>' +
     '<span><i class="sw box" style="--c:var(--contrast);width:9px;height:9px;transform:rotate(45deg)"></i>joint-model lead variant, opacity by |effect|</span>' +
     '<span>selected traits in their own colours</span>' +
     Object.keys(TIER).map(k => '<span><i class="sw box" style="--c:var(' + TIER[k][1] + ')"></i>' + TIER[k][0].toLowerCase() + '</span>').join("");
@@ -707,6 +767,7 @@ let drag = null;
 function lxy(ev) { const r = lcan.getBoundingClientRect(); return { x: ev.clientX - r.left, y: ev.clientY - r.top }; }
 function posAt(x) { return S.start + (x - LV.L) / (LV.w - LV.L - LV.R) * (S.end - S.start); }
 function lHit(x, y) {
+  const ti = trackHit(LV.T, x, y); if (ti != null && ti >= 0) return { kind: "qtl", i: ti };
   for (const r of LV.rr) if (y >= r.y && y < r.y + r.h) return { kind: "qtl", i: r.i };
   for (const r of LV.candR) if (x >= r.x0 - 2 && x <= r.x1 + 2 && y >= r.y && y < r.y + r.h) return { kind: "gene", i: r.g };
   for (const r of LV.geneR) if (x >= r.x0 - 1 && x <= r.x1 + 1 && y >= r.y && y < r.y + r.h) return { kind: "gene", i: r.i };
@@ -934,6 +995,7 @@ document.getElementById("dschips").addEventListener("click", e => { const b = e.
   if (S.ds.has(d)) { if (S.ds.size > 1) S.ds.delete(d); } else S.ds.add(d); go(); });
 document.getElementById("crossf").addEventListener("click", e => { if (e.target.id === "clrx") { S.crosses.clear(); go(); } });
 for (const m of ["both", "j", "w"]) document.getElementById("m-" + m).onclick = () => { S.model = m; go(); };
+for (const id of ["g-height", "l-height"]) document.getElementById(id).addEventListener("click", e => { const b = e.target.closest("button[data-h]"); if (b && S.h !== b.dataset.h) { S.h = b.dataset.h; go(); } });
 document.getElementById("v-genome").onclick = () => { S.view = "genome"; go(); };
 document.getElementById("v-locus").onclick = () => { S.view = "locus"; clampRegion(); go(); };
 document.getElementById("v-table").onclick = () => { S.view = "table"; go(); };
@@ -954,6 +1016,7 @@ function token() {
   if (S.ds.size < D.datasets.id.length) t += "~d" + [...S.ds].map(i => D.datasets.sc[i]).join("_");
   if (S.view === "locus" && S.q != null) t += "~q" + Q().id[S.q];
   if (S.view === "locus" && S.only) t += "~o";
+  if (S.view !== "table" && S.h === "ef") t += "~he";
   if (S.view === "table") { const f = S.tf; if (f.t !== "") t += "~ft" + D.traits.id[+f.t]; if (f.x !== "") t += "~fx" + (+f.x < 0 ? "joint" : D.crosses.id[+f.x]); if (f.c) t += "~fc" + f.c;
     if (f.lod !== "") t += "~fl" + f.lod; if (f.ef !== "") t += "~fe" + f.ef; }
   return t;
@@ -963,7 +1026,7 @@ function readHash() {
   const h = decodeURIComponent((location.hash || "").slice(1)); if (!h) return false;
   const parts = h.split("~"); const head = parts.shift();
   // a link carries the full state: start from the defaults, then apply what it names
-  S.crosses = new Set(); S.model = "both"; S.only = false; S.q = null; S.src = false; S.tf = { t: "", x: "", c: "", lod: "", ef: "", m: "" };
+  S.crosses = new Set(); S.model = "both"; S.only = false; S.h = "lod"; S.q = null; S.src = false; S.tf = { t: "", x: "", c: "", lod: "", ef: "", m: "" };
   S.ds = new Set(D.datasets.id.map((_, i) => i));
   for (const p of parts) {
     if (p[0] === "t" && p.length >= 1 && !p.startsWith("tf")) { S.traits = new Set(p.slice(1).split("_").map(id => TBYID[id]).filter(v => v != null)); }
@@ -977,6 +1040,7 @@ function readHash() {
     else if (p[0] === "d") { const ds = new Set(p.slice(1).split("_").map(sc => D.datasets.sc.indexOf(sc)).filter(v => v >= 0)); if (ds.size) S.ds = ds; }
     else if (p[0] === "q") { const v = QBYID[p.slice(1)]; S.q = v != null ? v : null; }
     else if (p === "o") S.only = true;
+    else if (p === "he") S.h = "ef";
   }
   const m = head.match(/^(chr[IVX]+)\.(\d+)-(\d+)$/);
   if (m && CHL[m[1]]) { S.view = "locus"; S.chrom = m[1]; S.start = +m[2]; S.end = +m[3]; clampRegion(); }

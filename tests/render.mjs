@@ -124,6 +124,10 @@ try {
     await page.click("#m-j"); await page.waitForTimeout(150);
     check("model control: joint only", (await page.textContent("#g-meta")).includes(" 0 within-cross"));
     await page.click("#m-both");
+    await page.click("#g-height button[data-h='ef']"); await page.waitForTimeout(150);
+    check("stem height toggle: effect", (await page.evaluate(() => location.hash)).includes("~he") && (await page.getAttribute("#g-height button[data-h='ef']", "aria-pressed")) === "true");
+    await page.screenshot({ path: path.join(SHOTS, "light-genome-effect.png"), fullPage: true });
+    await page.click("#g-height button[data-h='lod']");
     // table: filters, sort, download
     await load(page, "#table");
     const total = await page.textContent("#tv-title");
