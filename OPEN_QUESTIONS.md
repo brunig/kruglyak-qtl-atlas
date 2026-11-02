@@ -1243,6 +1243,56 @@ fetched; neither carries a table. The underlying expression and genotype data be
 No effect sizes are tabulated. Figure 2 plots expression by MAT-GPA1 genotype (RM is MATa, BY is MATα;
 GPA1 S469I is the BY allele), and effects differ by transcript, so `qtl.up` is not set.
 
+## Demogines et al. 2008
+
+Sources: the article page `sources/demogines2008/article.html` (statements quoted verbatim in
+`extracted/text_facts.tsv`) and four supporting figures (`raw/`). Tables 1-3 of the article are
+images and were not transcribed.
+
+### Q1. No QTL table; linkage support intervals are not printed
+The four linkage QTL are given in the Results text as a peak marker and a LOD (MMS and 4-NQO at
+YLR034C_1989, LOD 16.6 and 10.1; bleomycin YBR138C_275, LOD 5.2; caffeine YBR161W_293, LOD 5.0).
+The 1.5-LOD support intervals were computed (Methods) but their bounds are not printed.
+**Atlas:** each linkage QTL is drawn over the ORF that contains its peak marker (SGD R64-5-1
+bounds), labelled in `qtl.k`; this is not the support interval. The "22 genes in the support
+interval" cannot be checked (skipped test).
+
+### Q2. Reading the marker offset (most defensible reading)
+Markers are named ORF_offset (from the Brem et al. 2002 genotyping). The atlas reads the offset as
+bp from the start codon: it puts the chrXII peak at 210,161 (inside SMF3), ~1.6 kb from RAD5 and
+~12 kb from AAT2, matching the text's "~2 kb" and "approximately 12.5 kb". Read from the ORF's left
+coordinate instead, the distances would be ~3.5 kb and ~14 kb.
+
+### Q3. Figure 2 legend says chromosome 11
+The legend of Figure 2 says the MMS- and 4-NQO-sensitive phenotypes are "linked to a locus on
+chromosome 11"; the Results text says chromosome 12 near SMF3, and SMF3 and RAD5 are on chrXII.
+The atlas follows the text (strict xfail `test_figure2_legend_chromosome`).
+
+### Q4. Bulk-segregant regions and genome build
+The chrVII (433,546-551,683, peak 463,019) and chrXIV (437,935-473,640, peak 467,209) regions are
+on the "BY reference genome" of the tiling arrays (2008). Their peaks fall inside KAP122 and MKT1 on
+R64-5-1, the genes the text places at them, so the coordinates are used as printed, no transform.
+They come from third-backcross pools (40 resistant vs 40 sensitive; backcross segregants ~94% RM),
+modelled as a second cross; they are not intervals of the F1 linkage scan.
+
+### Q5. Direction
+No signed effects. Traits are growth (resistance) on each agent. `qtl.up`: BY at the chrXII RAD5
+locus for MMS and 4-NQO (the RM RAD5 allele confers sensitivity), RM at the chrXIV MKT1 region (the
+BY MKT1 allele contributes to 4-NQO sensitivity in a RAD5-RM background). No direction is stated for
+the chrVII region or the bleomycin and caffeine loci.
+
+### Q6. Confirmation tiers
+RAD5: homologous allele replacement in both backgrounds (Figures S1, S3, 3A) → tier `x`. MKT1:
+deletion plus allele-specific plasmid complementation in backcross segregants; homologous
+replacement failed because the integration marker interfered with MKT1 function. Recorded as tier
+`x` (experimentally confirmed), with this caveat. KAP122 and PDR1 (chrVII) were tested and did not
+suppress; not candidates. MKT1 was not significant in the F1 linkage scan (stated in the text).
+
+### Q7. Doses and condition keys
+Doses from Methods: MMS 0.03%, 4-NQO 0.25 µg/ml (0.30 µg/ml also used), caffeine 10 mM, bleomycin
+10 µg/ml. None matches another dataset's dose (Gou 2019 used MMS 0.01% and 4NQO "0.1 mg/ml"), so
+the condition keys link to no other dataset.
+
 ## Blocked steps
 
 ### B1. GitHub Pages
