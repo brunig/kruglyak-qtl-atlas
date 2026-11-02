@@ -1,0 +1,27 @@
+kind	key	value	quote	location
+count	local_A	1031	We mapped 1031 local eQTLs at an FDR of 5%.	PMC11903034 full text (efetch db=pmc), body
+count	distant_A	1562	We mapped 1562 distant eQTLs at an FDR of 5%	PMC11903034 full text (efetch db=pmc), body
+count	hotspots_A	12	We identified 12 distant eQTL hotspots in the one-pot eQTL experiment	PMC11903034 full text (efetch db=pmc), body
+count	local_BC	1193;721	We mapped a total of 1914 local eQTLs in the new crosses (1193 in cross B and 721 in cross C;	PMC11903034 full text (efetch db=pmc), body
+count	distant_BC	550;1126	as well as 1626 distant eQTLs (550 in cross B and 1126 in cross C;	PMC11903034 full text (efetch db=pmc), body
+count	hotspots_BC	6;7	These distant eQTLs clustered into 13 hotspots (6 in cross B and 7 in cross C;	PMC11903034 full text (efetch db=pmc), body
+count	hotspots_total	25	Of the 25 hotspots detected in the three crosses, 14 (56%) were unique to a single cross (7/12 in cross A, 2/6 in cross B, and 5/7 in cross C).	PMC11903034 full text (efetch db=pmc), body
+count	occupancy_qtl	20;4;10;6	We found a total of 20 unique cell-cycle occupancy QTLs in the three crosses (4 for cross A, 10 for cross B, and 6 for cross C;	PMC11903034 full text (efetch db=pmc), body
+count	cells_A	27744	We used scRNA-seq to measure the expression of 5435 transcripts in 27,744 single cells	PMC11903034 full text (efetch db=pmc), body
+count	cells_BC	44784;6595	both isolated in the United States (44,784 cells, 5556 transcripts;	PMC11903034 full text (efetch db=pmc), body
+count	cells_C	6595	(6595 cells, 4696 transcripts;	PMC11903034 full text (efetch db=pmc), body
+count	local_393_HMM	770	We mapped 770 local eQTLs at an FDR of 5% with the HMM-based genotypes	PMC11903034 full text (efetch db=pmc), body
+build	reference	R64-2-1	using the S2888C reference genome (SGD, R64-2-1)	PMC11903034 full text (efetch db=pmc), body
+method	distant_definition	different chromosome	here defined as those that influence the expression of genes on a different chromosome	PMC11903034 full text (efetch db=pmc), body
+method	interval	1.5 LOD drop	The 1.5 LOD-drop procedure was used to define approximate 95% CIs for QTL peaks	PMC11903034 full text (efetch db=pmc), body
+method	hotspot_ci	top-20 percentiles	To approximate the CI of a hotspot, we extracted the 20 most significant eQTLs within each hotspot and took the 10th and 90th percentile left and right CI of these eQTL to be the hotspot CI.	PMC11903034 full text (efetch db=pmc), body
+candidate	GPA1	B chrVIII:46887-140660	GPA1 for the hotspot on chromosome VIII in cross B ( Supplementary file 4 —Cross B chrVIII:46887–140660)	PMC11903034 full text (efetch db=pmc), body
+candidate	CYR1	C chrX:397734-497167	CYR1 for the hotspot on chromosome X in cross C ( Supplementary file 4 —Cross C chrX:397734–497167)	PMC11903034 full text (efetch db=pmc), body
+candidate	ZAP1	A chrX:298300-348016	The hotspot region contains the gene ZAP1 , which encodes a zinc-regulated transcription factor	PMC11903034 full text (efetch db=pmc), body
+candidate	MKT1	A occupancy	One of the QTLs identified in cross A contained the gene MKT1	PMC11903034 full text (efetch db=pmc), body
+candidate	GPA1	B occupancy	Variation in GPA1 decreases G1 occupancy and increases S and G2/M occupancy in the YJM145 × YPS163 cross.	PMC11903034 full text (efetch db=pmc), body
+candidate	CYR1	C occupancy	Variation in CYR1 decreases G1 occupancy and increases S and G2/M occupancy in the CBS2888 × YJM981 cross.	PMC11903034 full text (efetch db=pmc), body
+direction	GPA1_occupancy	YJM145 allele more in G1	Segregants carrying the YJM145 allele of GPA1 more frequently occupied G1	PMC11903034 full text (efetch db=pmc), body
+direction	CYR1_occupancy	CBS2888 allele more in G1	Segregants which carry the CBS2888 allele of CYR1 more frequently occupy the G1 phase of the cell cycle	PMC11903034 full text (efetch db=pmc), body
+validation	GPA1	allele replacement	We observed that for 36 of the 50 genes affected by the hotspot and detected in our single-cell validation dataset, the sign of the expression difference was consistent between the eQTL effect and the W82R validation experiment	PMC11903034 full text (efetch db=pmc), body
+design	one-pot	cross strains	These crosses were YLK3051 (BY × RM; cross A; PLK124), YLK3301 (YJM145 × YPS163; cross B; PLK124), YLK3004 (CBS2888 × YJM981; cross C; PLK73; Tables S3 and S4).	PMC11903034 full text (efetch db=pmc), body

@@ -1051,6 +1051,64 @@ Strict xfail; the atlas keeps both as given.
 Median petite frequencies of segregant groups and of allele-replacement strains appear only in
 figures (Figures 3B, 4, 7), which are not read. `qtl.ef` is empty; direction is in `qtl.up`.
 
+## Boocock et al. 2025
+
+Sources: the ten supplementary files in `sources/boocock2025/raw/` (fetched from
+`cdn.elifesciences.org` with plain requests) and the PMC full text
+`sources/boocock2025/article_pmc.xml` (PMC11903034, via NCBI E-utilities), because the eLife
+article page answered HTTP 406 to plain requests. Quotes used are in `extracted/text_facts.tsv`.
+
+### Q1. eQTL have no tabulated interval
+The methods define 1.5-LOD-drop intervals, but Supplementary files 2 and 3 give only the closest
+marker (local) or the peak marker (distant). **Atlas:** each lazy eQTL row is a point at that
+marker (`a = e = p`); density rows count the marker's 50 kb bin.
+
+### Q2. Hotspot extent and peak
+The paper's hotspot CI (10th/90th percentile of the top-20 eQTL CIs) is not tabulated.
+Hotspots are 50 kb bins enriched for distant eQTL (Supplementary file 3, `hotspot bin`), and
+the fine-mapping workbooks of Supplementary file 4 name merged ranges such as
+`chrXII:588097-735120_163` (three adjacent bins, 33 + 109 + 21 eQTL). **Atlas (most defensible
+reading):** `a`/`e` = the merged range named by the workbook; `p` = the peak marker of the
+strongest distant eQTL in the hotspot; `qtl.cc` = the number of distant eQTL in it. Every
+workbook's eQTL count equals the count recomputed from Supplementary file 3.
+
+### Q3. 1,626 vs 1,676 distant eQTL in crosses B and C
+The text says "1626 distant eQTLs (550 in cross B and 1126 in cross C)". The per-cross counts
+match Supplementary file 3, but they sum to 1,676 (strict xfail).
+
+### Q4. Effect sign
+Supplementary file 1, Table S4, column `effect_directions` gives "-BY,+RM", "-YJM145,+YPS163",
+"-CBS2888,+YJM981": a positive estimate means the second parent's allele raises the trait. The
+two occupancy directions stated in the text (YJM145 allele of GPA1 and CBS2888 allele of CYR1
+enriched in G1) match the signs in Supplementary file 7. Each lazy row names the favoured
+parent in `up`. The dataset's `effect` sentence states the convention per cross; the page's
+"positive = the X allele" parser would read only cross A's parent from it.
+
+### Q5. Parent order in Table S1 vs Table S4
+Table S1 lists cross B as YPS163 × YJM145 and cross C as YJM981 × CBS2888; Table S4 (with the
+effect directions) lists YJM145, YPS163 and CBS2888, YJM981. **Atlas:** Table S4's order.
+
+### Q6. Segregant numbers
+Each cell is a segregant, and only cell counts are given (27,744; 44,784; 6,595 after
+filtering). `crosses.n` is null.
+
+### Q7. Candidate genes
+Taken from the text only: GPA1 for the cross B chrVIII hotspot and the cross B G1/S/G2/M
+occupancy QTL (tier `x`: allele-replacement strains, Supplementary file 9); CYR1 for the cross
+C chrX hotspot and occupancy QTL, ZAP1 for the cross A chrX hotspot, MKT1 for the cross A
+occupancy QTL (tier `c`). Known causal genes labelled in Figure 2B and the per-hotspot
+annotations inside the fine-mapping workbooks are not used.
+
+### Q8. Cell-cycle occupancy QTL: 27 rows, 20 QTL
+Supplementary file 7 has one row per QTL and stage (27 rows); merging overlapping intervals
+within each cross gives 4 / 10 / 6 = 20, the paper's count. **Atlas:** one row per source row,
+one trait per stage.
+
+### Q9. Not drawn
+The 393-segregant local eQTL (Table S6), variance decomposition (S5), ASE and noise tables
+(Supplementary files 5 and 6) and the GPA1 validation (file 9) are kept verbatim in
+`docs/v/b25_extra.json`. Raw counts and genotypes (Dryad, Zenodo) were not fetched.
+
 ## Blocked steps
 
 ### B1. GitHub Pages
