@@ -1,0 +1,57 @@
+year	pmid	doi	pmc	journal	title	class	atlas_id	keywords
+1995	8533086	10.1126/science.270.5244.1945		Science	An STS-based map of the human genome.	QTL?		linkage;map 
+2002	11923494	10.1126/science.1069516		Science	Genetic dissection of transcriptional regulation in budding yeast.	QTL?		linkage;natural variation
+2003	12897782	10.1038/ng1222		Nat Genet	Trans-acting regulatory variation in Saccharomyces cerevisiae and the role of transcription factors.	QTL?		linkage
+2005	15659551	10.1073/pnas.0408709102	PMC547855	Proc Natl Acad Sci U S A	The landscape of genetic complexity across 5,700 gene expression traits in yeast.	QTL?		qtl;quantitative trait;mapping;heritab
+2005	15687292	10.1101/gr.2850605	PMC546530	Genome Res	Simultaneous genotyping, gene-expression measurement, and detection of allele-specific expression with oligonucleotide arrays.	QTL?		segregant
+2005	16035920	10.1371/journal.pbio.0030267	PMC1180512	PLoS Biol	Multiple locus linkage analysis of genomewide expression in yeast.	QTL?		quantitative trait;linkage;mapping
+2005	16079846	10.1038/nature03865	PMC1409747	Nature	Genetic interactions between polymorphisms that affect gene expression in yeast.	QTL?		qtl;quantitative trait
+2005	16121257	10.1371/journal.pbio.0020079	PMC1189075	PLoS Genet	Local regulatory variation in Saccharomyces cerevisiae.	QTL?		linkage
+2006	16527929	10.1126/science.1123726		Science	Genome-wide detection of polymorphisms at nucleotide resolution with a single DNA microarray.	other		genetic basis
+2006	16552446	10.1371/journal.pgen.0020035	PMC1401499	PLoS Genet	Telomere length as a quantitative trait: genome-wide survey and genetic mapping of telomere length-control genes in yeast.	QTL?		quantitative trait;linkage;segregant;mapping;natural variation
+2006	16638537	10.1016/j.chembiol.2006.01.010		Chem Biol	Revealing complex traits with small molecules and naturally recombinant yeast strains.	QTL?		quantitative trait;mapping
+2006	16892060	10.1038/ng1859		Nat Genet	Population genomic analysis of outcrossing and recombination in yeast.	QTL?		linkage
+2007	17334364	10.1038/ng1991		Nat Genet	Genetic basis of individual differences in the response to small-molecule drugs in yeast.	QTL?		linkage;segregant;genetic basis
+2007	17389913	10.1371/journal.pone.0000322	PMC1829191	PLoS One	Genome-wide analysis of nucleotide-level variation in commonly used Saccharomyces cerevisiae strains.	other		
+2007	17952072	10.1038/ng.2007.22		Nat Genet	Genetic basis of proteome variation in yeast.	QTL?		quantitative trait;linkage;genetic basis
+2008	18416601	10.1371/journal.pgen.0020013	PMC2292755	PLoS Biol	Gene-environment interaction in yeast gene expression.	QTL?		quantitative trait;linkage;segregant;genetic basis
+2008	18552845	10.1038/ng.167	PMC2573859	Nat Genet	Integrating large-scale functional genomic data to dissect the complexity of yeast regulatory networks.	other		
+2008	18617998	10.1371/journal.pgen.1000123	PMC2440805	PLoS Genet	Identification and dissection of a complex DNA repair sensitivity phenotype in Baker's yeast.	QTL?		qtl;quantitative trait;segregant;bulk;mapping
+2009	19212320	10.1038/nature07670	PMC2782482	Nature	Comprehensive polymorphism survey elucidates population structure of Saccharomyces cerevisiae.	QTL?		linkage;genetic basis
+2009	19435513	10.1186/1471-2105-9-253	PMC2686739	BMC Genomics	Measuring differential gene expression by short read sequencing: quantitative comparison to 2-channel gene expression microarrays.	other		
+2009	19581448	10.1534/genetics.109.104497	PMC2746160	Genetics	Polymorphisms in multiple genes contribute to the spontaneous mitochondrial genome instability of Saccharomyces cerevisiae S288C strains.	QTL?		qtl;quantitative trait;mapping;genetic basis
+2009	19730698	10.1371/journal.pone.0006907	PMC2731853	PLoS One	Using expression and genotype to predict drug response in yeast.	other		
+2009	19734204	10.1101/sqb.2009.74.013	PMC2888688	Cold Spring Harb Symp Quant Biol	Genetic dissection of complex traits in yeast: insights from studies of gene expression and other phenotypes in the BYxRM cross.	review		genetic basis
+2010	20080586	10.1073/pnas.0913883107	PMC2824413	Proc Natl Acad Sci U S A	Optimized detection of sequence variation in heterozygous genomes using DNA microarrays with isothermal-melting probes.	other		
+2010	20393561	10.1038/nature08923	PMC2862354	Nature	Dissection of genetically complex traits with extremely large pools of yeast segregants.	ingested	ehrenreich2010	quantitative trait;segregant;heritab
+2011	21829385	10.1371/journal.pbio.0060083	PMC3145625	PLoS Genet	Variants in SUP45 and TRM10 underlie natural variation in translation termination efficiency in Saccharomyces cerevisiae.	QTL?		qtl;linkage;mapping;natural variation
+2011	21901113	10.1371/journal.pgen.1000921	PMC3161923	PLoS Genet	Natural polymorphism in BUL2 links cellular amino acid availability with chronological aging and telomere maintenance in yeast.	QTL?		quantitative trait;linkage
+2011	21909241	10.1371/journal.pbio.1001144	PMC3167781	PLoS Biol	Genetic variation shapes protein networks mainly through non-transcriptional mechanisms.	QTL?		segregant
+2012	22396662	10.1371/journal.pbio.0060083	PMC3291563	PLoS Genet	Genetic basis of hidden phenotypic variation revealed by increased translational readthrough in yeast.	QTL?		qtl;linkage;mapping;genetic basis
+2012	22438822	10.1371/journal.pcbi.1000392	PMC3305394	PLoS Genet	Genetic architecture of highly complex chemical resistance traits across four yeast strains.	QTL?		qtl;mapping;genetic basis
+2012	22893000	10.1038/msb.2012.34	PMC3435501	Mol Syst Biol	Quantitative measurement of allele-specific protein expression in a diploid yeast hybrid by LC-MS.	other		genetic basis
+2013	23376951	10.1038/nature11867	PMC4001867	Nature	Finding the sources of missing heritability in a yeast cross.	ingested	bloom2013	quantitative trait;mapping;heritab
+2013	23505383	10.1371/journal.pgen.1002015.	PMC3591295	PLoS Genet	A natural polymorphism in rDNA replication origins links origin activation with calorie restriction and lifespan.	QTL?		qtl;quantitative trait
+2013	23550140	10.1534/g3.113.005884	PMC3618360	G3 (Bethesda)	Genetic Basis of Ammonium Toxicity Resistance in a Sake Strain of Yeast: A Mendelian Case.	QTL?		segregant;bulk;genetic basis;natural variation
+2014	24402228	10.1101/pdb.prot5448	PMC4285441	Nature	Genetics of single-cell protein abundance variation in large yeast populations.	QTL?		qtl;quantitative trait;eqtl;pqtl;mapping;genetic basis
+2014	24603560	10.1371/journal.pgen.1004142	PMC3945093	PLoS Genet	Genetic basis of metabolome variation in yeast.	ingested	breunig2014	quantitative trait;linkage;segregant;map ;genetic basis
+2014	25340754	10.1101/gr.163014.113	PMC4207643	PLoS Genet	Genetic influences on translation in yeast.	other		heritab
+2014	25521586	10.1371/journal.pgen.1004894	PMC4270474	PLoS Genet	Genetic basis of haloperidol resistance in Saccharomyces cerevisiae is complex and dose dependent.	QTL?		qtl;quantitative trait;linkage;segregant;genetic basis;heritab
+2015	25569670	10.1371/journal.pgen.1004913	PMC4287466	PLoS Genet	Genetic mapping of MAPK-mediated complex traits Across S. cerevisiae.	ingested	treusch2015	qtl;quantitative trait;mapping
+2015	26537231	10.1101/022418	PMC4635962	Nat Commun	Genetic interactions contribute less than additive effects to quantitative trait variation in yeast.	QTL?		qtl;quantitative trait;mapping
+2016	27230379	10.1126/science.aaf5124	PMC4933295	Science	CRISPR-directed mitotic recombination enables genetic mapping without crosses.	QTL?		linkage;mapping;causal variant
+2016	27384025	10.1534/genetics.116.191866	PMC4937462	Genetics	Complex Traits and Simple Systems: An Interview with Leonid Kruglyak.	QTL?		quantitative trait;linkage
+2017	28250458	10.1038/ng.3800	PMC5459553	Nat Genet	Accounting for genetic interactions improves modeling of individual quantitative trait phenotypes in yeast.	QTL?		quantitative trait
+2017	28826486	10.1073/pnas.1119675109	PMC5580887	Elife	Genetic variation in adaptability and pleiotropy in budding yeast.	QTL?		qtl;genetic basis;heritab
+2018	29632376	10.1002/0471142727.mb1307s27	PMC6115196	Nat Genet	Highly parallel genome variant engineering with CRISPR-Cas9.	other		
+2018	30014850	10.1038/ng.167	PMC6072440	Elife	Genetics of trans-regulatory variation in gene expression.	QTL?		qtl;quantitative trait;segregant;eqtl;heritab
+2019	30504363	10.1073/pnas.1323011111	PMC6366923	Genetics	The Genetic Basis of Mutation Rate Variation in Yeast.	QTL?		quantitative trait;linkage;segregant;mapping;genetic basis;heritab
+2019	31647408	10.1073/pnas.1322563111	PMC6892613	Elife	Rare variants contribute disproportionately to quantitative trait variation in yeast.	QTL?		qtl;quantitative trait
+2020	33179598	10.1038/s41586-018-0549-5	PMC7685706	Elife	Systematic identification of cis-regulatory variants that cause gene expression differences in a yeast cross.	other		causal variant
+2021	33479156	10.5281/zenodo.4107954	PMC8384573	Science	Ancient balancing selection maintains incompatible versions of the galactose pathway in yeast.	other		
+2022	36326816	10.1073/pnas.89.11.5015	PMC9633064	Elife	Genome-wide base editor screen identifies regulators of protein abundance in yeast.	other		
+2022	36459978	10.1093/brain/awaa152	PMC9808499	Am J Hum Genet	A minimal role for synonymous variation in human disease.	other		
+2022	36525401	10.1038/hdy.2010.152	PMC9757564	PLoS Biol	Exploring the genetic architecture of protein secretion in Komagataella phaffii (Pichia pastoris) for biotechnology applications.	other		
+2023	37076734	10.1038/s41586-023-05865-4	PMC11343442	Nature	Insufficient evidence for non-neutrality of synonymous mutations.	other		
+2024	38106186	10.1101/607291	PMC10723400	bioRxiv	Single-cell eQTL mapping in yeast reveals a tradeoff between growth and reproduction.	QTL?		qtl;quantitative trait;eqtl;bulk;mapping;map 
+2025	40073070	10.1038/ng.167	PMC11903034	Elife	Single-cell eQTL mapping in yeast reveals a tradeoff between growth and reproduction.	QTL?		qtl;quantitative trait;eqtl;bulk;mapping;map 
