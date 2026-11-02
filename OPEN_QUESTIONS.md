@@ -1509,6 +1509,64 @@ used.
 No effect size or direction is tabulated for any linkage. `qtl.ef` is null and `qtl.up` is -1.
 Table 2 (raw yields per segregant) would allow it but is phenotype data; it is kept in `raw/` only.
 
+## Smith and Kruglyak 2008
+
+### S1. Linkages to transcripts with a probe polymorphism are kept, flagged
+Table S4 (`st004.xls`) lists 11,392 linkages, including 2,271 to transcripts whose probe
+carries a BY/RM polymorphism (column `polymorphism in probe?` = yes) and 80 marked NA. The
+Methods say "We thus excluded them from all further analysis", and the text's counts
+(3,997 glucose, 3,489 ethanol, 1,555 gxe linkages) equal the 9,041 rows with `no`.
+**Atlas:** all 11,392 rows are in the lazy eQTL file. Excluded rows carry
+`st` = "probe polymorphism: excluded by the paper", NA rows carry "probe polymorphism not
+determined (NA)", and the density rows count only the 9,041 polymorphism-free linkages.
+
+### S2. Hotspot peaks have only genetic positions
+Table S1 (`st001.xls`) gives each of the 41 distant-linkage peaks in cM. **Atlas reading:**
+each peak is drawn from the physical span of the peak markers of the polymorphism-free
+Table S4 linkages whose `distant peak` column names it: `a`/`e` are the minimum and maximum,
+and `p` is the most frequent peak marker (ties go to the leftmost). The number of linkages
+per peak equals Table S1 `Total linkages` for all 41 peaks. This span is the atlas's
+placement, not an interval the paper reported.
+
+### S3. 1,126 vs 1,123 distant gxe linkages in peaks
+The text reports 81% (1,126/1,383) of distant gxe QTL in significant bins. Table S4 assigns
+1,123 polymorphism-free distant gxe linkages to the 15 gxe peaks, and Table S1 `Total
+linkages` sums to the same 1,123. Strict xfail in `tests/test_smith2008.py`.
+
+### S4. One marker lies 6 bp past the R64 chrVII end
+The right-hand support-interval marker at chrVII:1,090,946 lies 6 bp past the R64 chrVII
+length (1,090,940). It bounds 8 rows (2 polymorphism-free). **Atlas:** kept as printed, not
+clamped. All other positions lie inside R64. ORF-named markers lie inside their R64-5-1
+genes, so no coordinate transform is applied.
+
+### S5. eth11: 386 transcripts vs 387 linkages
+The text gives 386 transcripts at eth11, while Table S1 gives 387 linkages. One transcript
+probably has two linkages there. The atlas uses 387 (`cc`).
+
+### S6. Tables 1 and 2 are images
+Tables 1–2 (named peaks and candidate genes) are images on the article page. Candidate genes
+come from Table S1 `Candidate or verified gene`.
+
+### S7. Effect is RM − BY from the allele averages
+Table S4 gives the BY and RM allele averages of each transcript's log2 ratio to the common
+reference, in glucose and in ethanol, and their ethanol − glucose differences.
+**Atlas:** `ef` is RM minus BY for the row's condition; gxe rows use the difference
+columns. `up` names the parent whose allele raises the value. The paper never states the
+sign of a difference column; the atlas reads `BY/RM allele average` literally.
+
+### S8. Candidate tiers
+Tier x (verified) is given to IRA2, DIG1 and MKT1, which the paper tested, and to AMN1, GPA1,
+HAP1 and MAT, which earlier work it cites had confirmed. At one of its peaks Table S1
+marks HAP1 with `*` (footnote kept in `s08_extra.json`), and any gene marked `*` is tier c,
+so HAP1 is tier x at one peak and tier c at the other. MAT has no single gene
+(`g` = −1). OAF1, LEU2, PHO84 and CIN5 are tier c (candidate). GPA1 lies just outside the
+span of glu7's linkages, but within 25 kb.
+
+### S9. Datasets S1 and S2 are not copied to docs/
+The parental (`sd001.xls`) and segregant (`sd002.xls`) expression tables are kept in
+`raw/` only, at 1.7 MB and 6.7 MB. No genotype matrix was published, so nothing is
+re-mapped.
+
 ## Blocked steps
 
 ### B1. GitHub Pages

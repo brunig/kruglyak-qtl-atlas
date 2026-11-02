@@ -7,7 +7,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 rm -rf build/fragments
 python3 -I ingest/inventory.py
-for f in ingest/albert2014.py ingest/albert2018.py ingest/bloom2013.py ingest/bloom2015.py ingest/bloom2019.py ingest/boocock2025.py ingest/brem2005nature.py ingest/brem2005pnas.py ingest/breunig2014.py ingest/demogines2008.py ingest/dimitrov2009.py ingest/ehrenreich2010.py ingest/ehrenreich2012.py ingest/foss2007.py ingest/foss2011.py ingest/gatbonton2006.py ingest/gou2019.py ingest/jerison2017.py ingest/perlstein2007.py ingest/ronald2005.py ingest/storey2005.py ingest/torabi2012.py ingest/treusch2015.py ingest/wang2014.py ingest/yvert2003.py; do   # each merges into docs/data.json
+for f in ingest/albert2014.py ingest/albert2018.py ingest/bloom2013.py ingest/bloom2015.py ingest/bloom2019.py ingest/boocock2025.py ingest/brem2005nature.py ingest/brem2005pnas.py ingest/breunig2014.py ingest/demogines2008.py ingest/dimitrov2009.py ingest/ehrenreich2010.py ingest/ehrenreich2012.py ingest/foss2007.py ingest/foss2011.py ingest/gatbonton2006.py ingest/gou2019.py ingest/jerison2017.py ingest/perlstein2007.py ingest/ronald2005.py ingest/smith2008.py ingest/storey2005.py ingest/torabi2012.py ingest/treusch2015.py ingest/wang2014.py ingest/yvert2003.py; do   # each merges into docs/data.json
   python3 -I "$f"
 done
 if [[ "${1:-}" == "test" ]]; then

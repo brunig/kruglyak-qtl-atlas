@@ -650,7 +650,8 @@ gcan.addEventListener("click", ev => {
 function eqTip(r) { const t = r.t, i = r.i;
   return ["<b>" + esc(gname(t.g[i])) + " " + esc(GKINDS[t.kind] ? GKINDS[t.kind][0] : "") + "</b> · " + (t.loc[i] === 1 ? "local" : t.loc[i] === 0 ? "distant" : "") + " " + esc(GKINDS[t.kind] ? GKINDS[t.kind][1] : "QTL") + " · " + esc(D.datasets.label[t.ds]) + (t.xid && t.xid[i] && XBYID[t.xid[i]] != null ? " · " + esc(xlabel(XBYID[t.xid[i]])) : ""),
     '<span class="mono">' + t.c[i] + ":" + fmt(t.a[i]) + "–" + fmt(t.e[i]) + "</span> · LOD " + num(t.lod[i], 1) + (t.ef[i] != null ? " · effect " + sgn(t.ef[i], 2) : "") + (lzFavours(t, i) ? " · raised by the " + lzFavours(t, i) + " allele" : ""),
-    ...(lzStatus(t, i) ? ["gene status in the paper: " + esc(lzStatus(t, i))] : [])]; }
+    ...(t.env && t.env[i] ? ["condition: " + esc(t.env[i])] : []),
+    ...(lzStatus(t, i) ? ["note from the paper: " + esc(lzStatus(t, i))] : [])]; }
 function toggleTrait(t) { if (S.traits.has(t)) S.traits.delete(t); else S.traits.add(t); go(); }
 function qtlTip(i) {
   const q = Q(); const out = ["<b>" + esc(tname(q.t[i])) + "</b> · " + esc(qcross(i))];
@@ -816,7 +817,7 @@ function renderGeneCard() {
       eq = '<br><b>Genetic effects on its expression</b> <button class="btn" data-eg="clear" style="padding:1px 7px">hide</button>';
       for (const n of geneKinds()) { const rs = EQ.rows.filter(r => r.t.kind === n).sort((a, b) => b.t.lod[b.i] - a.t.lod[a.i]);
         eq += '<br>' + esc(GKINDS[n][0]) + ': ' + rs.length + (rs.length ? '' : ' (none reported)') +
-          (rs.length ? '<div class="list" style="max-height:140px;margin-top:2px">' + rs.map(r => '<a href="#" data-eqc="' + r.t.c[r.i] + '" data-eqa="' + r.t.a[r.i] + '" data-eqe="' + r.t.e[r.i] + '"><span>' + (r.t.loc[r.i] === 1 ? "local" : r.t.loc[r.i] === 0 ? "distant" : "") + ' · <span class="mono">' + r.t.c[r.i] + ':' + fmt(r.t.p[r.i]) + '</span></span><span class="k">' + (lzFavours(r.t, r.i) ? esc(lzFavours(r.t, r.i)) + ' ↑ · ' : '') + (r.t.lod[r.i] != null ? 'LOD ' + num(r.t.lod[r.i], 1) : r.t.nlp ? '−log10 p ' + num(r.t.nlp[r.i], 1) : '') + (lzStatus(r.t, r.i) ? ' · ' + esc(lzStatus(r.t, r.i)) : '') + '</span></a>').join("") + '</div>' : ''); }
+          (rs.length ? '<div class="list" style="max-height:140px;margin-top:2px">' + rs.map(r => '<a href="#" data-eqc="' + r.t.c[r.i] + '" data-eqa="' + r.t.a[r.i] + '" data-eqe="' + r.t.e[r.i] + '"><span>' + (r.t.loc[r.i] === 1 ? "local" : r.t.loc[r.i] === 0 ? "distant" : "") + (r.t.env && r.t.env[r.i] ? ' · ' + esc(r.t.env[r.i]) : '') + ' · <span class="mono">' + r.t.c[r.i] + ':' + fmt(r.t.p[r.i]) + '</span></span><span class="k">' + (lzFavours(r.t, r.i) ? esc(lzFavours(r.t, r.i)) + ' ↑ · ' : '') + (r.t.lod[r.i] != null ? 'LOD ' + num(r.t.lod[r.i], 1) : r.t.nlp ? '−log10 p ' + num(r.t.nlp[r.i], 1) : '') + (lzStatus(r.t, r.i) ? ' · ' + esc(lzStatus(r.t, r.i)) : '') + '</span></a>').join("") + '</div>' : ''); }
     }
     else if (S.eg === i) eq = '<br>' + (EQ.err ? 'File did not load (' + esc(EQ.err) + ')' : 'Loading…');
     else eq = '<br><button class="btn" data-eg="' + i + '" style="margin-top:4px">Show ' + geneKinds().map(n => GKINDS[n][1]).join(" and ") + ' for its expression</button>';

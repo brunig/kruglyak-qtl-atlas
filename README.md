@@ -2,21 +2,37 @@
 
 A static browser for every QTL the Kruglyak lab has mapped in yeast, one dataset at a time,
 in the visual language of the
-[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). Ten datasets so far
-(14,356 QTL drawn, 180 traits, plus 36,498 eQTL and 1,025 pQTL loaded per gene on demand):
+[Microscale X-QTL browser](https://github.com/brunig/microscale-xqtl). 26 datasets so far: 14,679 QTL on the maps and 58,636 more
+(eQTL, pQTL, single-cell eQTL) loaded per gene on demand, across 319 traits.
 
-| dataset | design | QTL |
-|---|---|---|
-| Bloom et al. 2019, eLife | 16-parent round-robin segregant panel, 13,950 segregants | 4,552 joint-model + 7,751 within-cross, 38 traits |
-| Bloom et al. 2015, Nat Commun | BY × RM, 4,390 segregants | 797, 20 traits |
-| Bloom et al. 2013, Nature | BY × RM, ~1,000 segregants | 591, 46 traits |
-| Albert et al. 2018, eLife | BY × RM eQTL, 1,012 segregants | 102 trans-eQTL hotspots; 36,498 eQTL on demand |
-| Albert et al. 2014, Nature | X-pQTL for 160 GFP-tagged proteins in BY × RM pools | 1,025 pQTL on demand |
-| Treusch et al. 2015, PLoS Genet | X-QTL in a 12-strain round robin, plus BY × RM | 97 (60 grouped across crosses), caffeine and salt |
-| Ehrenreich et al. 2012, PLoS Genet | X-QTL in all 6 crosses of BY, RM, YJM789, YPS163 | 411 loci, 13 chemicals |
-| Ehrenreich et al. 2010, Nature | X-QTL in BY × RM pools | 2 tabulated loci (the rest are figures only) |
-| Breunig et al. 2014, PLoS Genet | BY × RM segregants, metabolite levels | 53 linkages, 34 metabolites (genetic positions only) |
-| Gou et al. 2019, Genetics | BY × RM segregants, mutation rate and mutagen growth | 8 QTL, chromosome only (no coordinates published) |
+| dataset | design | QTL drawn or listed | per-gene QTL on demand |
+|---|---|---:|---:|
+| Boocock 2025 | one-pot single-cell eQTL: pools of MATa segregants from three crosses (A = BY × RM, 27,744 | 52 | 6,183 |
+| Bloom 2019 | segregant panel | 12,303 | 0 |
+| Gou 2019 | segregant panel, BY × RM (1040 segregants genotyped in Bloom et al. 2013 | 8 | 0 |
+| Albert 2018 | segregant panel | 102 | 36,498 |
+| Jerison 2017 | segregant panel: 230 BY × RM MATa segregants from Bloom et al. 2013, 8 replicate lines eac | 30 | 0 |
+| Bloom 2015 | segregant panel | 797 | 0 |
+| Treusch 2015 | X-QTL (bulk segregant) in a 12-strain round-robin cross (each strain in two crosses) | 97 | 0 |
+| Albert 2014 | X-pQTL (bulk segregant): for each of 160 GFP-tagged genes, a BY × RM segregant pool sorted | 0 | 1,025 |
+| Breunig 2014 | segregant panel | 53 | 0 |
+| Wang 2014 | segregant panel, BY4724 × RM11-1a, 1008 segregants (the Bloom et al. 2013 panel) | 32 | 0 |
+| Bloom 2013 | segregant panel | 591 | 0 |
+| Ehrenreich 2012 | X-QTL (bulk segregant analysis of millions of segregants selected for resistance) in all 6 | 411 | 0 |
+| Torabi 2012 | X-QTL (bulk segregant) in BY × RM: for each of nine conditions, a wildtype pool and a pool | 2 | 0 |
+| Foss 2011 | segregant panel BY × RM, 95 segregants | 0 | 521 |
+| Ehrenreich 2010 | X-QTL (bulk segregant): very large BY × RM segregant pools (more than 10^5 haploids) selec | 2 | 0 |
+| Dimitrov 2009 | segregant panel, BY4716 × RM11-1a (122 segregants, 2957 markers from Brem and Kruglyak 200 | 3 | 0 |
+| Demogines 2008 | segregant panel, BY × RM (123 segregants phenotyped, 121 genotyped at 2,956 markers) on MM | 6 | 0 |
+| Smith 2008 | segregant panel BY × RM, 109 segregants expression-profiled (Agilent two-colour arrays) in | 41 | 11,392 |
+| Foss 2007 | segregant panel BY × RM | 0 | 6 |
+| Perlstein 2007 | segregant panel, BY × RM, 104 genotyped segregants grown with a panel of small molecules ( | 132 | 0 |
+| Gatbonton 2006 | segregant panel, BY4716 × RM11-1a, 122 segregants genotyped at 3,312 microarray markers | 2 | 0 |
+| Brem 2005 (Nature) | segregant panel, BY × RM (112 segregants | 2 | 0 |
+| Brem 2005 (PNAS) | segregant panel, BY4716 × RM11-1a, 112 segregants | 0 | 0 |
+| Ronald 2005 | segregant panel BY4716 × RM11-1a, 112 segregants (expression and genotypes of Brem & Krugl | 0 | 1,406 |
+| Storey 2005 | segregant panel BY4716 × RM11-1a, 112 segregants | 0 | 340 |
+| Yvert 2003 | segregant panel BY × RM, 86 segregants plus parents | 13 | 1,265 |
 
 Details, counts and the queue of papers still to ingest: `DATASETS.md`.
 
@@ -119,11 +135,10 @@ settled a question the atlas uses the most defensible reading and says so in `OP
 Each dataset has `tests/test_<id>.py`, which checks the paper's own reported numbers
 against the ingested tables, coordinate sanity (inside R64 chromosomes, start ≤ peak ≤ end),
 provenance, and that every source row is kept verbatim. Run them all with `./build.sh test`:
-225 pass, 3 are skipped (not checkable from the files), and 24 are strict expected failures,
+466 pass, 5 are skipped (not checkable from the files), and 45 are strict expected failures,
 each a number in a paper that its own supplementary files do not reproduce, named with file
-and column (for example Bloom 2019's 105 candidate genes at FDR 5%, 102 in the table;
-Breunig 2014's 52 linkages, 53 in Table S1). `OPEN_QUESTIONS.md` explains each one.
-`node tests/render.mjs` checks the browser (37 checks).
+and column. `OPEN_QUESTIONS.md` explains each one. `node tests/render.mjs` checks the browser
+(37 checks).
 
 ## Adding a dataset
 
