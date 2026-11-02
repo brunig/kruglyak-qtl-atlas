@@ -1,0 +1,16 @@
+# Statements quoted verbatim from sources/foss2011/article.html (text extracted from the PLOS page; whitespace normalised).
+key	quote
+design	All strains have been genotyped for 2,955 genetic markers, 1,969 of which exhibited unique segregation patterns among the 95 segregant strains.
+method	We looked for linkage between inheritance of these 1,969 markers and the 354 transcript and protein levels using t tests and determined FDR cutoffs for each gene on the basis of 100 permutations.
+loci_5pct	At a 5% FDR, we mapped 49 and 97 loci that control the level of a total of 125 and 200 proteins and transcripts, respectively.
+loci_1pct	At a 1% FDR, we mapped 30 and 74 loci that control levels of 89 and 170 proteins and transcripts, respectively ( Table S4 ).
+linkages	the total number of linkages at a 5% FDR was 179 for proteins and 342 for transcripts, and at a 1% FDR these numbers were 115 and 253, respectively.
+cis	at 1% FDR, we map regulators of 170 transcripts, 22 of which act in cis. In contrast, at this FDR we map regulators of 89 proteins, only three of which act in cis
+correlation	We found that proteins and transcripts were well correlated for only 27% of genes (94/354 at 5% significance; Table S3 )
+cutoffs	The dashed lines at 0.24 and 0.31 indicate the average cutoffs for significance at p <0.05 and p <0.01, respectively
+heritability	averages for proteins and transcripts were 0.70 and 0.71, respectively, and medians for proteins and transcripts were 0.71 and 0.74, respectively
+direction_example	The levels of protein ACS2 are higher in segregants that inherited SNP 12_662,627 from the RM (vineyard) compared to segregants that inherited this SNP from the BY (laboratory) parent.
+hotspots	both proteins and transcripts show hot spots of regulation (single loci that control multiple genes), (2) these hot spots are largely but not completely overlapping
+raw_data	Raw data for both protein [14] and transcript [17] , [19] , [21] quantitation came from previously published work.
+code	The mapping algorithm was based on t tests with permutation testing to determine false discovery rates. Complete code is available from E.J.F. upon request.
+proteins	We quantified 354 proteins in a genetically diverse population of yeast segregants

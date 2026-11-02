@@ -759,6 +759,158 @@ leave at least 701, which is consistent.
 No segregant count is given for the sorted pools (the abstract says "thousands of individuals with
 high versus low protein abundance"). `crosses.n` is null.
 
+## Torabi and Kruglyak 2012
+
+Sources: the nine supporting-information files in `sources/torabi2012/raw/`, the article page
+`sources/torabi2012/article.html`, and `sources/torabi2012/extracted/` (Tables S1-S3 written from
+the .doc files, and verbatim quotes, by `extract_sources.py`). No code repository is cited; the raw
+arrays are in NCBI GEO (GSE33817), which is not in the bundle.
+
+### Q1. The readthrough-dependent loci are not tabulated
+The paper reports 18 readthrough-dependent locus-condition pairs (ten distinct loci; one to six per
+condition) and, per cross, one to 20 X-QTL loci per condition. All of these are drawn only (Figure 2,
+Figure S2 A-I). **Atlas:** only the locus the text names is ingested: chromosome XIII, right arm,
+for diamide and for hydrogen peroxide (2 rows). The text says it affected five conditions; the other
+three are visible only in Figure 2B and are not ingested. A strict xfail records the gap.
+
+### Q2. No coordinates for the chromosome XIII locus
+Figure S3 draws the 50 kb region around the locus, and the text names SKY1 and MRE11 in it, but no
+interval or peak is given. **Atlas:** the rows carry `c = chrXIII` and null `a`, `e`, `p` (listed,
+not drawn), as for Gou 2019. They are not placed at SKY1, because the gene is the causal candidate, not
+the reported QTL position.
+
+### Q3. Which cross the QTL row belongs to
+A readthrough-dependent locus is defined by the difference between the wildtype and sup35 pools. The
+skew that defines it is in the sup35 pool ("a frequency skew in favor of the RM allele in the sup35
+pool but not in the wildtype pool"). **Atlas (most defensible reading):** `x` = the sup35 cross;
+`k` says the locus is the pool difference.
+
+### Q4. Direction on hydrogen peroxide
+The text states the RM-favouring skew for diamide only. For hydrogen peroxide the direction comes
+from "sup35 C653R and the BY allele of SKY1 act together to lower growth rate on diamide and
+hydrogen peroxide" and from Table S2 (SKY1 (BY) estimate −0.0708). **Atlas:** `up = RM` on both rows.
+
+### Q5. Units in Table S1
+Table S1 prints chlorpromazine 20 mM, E6-berbamine 40 mM and tunicamycin 3 mM, and CoCl2 3 M, as
+X-QTL concentrations. Chlorpromazine, E6-berbamine and tunicamycin are usually used in µM, and 3 M
+CoCl2 is implausible on agar (Ehrenreich 2010's Table S1 prints the same "3 M"). **Atlas:** shown as
+printed; the condition keys therefore do not link to other datasets' doses.
+
+### Q6. SKY1 tier
+SKY1 is confirmed by allele replacement in the X-QTL (the skew disappears when both parents carry the
+BY allele) and by growth assays of swapped strains. **Atlas:** tier `x`. MRE11 was tested the same
+way and ruled out; it is recorded in the quotes, not as a candidate.
+
+### Q7. Genome build
+No coordinates are given, so none applies. SKY1's position is from SGD R64-5-1.
+
+## Foss et al. 2011
+
+Sources: the ten supporting-information files in `sources/foss2011/raw/` and the article page
+`sources/foss2011/article.html` (PLoS Biol 9:e1001144). No code or data repository is cited;
+the paper says mapping and quantitation code are available from the authors on request.
+
+### Q1. Table S4 gives no p-value, LOD, interval or direction
+Each row is one linkage: measurement type (peptide or transcript), regulated gene, peptide,
+linked marker, chromosome and position. The text reports linkages at 5% and 1% FDR; the table's
+179 + 342 rows equal the 5% FDR counts, so it is the 5% set and the 1% subset cannot be
+separated. **Atlas:** every linkage is a point at its marker (`a = e = p`), `lod` and `ef` are
+null, and the dataset FDR is 0.05.
+
+### Q2. "49 and 97 loci" are not reproducible
+The text says the 5% FDR linkages come from 49 protein and 97 transcript loci. Table S4 has 73
+and 156 distinct markers. The rule that merged neighbouring markers into loci is not stated.
+Recorded as a strict xfail; the atlas keeps markers as given and does not merge them.
+
+### Q3. Local (cis) linkages are an atlas definition
+The paper reports 22 cis transcripts and 3 cis proteins at 1% FDR but does not list them.
+**Atlas (labelled rule):** a linkage is local when its marker lies on the regulated gene's
+chromosome within 20 kb of the gene (R64-5-1 bounds). That gives 25 transcript linkages
+(24 genes) and 3 protein linkages (3 genes) in the 5% set, consistent with (not equal to) the
+1% counts. At 10 kb the transcript count (19 genes) would fall below the paper's 22, so 10 kb
+is too strict for this marker density.
+
+### Q4. Genome build
+Not stated. Markers come from the earlier array genotyping of these segregants (names like
+`6964_s_at_x08_2_555787`, ending in chromosome number and position). All positions fall inside
+R64 chromosomes, and the hotspot markers sit at the R64 positions of LEU2 (chrIII 90,412-92,013
+vs gene 91,179-92,594), AMN1 (chrII 555,787 vs 556,201) and near HAP1 (chrXII 659,357 vs
+646,415-650,923). **Atlas:** positions used as given, no transform; agreement is checked at
+marker resolution only, not to the base pair.
+
+### Q5. No direction of effect
+Table S4 has no sign. The text gives one example (ACS2 protein higher with the RM allele at
+chrXII 662,627) in a figure legend; a single example is not ingested as data.
+
+### Q6. Hotspots are not tabulated
+Protein and transcript hotspots are described and plotted (Figure 3B, Figure 5) but not listed,
+so there are no hotspot rows. The density rows show them.
+
+### Q7. Two measurement kinds in one dataset
+Protein linkages go to lazy table `mspqtl` and transcript linkages to `eqtl`. The transcript
+data are earlier microarray measurements (references 17, 19, 21 of the paper) re-mapped here
+for the same 354 genes; they overlap in kind with Albert 2018's RNA-seq eQTL but are a separate
+measurement and are kept separate.
+
+### Q8. Word-format supplements not parsed
+Table S2 (community membership) and Text S1 (quantitation algorithm) are legacy Word files; they
+are inventoried and checksummed, not parsed.
+
+## Wang and Kruglyak 2014
+
+Sources: the seven supporting-information files in `sources/wang2014/raw/` (fetched from
+journals.plos.org), the article page `sources/wang2014/article.html`, the verbatim flattenings
+of the Word tables in `sources/wang2014/extracted/S*_Table.tsv`, and the quoted sentences in
+`extracted/text_facts.tsv`. The Data Availability statement says all data are in the paper and
+its supporting information; no code or data repository is cited.
+
+### Q1. Not X-QTL: linkage in 1008 segregants
+The brief anticipated a bulk-segregant (X-QTL) design. The paper maps haloperidol resistance by
+linkage in the 1008 individually genotyped BY × RM segregants of Bloom et al. 2013 (R/qtl,
+Haley-Knott and non-parametric, LOD 3, 1000 permutations). **Atlas:** `m = "w"`, one cross,
+n = 1008.
+
+### Q2. No QTL positions or intervals are tabulated
+S1 Table names each locus by chromosome and arm (1L, 1R, 2, 7, 12, 13, 14, 15-1, 15-2) and gives
+its drop-one LOD and % variance in the per-dose additive model. The 1.5-LOD intervals and peaks
+are drawn in Figure 3A only; main-text Tables 1 and 2 are images. **Atlas:** 32 locus-dose rows
+with a chromosome and no coordinates (`a`, `e`, `p` null), listed in the table and card but not
+drawn; the arm or locus number is in `qtl.k`. Positions could only come from re-mapping the
+Bloom 2013 panel, which the atlas does not do.
+
+### Q3. The direction sentence names a chrV locus that S1 Table does not have
+Text: "RM alleles at loci on chromosomes V, XII and XV also confer greater resistance, while BY
+alleles confer higher resistance at the remaining five loci." S1 Table has no chromosome V locus
+at any dose. **Atlas (most defensible reading):** RM raises resistance at 1R, 12, 15-1 and 15-2
+(four loci; "XV" covering both chrXV loci) and BY at 1L, 2, 7, 13 and 14 (five, matching "the
+remaining five"); `qtl.up` carries this. "V" may be a slip for the second chrXV locus; the files
+cannot settle it. Strict xfail `test_a_chrV_locus_exists`.
+
+### Q4. Which chrXV locus is IRA2's
+The text says IRA2 "resides within the locus on chromosome XV" and that the chrXIV and chrXV loci
+"became the major QTL at higher doses". Locus 15-1 is present at 80-200 µM with 1-8% variance;
+15-2 only at 40-80 µM below 1%. **Atlas (reading):** IRA2 assigned to 15-1.
+
+### Q5. LOD values are drop-one LODs in the additive model
+S1 Table's LOD column is the drop-one statistic in the multiple-QTL model at each dose, not the
+genome-scan peak LOD used for calling (cutoff 3). Two rows are below 3: 15-2 at 80 µM (1.629) and
+13 at 160 µM (2.313). Kept as given; stems in LOD mode would understate scan strength.
+
+### Q6. chrXIII at 160 µM
+Text: the chrVII, XII and XIII loci "were only detected at the two lower doses". S1 Table lists
+chrXIII at 160 µM as well (drop-one LOD 2.313, 0.69%). Strict xfail
+`test_chrXIII_only_at_the_two_lower_doses`.
+
+### Q7. Variance explained by the chrI right-arm locus
+Text: 21.4%, 26.7%, 21.4%, 11.6% at 40-160 µM. S1 Table: 21.3477, 26.6095, 21.390, 11.6005, so the
+first two round to 21.3 and 26.6. Strict xfail `test_chrI_right_arm_variance_as_stated`.
+
+### Q8. Not checkable from the files
+- The additional variance explained by interactions (11.0, 6.6, 1.7, 7.8, 7.2%): S3 Table gives
+  per-term variances but no model totals.
+- Broad- versus narrow-sense heritability differences (14.6%, 12.9%): Table 1 is an image.
+- Signed effect sizes per locus and dose: Figure 3B only.
+
 ## Blocked steps
 
 ### B1. GitHub Pages

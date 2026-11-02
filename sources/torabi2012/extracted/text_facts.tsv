@@ -1,0 +1,16 @@
+kind	topic	section	quote
+design	strains	Abstract	BY4724 (a laboratory strain) and RM11_1a (a wine strain)
+design	pools	X-QTL reveals readthrough-dependent loci	a wildtype pool from a cross between wildtype BY and RM, and a sup35 pool from a cross between BY and RM both carrying sup35 C653R
+design	replicates	X-QTL	two biological replicates for the wildtype BY×RM cross and two biological replicates for the sup35 cross
+design	array	X-QTL	assay ∼18,000 single nucleotide polymorphisms (SNPs) between BY and RM
+design	geo	X-QTL	GEO Series accession number GSE33817
+count	loci per condition	X-QTL reveals readthrough-dependent loci	The number of loci detected for growth rates in the nine conditions at an FDR of 5% ranged from one to 20 in both wildtype and sup35 crosses
+count	readthrough-dependent loci	X-QTL reveals readthrough-dependent loci	18 loci showed significant differences between these pools
+count	distinct loci	X-QTL reveals readthrough-dependent loci	Each readthrough-dependent locus had an effect in one to five conditions, with a total of ten distinct loci detected
+locus	chrXIII	SKY1 variation underlies the readthrough-dependent locus on chromosome XIII	we focused on the locus on the right arm of chromosome XIII, which affected growth in five conditions
+direction	diamide	SKY1 variation underlies the readthrough-dependent locus on chromosome XIII	At this locus, we detected a frequency skew in favor of the RM allele in the sup35 pool but not in the wildtype pool
+locus	hydrogen peroxide	Figure S4.	SKY1 variation underlies the locus on Chromosome XIII for growth on hydrogen peroxide
+candidate	SKY1	SKY1 variation underlies the readthrough-dependent locus on chromosome XIII	These results demonstrate that polymorphisms in SKY1 are causal for the effects of this locus
+candidate	MRE11	SKY1 variation underlies the readthrough-dependent locus on chromosome XIII	ruling it out as the causal gene for this locus
+direction	anova	Complex interplay between sup35 effects, allelic state of SKY1 , and genetic background determines growth rate on diamide and hydrogen peroxide	SKY1 allelic status also had a significant effect, with the RM allele increasing growth
+direction	both conditions	Complex interplay between sup35 effects, allelic state of SKY1 , and genetic background determines growth rate on diamide and hydrogen peroxide	sup35 C653R and the BY allele of SKY1 act together to lower growth rate on diamide and hydrogen peroxide

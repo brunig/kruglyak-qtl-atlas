@@ -529,7 +529,7 @@ function drawGenome() {
       ctx.fillText(fitText(ctx, empty[hr.z].length + " trait" + (empty[hr.z].length === 1 ? "" : "s") + " with no tabulated QTL (" + empty[hr.z].map(tname).join(", ") + ")", w - L - R), L, y + rowH / 2); return; }
     if (hr.h != null) { ctx.fillStyle = css("--fg"); ctx.font = "600 " + HF + css("--sans"); ctx.textAlign = "left"; ctx.fillText(fitText(ctx, D.datasets.label[hr.h], L + 200), 4, y + rowH / 2); ctx.fillStyle = css("--rule"); ctx.fillRect(0, y + rowH - 0.5, w, 0.8); lastCat = null; return; }
     if (hr.dz != null) { const o = DZ[hr.dz], row = o.kinds[hr.k];
-      ctx.fillStyle = muted; ctx.font = HF + css("--sans"); ctx.textAlign = "right"; ctx.fillText(fitText(ctx, (GKINDS[dsKind(hr.dz)] ? GKINDS[dsKind(hr.dz)][1] : "QTL") + ", " + hr.k, L - 12), L - 8, y + rowH / 2);
+      ctx.fillStyle = muted; ctx.font = HF + css("--sans"); ctx.textAlign = "right"; ctx.fillText(fitText(ctx, hr.k.includes(",") ? hr.k : (GKINDS[dsKind(hr.dz)] ? GKINDS[dsKind(hr.dz)][1] : "QTL") + ", " + hr.k, L - 12), L - 8, y + rowH / 2);
       for (const ch of CH) { const cr = row[ch] || {}, nb = Math.ceil(CHL[ch] / HB);
         for (let b = 0; b < nb; b++) { const n = cr[b] || 0, x0 = X(CHSTART[ch] + b * HB), x1 = X(CHSTART[ch] + Math.min(CHL[ch], (b + 1) * HB));
           ctx.fillStyle = n ? heatColor(n, o.max) : nopeak; ctx.fillRect(x0, y + 0.5, Math.max(0.6, x1 - x0 - 0.3), rowH - 1); } }
