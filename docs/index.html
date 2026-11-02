@@ -335,7 +335,7 @@ function loadLazy(k) {
   return LZ[key];
 }
 // per-gene QTL kinds a dataset can provide on demand, in display order: [track label, short name]
-const GKINDS = { eqtl: ["mRNA (eQTL)", "eQTL"], pqtl: ["protein (pQTL)", "pQTL"] };
+const GKINDS = { eqtl: ["mRNA (eQTL)", "eQTL"], sceqtl: ["mRNA, single-cell (eQTL)", "sc-eQTL"], pqtl: ["protein (pQTL)", "pQTL"], mspqtl: ["protein, mass spec (pQTL)", "MS-pQTL"] };
 function geneKinds() { return Object.keys(GKINDS).filter(n => lazyRows(n).length); }
 function dsKind(d) { const L = D.lazy; if (!L || !L.ds) return null; const k = L.ds.indexOf(d); return k >= 0 ? L.name[k] : null; }
 const EQ = { g: null, rows: null, err: null };
