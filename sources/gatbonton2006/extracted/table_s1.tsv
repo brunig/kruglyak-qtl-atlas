@@ -1,0 +1,19 @@
+# Table S1 of Gatbonton et al. 2006, from raw/journal.pgen.0020035.st001.xls (sha256 08f0250d5967476f93ab364e203ca6a5a59c01ad6c22eb923c5f920f2097936b), Sheet1, cell for cell
+row	col_B	col_C	col_D	col_E
+7	Suplemental Table 1: Candidates telomere length control genes in BYXRM cross			
+9	CHROM 12	function	tel. length/essential	AA sequence in RM11
+10	EST1	 telomerase recruitment	short	11 AA substitutions
+11	VPS34	vauolar protein sorting	short	identical
+12	ARV1	sterol metabolism	short  (Askree et al)	identical
+13	YLR243W	not known	essential	identical
+14	YEF3	translation elongation	essential	 1 AA substitution
+15	HSP60	protein folding	essential	identical
+16	RPS28 B	 ribosomal protein	long	identical
+17	CHROM 13			
+18	TAF8	transcription factor	essential	1 AA substitution
+19	TAF13	transcription factor	essential	3 AA substitutions
+20	VPS9	vacuolar protein sorting	short (Askree et al)	7 AA substitutions
+21	UTP14	rRNA processing	essential	5 AA substitutions
+22	PRE8	proteosome subunit	essential	identical
+23	RPM2	mitochondrial RNAse P	essential	13 AA substitutions
+24	BET1	membrane transport	essential	identical

@@ -1109,6 +1109,52 @@ The 393-segregant local eQTL (Table S6), variance decomposition (S5), ASE and no
 (Supplementary files 5 and 6) and the GPA1 validation (file 9) are kept verbatim in
 `docs/v/b25_extra.json`. Raw counts and genotypes (Dryad, Zenodo) were not fetched.
 
+## Gatbonton et al. 2006
+
+Sources: Table S1 (XLS), Figure S1 and the article's and correction's table images (TIFF), fetched
+from journals.plos.org with plain requests, and the article and correction pages. Quotes used as
+data are in `sources/gatbonton2006/extracted/text_facts.tsv`, each checked verbatim.
+
+### Q1. No QTL positions or intervals in a table
+Table 2 ("Loci that control telomere length in RM and BY strains") is published only as an image,
+and the genome scan is Figure 6C. The text names the two loci by chromosome with their LOD (7.4,
+4.3) and variance explained (25%, 13%). **Atlas:** two chromosome-only QTL rows (`a`/`e`/`p` null),
+listed, not drawn. The genes Table S1 lists cluster at about 607–678 kb on chrXII and 42–88 kb on
+chrXIII in R64, but they are the paper's candidate list, not an interval, so no coordinates are
+inferred from them.
+
+### Q2. Direction at the chromosome 13 locus
+The text states the direction only for chromosome 12 (the RM11 allele confers longer telomeres,
+opposite to the parental difference). The chromosome 13 direction is in the Table 2 image.
+**Atlas:** `up` = RM on chrXII, not recorded on chrXIII.
+
+### Q3. Which candidate genes
+The Results name EST1, VPS34, RPS28B, ARV1 and VPS9 as known telomere-length genes in the mapped
+regions and say "Polymorphisms that result in amino-acid substitutions in these genes (Table S1) are
+likely candidates". Table S1 marks VPS34, ARV1 and RPS28B as "identical" in RM11 and EST1 (11) and
+VPS9 (7) as carrying substitutions. **Atlas (most defensible reading):** all five as tier `c`
+(candidate named by the paper), with Table S1's substitution column kept verbatim so a reader can
+see which differ at the protein level. The essential genes Table S1 also lists are not tiered.
+
+### Q4. BET1 listed under chromosome 13
+Table S1 lists BET1 under "CHROM 13", but BET1 is YIL004C on chrIX. Kept as printed; strict xfail
+in the tests.
+
+### Q5. "30%–35%" vs 25% + 13%
+The abstract says the two loci account for 30%–35% of the variation between the strains; the Results
+give 25% and 13% of the variation among the segregants. These are different quantities and are not
+treated as a discrepancy; both are kept in the dataset notes.
+
+### Q6. The deletion survey and the correction
+The genome-wide deletion survey (72 short, 80 long telomere genes) is context, not QTL, and its
+Table 1 is an image. The correction (PLoS Genet 2:e104) states only that Table 1 was incomplete and
+reprints it, also as an image. **Atlas:** the survey counts are recorded from the text; neither
+table is read off its image; nothing from the survey is drawn.
+
+### Q7. Build
+No coordinates are tabulated, so no genome build applies. Gene positions shown for candidates come
+from SGD R64-5-1.
+
 ## Blocked steps
 
 ### B1. GitHub Pages
