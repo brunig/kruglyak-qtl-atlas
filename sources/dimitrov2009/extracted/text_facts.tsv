@@ -1,0 +1,29 @@
+kind	section	quote
+design	Figure 2 legend	A total of 122 segregants from a cross between BY4716 and RM11-1a
+design	Results	genotyped for parental contributions at 2957 polymorphic markers covering >99% of the yeast genome
+method	Methods: Linkage and statistical analysis	The median petite frequencies for the segregants in the BY vs. the RM group were compared with the nonparametric, Wilcoxon–Mann–Whitney test
+method	Methods: Linkage and statistical analysis	to arrive at the “linkage likelihood” statistic reported in Figure 3
+threshold	Figure 3 legend	The solid line at linkage likelihood of 9.3 marks the 5% genomewide significance level
+loci	Results	Three QTL in the yeast genome reached statistical significance on the basis of permutation tests
+loci	Results	Locus 1 is on chromosome XIV. Loci 2 and 3 are both on chromosome XV
+direction	Results	For all three QTL, inheritance of the RM alleles at each locus was associated with a lower petite frequency
+window	Figure 3 legend	in the 37.2-kbp window between marker positions 449,639 and 486,861, which are the two markers with the highest linkage likelihood
+window	Figure 3 legend	in a 26.4-kbp window (between marker positions 519,776 and 546,197)
+window	Figure 3 legend	in an 8.7-kbp window between marker positions 937,036 and 945,781, which are the two markers with the highest linkage likelihood
+region	Figure 5 legend	The region between positions 410,121 and 510,213 was BLASTN aligned to the RM11-1a genome
+region	Figure 5 legend	The region between positions 483,221 and 579,794 was BLASTN aligned to the RM11-1a genome
+gene	Results: MKT1	The median petite frequency of the BY MKT1-30G strain was 82%, almost twice that of the BY MKT1-30D strain
+gene	Results: Locus 1	Thus, SAL1 is a quantitative trait gene (QTG) that affects petite frequency.
+gene	Results: Locus 2	Thus, CAT5 is a QTG that affects the petite frequency phenotype.
+gene	Results: Locus 3	Thus, MIP1 is a QTG that affects the petite frequency phenotype
+gene	Results: Locus 3	the allele was <2 kbp from the marker of peak linkage in locus 3
+negative	Results: Locus 2	did not affect the petite frequency phenotype (data not shown)
+summary	Abstract	Four main genetic determinants explained the phenotypic difference.
+summary	Abstract	Alleles of SAL1 , CAT5 , and MIP1 contributed to the high petite frequency of S288C and its derivatives by increasing the formation of petite colonies.
+summary	Abstract	By contrast, the S288C allele of MKT1 reduced the formation of petite colonies and compromised the growth of petite cells.
+summary	Results	explains ∼94% [(79% − 5%)/(79% − 0.6%)] of the difference between the BY and RM strains when both carry the MKT1-30G allele
+segregants	Results	Nineteen segregants had median petite frequencies that were at the same low level as that of the RM parent (<0.6%).
+dominance	Results	These results suggested that the petite frequency phenotype was under genetic control and that the RM alleles were dominant to those in BY.
+build	Methods	The source of the BY/S288C sequences was the Saccharomyces Genome Database (SGD)
+supplement	Acknowledgments	Supporting information is available online at http://www.genetics.org/cgi/content/full/genetics.109.104497/DC1
+rate	Results: MKT1	The petite mutation rate of the BY MKT1-30D strain was 5% while that of the BY MKT1-30G strain was 22% ( Table 2 ), a difference that was statistically significant ( P = 0.01)

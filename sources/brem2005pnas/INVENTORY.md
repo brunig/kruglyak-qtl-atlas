@@ -21,7 +21,7 @@ header row), column names, and the first three data rows. Values over 60 charact
 
 NCBI E-utilities efetch for PMC547855: front matter only (the XML says the publisher does not allow full-text XML download). Kept as a record of what the official API returns.
 
-Image or binary figure file; not parsed by the atlas.
+XML document (7,316 bytes): article or table text, parsed by the dataset's ingest where it says so.
 
 ## Not in the bundle
 

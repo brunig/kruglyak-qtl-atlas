@@ -1006,6 +1006,51 @@ No marker or QTL positions are given, so no build applies. The 2,957 markers are
 Expression data are deposited in GEO (GSE1990). They are phenotypes, not QTL results, and were not
 fetched; re-mapping them would go beyond what the paper reported.
 
+## Dimitrov et al. 2009
+
+Source: the PubMed Central full text (PMC2746160), `sources/dimitrov2009/raw/PMC2746160.html`.
+Quotes used are in `sources/dimitrov2009/extracted/text_facts.tsv`.
+
+### Q1. Supporting information and PDF not fetched
+The supporting information (File S1, Figures S1–S3, Table S1 primers) is at genetics.org /
+academic.oup.com, which refuses requests from the build environment (403). PMC's PDF link served
+a proof-of-work bot check instead of the file; it was not worked around. The full text and
+Tables 1–4 on the PMC page are complete, so nothing the atlas uses depends on these files.
+
+### Q2. No QTL table; intervals are the two-top-marker windows
+The paper tabulates no QTL. Loci, chromosomes and direction come from the Results text; for each
+locus the Figure 3 legend gives the window between "the two markers with the highest linkage
+likelihood" (chrXIV 449,639–486,861; chrXV 519,776–546,197; chrXV 937,036–945,781). **Atlas
+(most defensible reading):** those windows are `qtl.a`–`qtl.e`. They are not confidence
+intervals. The single peak marker is not stated, so `qtl.p` is the window midpoint, labelled in
+`qtl.k`. The linkage statistic (−ln p of a Wilcoxon test; 5% genome-wide threshold 9.3) is only
+plotted (Figure 3A), so `qtl.lod` is empty. Figure 5 gives wider analysis regions around the
+peaks of loci 1 and 2 (410,121–510,213 and 483,221–579,794); they are kept in the quotes only.
+
+### Q3. Genome build
+Positions are as printed in 2009, from the Brem and Kruglyak 2005 marker set. On SGD R64-5-1
+coordinates, MKT1 and SAL1 sit inside the locus-1 window and MIP1 inside the locus-3 window
+(the text: MIP1 "<2 kbp from the marker of peak linkage"). **Atlas:** used as R64, no transform.
+
+### Q4. CAT5 lies outside the locus-2 window
+CAT5 (558,738–559,780 on R64-5-1) is 12.5 kb right of the locus-2 two-top-marker window but
+inside the 97-kbp region the paper analysed around that peak. The paper assigns it to locus 2
+and confirms it by allele replacement; the atlas keeps that assignment.
+
+### Q5. MKT1 acts against the locus-1 direction
+At locus 1 the RM allele is associated with lower petite frequency, but replacing BY's MKT1-30D
+with MKT1-30G *raised* petite frequency (82%, "almost twice that of the BY MKT1-30D strain"). The paper concludes SAL1 drives the locus.
+**Atlas:** both genes are tier `x` on locus 1, with `causal.eff` "increase" for SAL1 (BY allele
+raises) and "decrease" for MKT1 (BY allele lowers); the QTL card shows SAL1.
+
+### Q6. P-value for the MKT1 petite mutation rates
+The text gives the MKT1-30D vs MKT1-30G rate difference as "P = 0.01"; Table 2 prints "<0.01".
+Strict xfail; the atlas keeps both as given.
+
+### Q7. No effect sizes
+Median petite frequencies of segregant groups and of allele-replacement strains appear only in
+figures (Figures 3B, 4, 7), which are not read. `qtl.ef` is empty; direction is in `qtl.up`.
+
 ## Blocked steps
 
 ### B1. GitHub Pages

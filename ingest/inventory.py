@@ -166,6 +166,8 @@ def run(ds):
         elif f.endswith(".docx"):
             with zipfile.ZipFile(p) as z:
                 md += [f"Word document, {len(z.namelist())} parts in the archive.", ""]
+        elif f.endswith((".html", ".htm", ".xml")):
+            md += [f"{'HTML' if 'htm' in f else 'XML'} document ({os.path.getsize(p):,} bytes): article or table text, parsed by the dataset's ingest where it says so.", ""]
         elif f.endswith(".doc"):
             md += ["Legacy Word document (figure or text supplement); not parsed by the atlas.", ""]
         else:
