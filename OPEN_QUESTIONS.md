@@ -1155,6 +1155,94 @@ table is read off its image; nothing from the survey is drawn.
 No coordinates are tabulated, so no genome build applies. Gene positions shown for candidates come
 from SGD R64-5-1.
 
+## Ronald et al. 2005
+
+Sources: the six supporting-information files in `sources/ronald2005/raw/` (fetched from
+journals.plos.org with plain requests) and the article page `sources/ronald2005/article.html`.
+No code is cited; the expression and genotype data are those of Brem & Kruglyak 2005 (PNAS).
+
+### Q1. Placement of self-linkages (atlas placement)
+Table S1 gives no marker position: each transcript was tested at "the one [marker] closest to the
+gene's start site", and the 1- and 2-LOD support intervals are base pairs on the 2005 SGD assembly.
+**Atlas (most defensible reading):** each of the 1,428 self-linkages is a local eQTL by
+construction, so it is drawn as a point at its gene's start site on SGD R64-5-1 (`a = e = p`). The
+paper's support intervals are kept verbatim in the source rows and not converted, so builds are not
+mixed.
+
+### Q2. 22 self-linking ORFs are not placed
+22 ORFs flagged as self-linking in Table S1 are not in the R64-5-1 gene table (retired, merged or
+renamed since 2005; they are listed in the dataset notes). They stay in the verbatim Table S1 rows
+in `docs/v/r05_extra.json` but are not in the per-gene eQTL file. Mapping old names to current ones
+would need SGD's history tables, which are not in the bundle.
+
+### Q3. No LOD
+Table S1 gives −ln p, not LOD. The atlas stores −log10 p (an exact rescaling) in column `nlp` and
+leaves `lod` empty, so the page draws these stems at the floor height.
+
+### Q4. Effect sign
+`fold_change_log2(BY/RM)` is log2 of mean expression in segregants with the BY allele at the tested
+marker over mean with the RM allele (Materials and Methods). Positive = the BY allele raises
+expression; the per-row `up` column says which parent.
+
+### Q5. "52%–78%" in the abstract
+The Results give 44 of 77 assayed genes (57%) with nominal ASE p < 0.05 and a Storey–Tibshirani
+estimate of 78%. Table S2 gives 44 (57%), or 42 (54.5%) when the ASE direction also agrees with
+linkage; no reading of the table gives 52%. Strict xfail in `tests/test_ronald2005.py`.
+
+### Q6. Table S1 header
+The header line of `journal.pgen.0010025.st001.txt` has an empty column (a doubled tab) between
+`minus_ln_pvalue` and the support intervals, so it has 10 cells while every data row has 9. The
+atlas shows the header without the empty cell, so names line up with values; the raw header is
+kept in `docs/v/r05_extra.json` (`header_raw`).
+
+### Q7. Not ingested
+Table S3 (promoter vs synonymous polymorphisms at predicted binding sites) is a Word table about
+sequence divergence, not QTL; it is inventoried, not parsed. Figures S1–S3 are EPS figures.
+
+## Brem et al. 2005 (Nature)
+
+Sources: the PubMed Central author manuscript PMC1409747 (full text; source of record) and the Nature
+article page (abstract, supplementary items). Code references: none published.
+
+### Q1. No table of locus pairs
+The paper reports significant locus pairs for 225 transcripts but publishes no list of them, their
+loci, positions or statistics; Figure 1 is a histogram of pair positions in 20 kb bins, read from no
+table. **Atlas:** only the one pair the text names (MAT-GPA1) is ingested; every count is in
+`datasets.notes` and the tests.
+
+### Q2. MAT and GPA1 loci are not placed
+The text says the primary locus "lay near MAT" and the secondary locus "contained" GPA1, with no
+coordinates or marker. **Atlas (most defensible reading):** two chromosome-only rows (chrIII, chrVIII);
+the genes' R64-5-1 coordinates are on the candidate-gene rows, not on the QTL.
+
+### Q3. MAT as a candidate "gene"
+MAT is a locus (the a or α idiomorph), not a single gene. The engineered strains differ at the whole
+locus (BY4709 MATα vs BY4724 MATa). **Atlas:** MATALPHA1 (YCR040W), the S288C reference gene at MAT,
+stands in for the locus in the candidate table, tier `x` with GPA1; this is a representation choice.
+
+### Q4. Tier for the MAT-GPA1 pair
+The interaction was reproduced in engineered strains for 10 of 15 tested transcripts (7 of 11
+mating-type-regulated, 3 of 4 of unknown function); PTC1 and YRR1 disagreed. **Atlas:** tier `x`
+(experimentally confirmed) for the pair as a whole.
+
+### Q5. "YOR090C/PTC1"
+The text names YOR090C/PTC1 among transcripts that disagreed. In SGD R64-5-1 YOR090C is PTC5 and PTC1
+is YDL006W. Kept as printed (strict xfail in the tests).
+
+### Q6. Abstract wording differs between versions
+The author manuscript and the published abstract differ in wording ("play a role in" vs "be involved
+in"; "dramatically impact" vs "markedly affect"; "suggest" vs "indicate"); the numbers are the same.
+Quotes come from the manuscript, with the published abstract sentence kept as well.
+
+### Q7. Files not fetched
+PMC's PDF and its copy of the supplementary figure answered with a JavaScript proof-of-work page; it
+was not solved. Nature's own copy of Supplementary Figure S1 (PowerPoint) and the corrigendum were
+fetched; neither carries a table. The underlying expression and genotype data belong to ref. 7.
+
+### Q8. Direction
+No effect sizes are tabulated. Figure 2 plots expression by MAT-GPA1 genotype (RM is MATa, BY is MATα;
+GPA1 S469I is the BY allele), and effects differ by transcript, so `qtl.up` is not set.
+
 ## Blocked steps
 
 ### B1. GitHub Pages

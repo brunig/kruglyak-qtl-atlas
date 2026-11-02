@@ -1,0 +1,27 @@
+kind	section	file	quote
+design	main text	raw/PMC1409747.html	For this analysis, we used previously described genotype and gene expression data from 112 segregants
+design	main text	raw/PMC1409747.html	We sought to identify the loci involved in such interactions in a cross between a lab strain of yeast, BY, and a wild strain, RM.
+estimate	abstract	raw/PMC1409747.html	Such locus pairs were estimated to play a role in the inheritance of 57% of transcripts; statistically significant pairs were identified for 225 transcripts.
+estimate	main text	raw/PMC1409747.html	it identified locus pairs for 225 transcripts at a false discovery rate of 5% ( i.e. fewer than 12 of these are expected to have either locus as a false positive)
+interaction	main text	raw/PMC1409747.html	the latter term was significant at p < 0.05 for 65% of transcripts
+interaction	main text	raw/PMC1409747.html	For comparison, we considered 547 transcripts for which two loci were identified as significant by their individual effects. Of these, only 13% had an interaction term significant at p < 0.05.
+interaction	main text	raw/PMC1409747.html	the interaction term represented a true positive for 91% of locus pairs mapped by the two-stage search, compared to 13% of pairs mapped independently
+secondary	main text	raw/PMC1409747.html	found that 87% of these were significant at p < 0.05
+secondary	main text	raw/PMC1409747.html	we found that only 74 (33%) of the 225 were, indicating that 67% of secondary loci would have been missed without the two-stage search
+bins	Figure 1 legend	raw/PMC1409747.html	On each axis the genome is divided into 611 bins of 20 kb each, shown in chromosomal order.
+pair	main text	raw/PMC1409747.html	The largest number of transcripts linking to a single locus pair was 14, with four additional transcripts linking nearby
+pair	main text	raw/PMC1409747.html	we eliminated the latter from further analysis, leaving 17 transcripts that linked to this locus pair
+pair	main text	raw/PMC1409747.html	The primary QTL of the pair lay near MAT
+pair	main text	raw/PMC1409747.html	The secondary locus contained the gene encoding the G-protein subunit Gpa1, in which a single polymorphism in the BY parent strain, S469I, has previously been shown to affect expression of pheromone response genes
+pair	main text	raw/PMC1409747.html	Of the 17 transcripts whose linkage to the MAT and GPA1 loci was detected by the two-stage search, 11 were previously shown to be regulated by mating type, of which seven are also regulated by the pheromone response pathway; two have known function that does not involve mating, and four have no known function
+pair	main text	raw/PMC1409747.html	For 14 of the transcripts, the MAT and GPA1 loci showed direct evidence for interaction in the regression model at p < 0.05; the independent effect of the GPA1 locus exceeded the genome-wide significance threshold for single-locus linkage for only one of these 17 transcripts.
+engineered	main text	raw/PMC1409747.html	we engineered isogenic yeast strains carrying each of the four possible combinations of alleles at the two loci
+engineered	main text	raw/PMC1409747.html	For 7 of 11 transcripts previously known to be regulated by mating type, and 3 of 4 transcripts of unknown function, the pattern of effect of MAT - GPA1 genotype on expression was the same in engineered strains as in segregants
+engineered	main text	raw/PMC1409747.html	YOR090C/PTC1 and YOR162C/YRR1 , which have known functions unrelated to mating, did not show agreement between engineered strains and segregants
+genotype	Figure 2 legend	raw/PMC1409747.html	RM is MATa and BY is MATα
+method	Methods	raw/PMC1409747.html	For each transcript and marker, a Wilcoxon rank-sum statistic was formed to quantify expression differences between the segregants grouped by inheritance at the locus.
+method	Methods	raw/PMC1409747.html	With a cut-off corresponding to a 5% false discovery rate, 225 expression traits were called significant for two-locus linkage using this method.
+method	Methods	raw/PMC1409747.html	the I469 and S469 alleles of GPA1 were each engineered into the S288c derivatives BY4709 (MATα URA3Δ0) and BY4724 (MAT a LYS2Δ0 URA3Δ0)
+supplement	Supplementary information (Nature page)	article.html	Comparison of transcript levels in segregants and engineered strains for the 18 transcripts with significant linkage to the MAT-GPA1 locus pair under the two-stage linkage test
+supplement	Supplementary information (Nature page)	article.html	This file contains details regarding an error in the Supplementary Figure at the time of publication.
+abstract	abstract (Nature page)	article.html	Such locus pairs were estimated to be involved in the inheritance of 57% of transcripts; statistically significant pairs were identified for 225 transcripts.
