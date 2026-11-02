@@ -911,6 +911,101 @@ first two round to 21.3 and 26.6. Strict xfail `test_chrI_right_arm_variance_as_
 - Broad- versus narrow-sense heritability differences (14.6%, 12.9%): Table 1 is an image.
 - Signed effect sizes per locus and dose: Figure 3B only.
 
+## Jerison et al. 2017
+
+Sources: the unpacked eLife bundle `sources/jerison2017/raw/` (from `cdn.elifesciences.org`,
+checksum in `SOURCE_ZIP.tsv`) and the PMC open-access full text
+`sources/jerison2017/article_pmc5580887.xml`, fetched through NCBI E-utilities because the eLife
+article page answered 406 to plain requests and `api.elifesciences.org` is not an allowed host. No
+analysis code is cited.
+
+### Q1. QTL have positions but no interval bounds or LOD
+Methods say each QTL has a 1.5-LOD-drop confidence interval, but Supplementary file 5 gives only
+one position per locus ("ChrXIV 376315") plus the genes inside the interval. No LOD is tabulated.
+**Atlas:** QTL are points at that position (`a = e = p`), `lod` is null. The genes listed under
+each locus span roughly -50 to +50 kb around it; that span is not turned into an interval.
+
+### Q2. One row per locus and trait; two kinds of evidence
+Supplementary file 5 marks each of 8 loci y/n for 8 traits. The first four (initial fitness and
+adaptability at OT and HT) come from the genome scan; the last four ("adaptability … beyond
+fitness", "pleiotropy … beyond fitness") mark loci kept as terms in the combined fitness + QTL
+models (Figure 3/8 source data). **Atlas:** 30 QTL rows, one per "y" cell; `qtl.k` says which kind.
+Loci that enter a model only through an interaction with the ChrXIV 376315 (KRE33) locus are
+labelled as such and carry no main-effect coefficient.
+
+### Q3. Model tables quote three loci at other positions
+Figure 3-source data 1 and Figure 8-source data 1 give ChrIV 1091232, ChrXIV 466590 and ChrXII
+644077, where Supplementary file 5 has ChrIV 1062759, ChrXIV 470303 and ChrXII 646707 (offsets
+28.5, 3.7 and 2.6 kb). **Atlas (most defensible reading):** the same loci; coefficients are matched
+to the nearest Supplementary file 5 locus on the same chromosome (all within 50 kb), and the
+matches are kept in `docs/v/j17_extra.json` (`j17:locus_matches`). The ingest refuses any match
+landing on a locus-trait cell Supplementary file 5 does not flag.
+
+### Q4. Gene names in Supplementary file 5
+Under R64-5-1 names, MHF2 (listed for ChrXV 154799) is on chrIV and GSY1 (listed for ChrXII
+646707) is on chrVI; the chrXII gene at that locus is GSY2. MCP2 is not a current SGD standard
+name. Every other listed gene lies within 50 kb of its locus. The names are kept as given.
+
+### Q5. Sign of the coefficients
+Neither the tables nor the methods state which allele is coded positive in the QTL models; the
+combined models code loci +0.5/-0.5 without saying which is which. **Atlas (most defensible
+reading):** positive = the RM allele raises the trait. The text calls the RM allele at the KRE33
+locus "less-fit" and says founders carrying it are more adaptable, and the KRE33 coefficient is
+positive in both adaptability QTL models. The same reading is applied to every coefficient table.
+
+### Q6. Counts in the text that the supplement does not reproduce
+- 910 OT and 839 HT evolved lines (Methods); Supplementary file 2 lists 907 and 852.
+- 603 mutations in 254 sequenced lines (Results); Supplementary file 3 has 738 mutations in 219
+  populations, all at frequency >= 0.5.
+- 99 genes within QTL confidence intervals, dubious ORFs excluded (Methods); Supplementary file 5
+  lists 208 unique names.
+All three are strict xfails in `tests/test_jerison2017.py`.
+
+### Q7. Candidate genes
+The text proposes KRE33 for the ChrXIV 376315 locus ("genetic variation in the KRE33 gene itself
+might have caused the observed variation in adaptability"), supported by de novo mutations in
+KRE33 and ribosome-biogenesis genes only in RM-KRE33 descendants. **Atlas:** KRE33, tier `c`. IRA2,
+BFR2 (multi-hit genes inside QTL intervals) and RAS2 are mentioned as possible links, not as causal
+genes, and are not tiered.
+
+### Q8. Trait categories and condition keys
+Initial fitness at OT (YPD 30 °C) gets condition key `ypd`, shared with YPD traits elsewhere; the
+phenotype here is competitive fitness in liquid culture, not colony growth. Adaptability and
+pleiotropy get a new category, `adaptability`, because none of the existing ones fits.
+
+## Brem and Kruglyak 2005
+
+Sources: the PubMed Central page for PMC547855 (`sources/brem2005pnas/article.html`), from which
+`extracted/extract.py` writes 20 verbatim quotes (`extracted/text_facts.tsv`) and Tables 1 and 2
+(`extracted/tables.tsv`). www.pnas.org is not reachable from the build environment.
+
+### Q1. No QTL-level results are tabulated
+The article gives counts and distributions only: 2,984 transcripts with at least one QTL at FDR
+0.05, Table 1 (fraction of QTLs by variance explained) and Table 2 (bounds on loci per transcript).
+Which transcripts link where is not listed in the article; the linkage method follows ref. 17
+(Yvert et al. 2003). **Atlas:** a dataset row, BY and RM, the 112-segregant cross and one summary
+trait, with no QTL rows (`nq = 0`). Nothing is filled in from other papers.
+
+### Q2. The PMC supplementary files and PDF were not fetched
+PMC serves `pnas_102_5_1572__.html`, `__1.html`, `__2.pdf`, `__3.pdf` (Supporting Text, a
+supporting table page, Figs. 5 and 6) and the article PDF behind a JavaScript proof-of-work page.
+A plain request returns the challenge; solving it would be bot-check circumvention and was not
+done. NCBI E-utilities `efetch db=pmc` returns front matter only ("The publisher of this article
+does not allow downloading of the full text in XML form"); that response is kept in `raw/`. The
+supporting table page (`__1.html`, 8.7 KB) might hold per-transcript results; it is unexamined.
+Fix: supply those files, or allow access to them from the publisher.
+
+### Q3. "40%" vs 41%
+The abstract says no QTL was detected for 40% of highly heritable transcripts. The Results give
+2,091 of 3,546 (59%) with a QTL, so 1,455 (41.0%) have none. Recorded as a strict xfail.
+
+### Q4. Genome build
+No marker or QTL positions are given, so no build applies. The 2,957 markers are those of ref. 17.
+
+### Q5. Expression data
+Expression data are deposited in GEO (GSE1990). They are phenotypes, not QTL results, and were not
+fetched; re-mapping them would go beyond what the paper reported.
+
 ## Blocked steps
 
 ### B1. GitHub Pages
@@ -927,5 +1022,9 @@ From the build environment (network policy as of 2026-11-01):
 - **Genetics / OUP** (Gou 2019): `academic.oup.com` answers 403 and figshare is not allowed;
   resolved by the user supplying the article PDF and the supplement zip.
 - **Dryad** (Treusch 2015 code and mapping data): not an allowed host.
+- **PMC supplementary files** (Brem & Kruglyak 2005): `pmc.ncbi.nlm.nih.gov` serves article pages to
+  plain requests but answers requests for the PDF and supplementary files with a JavaScript
+  proof-of-work challenge. Solving it would be bot-check circumvention, so those files were not
+  fetched. E-utilities `efetch db=pmc` returns full text only where the publisher allows it.
 Fix: add `idp.nature.com`, `doi.org`, `*.figshare.com`, `datadryad.org` to the environment's
 allowed domains, or supply the files directly (upload, or a shared folder).

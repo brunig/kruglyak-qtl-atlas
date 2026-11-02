@@ -1,0 +1,22 @@
+# Verbatim quotes from the PMC full text (sources/jerison2017/article_pmc5580887.xml); text = " ".join(element.itertext()) with whitespace collapsed.
+key	section	quote
+founders	Results	we selected 230 segregants (‘founders’) from a cross between a wine strain, RM, and a laboratory strain, BY
+founders_mata	Materials and methods: Founders	We used the first 230 MATa segregants from this cross as our founder strains
+populations	Results	(a total of 1840 populations)
+lines	Materials and methods: Experimental evolution	leaving a total of 910 evolved lines in the OT environment and 839 in the HT environment
+n_qtl	Results	the 8 QTLs that we identified as influencing founder fitness or adaptability
+genes_in_ci	Materials and methods: Comparing QTL locations	the list of 99 genes within QTL confidence intervals
+mutations	Results	We identified a total of 603 mutations
+sequenced_lines	Results	leaving us with a total of 254 sequenced lines
+multihit	Results	We found 27 genes in which missense or putative loss of function mutations were called in two or more independent populations
+kre33_fitness	Results	the less-fit RM allele at the QTL containing the KRE33 gene
+kre33_adapt	Results	it likely contributes to the increased adaptability of the founders which carry the RM version of KRE33
+kre33_candidate	Results	This observation suggests that genetic variation in the KRE33 gene itself might have caused the observed variation in adaptability.
+interval	Materials and methods: Mapping QTLs	we calculate a confidence interval for the location of the QTL based on an LOD decline of 1.5
+threshold	Materials and methods: Mapping QTLs	to determine whether the QTL with the largest value of the test statistic is significant at the 0.05 level
+traits	Materials and methods: Mapping QTLs	We carry out this QTL detection procedure separately for two traits, initial fitness X and fitness increment
+ot	Results	rich media at an optimal temperature of 30°C (the OT environment), and synthetic media at a high temperature of 37°C (the HT environment)
+h2_adapt	Results	≈ 0.61 in the OT environment and 0.65 in the HT environment
+ira2_bfr2	Results	We found two additional examples of multi-hit genes that lie within the confidence interval for one of these 8 QTLs: IRA2 and BFR2
+no_more_qtl	Materials and methods: Combined QTL and fitness model	We did not find any additional QTLs beyond those previously identified.
+sra	Major datasets	SRP102877
