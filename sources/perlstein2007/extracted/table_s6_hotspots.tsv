@@ -1,0 +1,10 @@
+# extracted from raw/41588_2007_BFng1991_MOESM241_ESM.pdf (sha256 9dcdf3749787d693feada6fe19ec8bec0e2e1a52d86ee3f61221f528e4f60cc8) by extract_tables.py
+page	line	column	chrom	pos_bp	n_smp
+1	2	1	1	180000	7
+1	2	2	3	80000	7
+1	2	3	12	660000	8
+1	2	4	13	20000	26
+1	2	5	14	440000	7
+1	2	6	14	480000	5
+1	2	7	15	160000	4
+1	2	8	15	240000	4

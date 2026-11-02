@@ -1440,6 +1440,75 @@ the R64-5-1 gene table; their 14 loci keep `g = -1` and cannot be opened from a 
 `loc = 1` exactly where Table S1's Cis column marks that locus as cis (58 traits, as the text
 states); every such locus is on the trait's chromosome and within 50 kb of the trait gene.
 
+## Perlstein et al. 2007
+
+Sources: the nine supplementary files linked from https://www.nature.com/articles/ng1991
+(`sources/perlstein2007/raw/`) and the article page (`sources/perlstein2007/article.html`). The main
+text and Online Methods are paywalled and the paper is not in PubMed Central, so semantics come from
+the abstract, the supplementary legends and the Supplementary Note.
+
+### Q1. Linkage method, threshold, FDR and interval definition are not in the bundle
+The abstract says "linkage analysis"; the Methods are paywalled. The tables give peak markers and LOD
+(Tables 3-5) and base-pair confidence intervals (Table 5) without saying how the intervals were
+defined or which LOD threshold or FDR was used. **Atlas:** `datasets.fdr` is null; the interval is
+labelled "Supplementary Table 5 confidence interval, definition not stated". Every Table 5 LOD is at
+least 4.0.
+
+### Q2. Which table is drawn, and how Table 5 rows get their compound, dose and time point
+Table 3 lists all 219 compound × dose × time-point linkages; Table 4 the 123 "collapsed" ones;
+Table 5 the collapsed ones with base-pair positions, 124 rows, matching the abstract's "124 distinct
+linkages". Table 5 is drawn (one QTL row per Table 5 row). Its trait column holds codes such as
+`29_D16HighAT.48`; each row is labelled with the Table 4 row in the same order with the same marker
+(ignoring a `.1` suffix), chromosome, LOD within rounding (Table 4 rounds some LODs: 21.7 → 22) and
+the time point the code encodes. Three Table 5 rows have no such Table 4 row and are labelled from
+Table 3 the same way: cinnarizine at 44 h (chrVII), H2O2 at 132 h (chrXII) and tyrothricin at 80 h
+(chrXIII). The full mapping is kept in `docs/v/p07_extra.json` (`p07:ALIGN`).
+**Most defensible reading**; Table 3 is kept verbatim but not drawn (it repeats loci across time points).
+
+### Q3. Tables 4 and 5 disagree on two linkages
+Table 4 lists the chrVII cinnarizine linkage (marker YGL020C_1347, LOD 5.9) at 52 h; Table 5's code
+says 44 h, and Table 3 has that linkage at 44 h. Table 4's chlorhexidine 2.7 µM, 68 h linkage on
+chrXIII (YML120C_2561, LOD 5) has no Table 5 row. The atlas follows Table 5 (and Table 3 for its label).
+
+### Q4. "100 diverse small molecules" vs 92 in Table 1
+The abstract says 100; Table 1 numbers 92 SMPs. The linkage tables name 84 compounds; the abstract's
+"83 compounds" is reproduced when "rapamycin (CSM media)" is counted with rapamycin.
+
+### Q5. Hotspot SMP lists
+Table 6 gives each hotspot as chromosome, base-pair position (rounded, apparently to 20 kb bins) and
+number of linked SMPs, with the SMP names in columns. The names were assigned to columns by word
+position (`extract_tables.py`). Seven columns list exactly their stated number; the chrXIII 20 kb
+hotspot states 26 SMPs and lists 25.
+
+### Q6. PHO84 and the "two polychlorinated phenols"
+The abstract says a coding polymorphism in PHO84 "underlies sensitivity to two polychlorinated
+phenols"; the compounds are not named in the accessible text. The only polychlorinated phenols in
+Table 1 are dichlorophene and pentachlorophenol, and both link on chrXIII at marker YML121W
+(27,644 bp), so PHO84 (tier x) is attached to those two QTL. **Reading, labelled.** PHO84
+(R64-5-1 chrXIII 23,886-25,919) ends about 1.7 kb left of both reported intervals, which start at
+the peak marker; recorded by a test, not adjusted. Supplementary Table 7 gives primers for L259P and
+D55N PHO84 allele swaps.
+
+### Q7. LEU2 is a deletion, not a natural polymorphism
+The abstract verifies that "a deletion of LEU2 underlies sensitivity to niguldipine". LEU2 lies inside
+the chrIII niguldipine interval. It is tiered `x` (experimentally verified) like the other confirmed
+genes; which parent carries the deletion is not stated in the accessible text.
+
+### Q8. SWH1 and MKS1 are unverified literature associations
+The Supplementary Note favours SWH1 at the chrI hotspot and MKS1 at "the QTL hot spots on chromosome
+14" and stresses that these "are associations which must ultimately be verified". **Atlas:** tier `c`,
+attached to the chrI hotspot and to both chrXIV hotspots.
+
+### Q9. Genome build and position units
+No build is stated. Table 5's base-pair positions sit a median ~260 bp (max ~4.5 kb) from the R64-5-1
+midpoint of the gene naming each marker; used as R64 without transform. Tables 3 and 4 have a second
+"chromosomal location" column at about 3 kb per unit, most defensibly cM; it is kept verbatim and not
+used.
+
+### Q10. No effect direction
+No effect size or direction is tabulated for any linkage. `qtl.ef` is null and `qtl.up` is -1.
+Table 2 (raw yields per segregant) would allow it but is phenotype data; it is kept in `raw/` only.
+
 ## Blocked steps
 
 ### B1. GitHub Pages

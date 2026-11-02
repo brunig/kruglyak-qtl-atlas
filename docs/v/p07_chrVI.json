@@ -1,0 +1,1 @@
+{"cols":{"p07:S5":["page","line","trait","marker","chrom","pos_bp","lod","ci_start","ci_end","ci_length"],"p07:S6":["page","line","column","chrom","pos_bp","n_smp","smps (Table 6 column)"],"p07:TF":["kind","source","location","quote"]},"rows":{"p07:S5":{"p07-w-113":["3","13","thimerosalAT.77","YFR027W_1201","6","208006","4.9","177323","226146","48823"]},"p07:S6":{},"p07:TF":{}}}

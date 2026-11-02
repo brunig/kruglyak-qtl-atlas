@@ -1,0 +1,125 @@
+# extracted from raw/41588_2007_BFng1991_MOESM239_ESM.pdf (sha256 d8c1cf17750eb5b6e82c5b6862e7353791d6407dd574f1872ef9c5ede3fbc0c8) by extract_tables.py
+page	line	compound	dose	unit	time_h	marker	chrom	pos	lod
+1	4	29_D16	65.4	µM	48	YMR317W_2755	13	303	4.1
+1	5	29_D16	65.4	µM	48	YOR158W_3130	15	211	5.5
+1	6	29_D16	65.4	µM	70	YLR263W_2425	12	224	4.1
+1	7	3,4-dichloroisocoumarin	11.6	µM	52	YMR279C_2742	13	275	7.1
+1	8	aclacinomycin A	3.1	µM	40	YNL124W_2814	14	131	4.1
+1	9	ascomycin	31.5	µM	43	NNL035W_2823	14	150	4.1
+1	10	ascomycin	31.5	µM	43	gOL02_3008	15	59	4.3
+1	11	alexidine	2.15	µM	40	YML121W_2558	13	9.2	5.5
+1	12	alpha factor	10	µM	42	YCR041W_717	3	67	53.2
+1	13	alpha factor	10	µM	42	YGR051C_1364	7	198	4
+1	14	alverine	105.5	µM	118	YAR042W_441	1	64	22
+1	15	amiodarone	14.66	µM	115	NNL035W_2823	14	150	5.3
+1	16	anisomycin	37.7	µM	80	NNL035W_2823	14	150	4.6
+1	17	anisomycin	37.7	µM	132	gOR05_3129	15	207	5.7
+1	18	astemizole	109	µM	118	YMR260C_2741	13	263	9.5
+1	19	benzalkonium chloride	7.1	µM	48	YLR257W_2422	12	220	6.4
+1	20	benzalkonium chloride	7.1	µM	60	YBR045C_555	2	109	4.5
+1	21	benzyl isothiocyanate	167.5	µM	60	gCL01_689	3	30	9.3
+1	22	bithionol	12.5	µM	68	YOL081W_3010	15	60	6.2
+1	23	cadmium acetate	21.65	µM	68	YBR284W_679	2	258	4.4
+1	24	CAPE	58.7	µM	66	YML121W_2558	13	9.2	9.8
+1	25	cerulenin	2.24	µM	40	NNL035W_2823	14	150	5.4
+1	26	cetylpyridinium chloride	0.766	µM	68	YLR258W_2423	12	221	9.7
+1	27	chlorhexidine	2.7	µM	68	YML120C_2561	13	9.6	5
+1	28	chlorhexidine	2.7	µM	118	NMR044C_2719	13	186	5.8
+1	29	chlorpromazine	15.7	µM	70	SNR74_2646	13	99	4.1
+1	30	cycloheximide	0.281	µM	55	YGL017W_1349	7	154	4.7
+1	31	cinnarizine	33.9	µM	52	YGL020C_1347	7	152	5.9
+1	32	cinnarizine	33.9	µM	52	YMR123W_2713	13	171	4.5
+1	33	clomiphene citrate	8.35	µM	80	YNL066W_2826	14	167	4.2
+1	34	clomiphene citrate	8.35	µM	100	YAR042W_441	1	64	6.2
+1	35	clomiphene citrate	8.35	µM	100	YLR258W_2423	12	221	5.1
+1	36	clotrimazole	0.483	µM	66	YHR115C_1634	8	113	4.9
+1	37	clotrimazole	0.483	µM	66	YOR092W_3098	15	166	5.5
+1	38	cloxyquin	27.8	µM	66	YPL254W_3179	16	24	5.3
+1	39	copper sulfate	5000	µM	40	YHR054C_1627	8	71	16
+1	40	cyclobenzaprine hydrochloride	80.3	µM	46	gMR12_2753	13	295	4
+1	41	damnacanthal	35.4	µM	90	YOR158W_3130	15	211	11.7
+1	42	damnacanthal	35.4	µM	112	YAR031W_439	1	63	4.4
+1	43	dequalinium chloride	1.9	µM	68	SNR31_3154	15	281	4.3
+1	44	dichlorophene	18.6	µM	66	YML121W_2558	13	9.2	5.9
+1	45	dichlorophene	18.6	µM	88	gOL02_3007	15	58	6
+1	46	DFI	16	µM	64	gKR07_2160	11	215	7
+1	47	doxorubicin	21.6	µM	74	YJL152W_1869	10	45.3	4.4
+1	48	doxorubicin	21.6	µM	74	YML120C_2561	13	9.6	5.7
+1	49	daunorubicin	22.2	µM	52	YML121W_2558	13	9.2	5.7
+1	50	E6 berbamine	16.5	µM	74	YAL048C_408	1	18	5.9
+1	51	ebselen	36.5	µM	80	YML120C_2561	13	9.6	11
+1	52	FCCP	20	µM	40	YML121W_2558	13	9.2	4.7
+1	53	FCCP	20	µM	74	YNL074C_2824	14	162	6.8
+1	54	FCCP	20	µM	74	YOL043C_3020	15	83	8.1
+1	55	flutrimazole	0.723	µM	48	YOR131C_3118	15	191	7.3
+2	2	furoxan	66.8	µM	64	YML121W_2558	13	9.2	14.6
+2	3	gliotoxin	15.3	µM	66	YJL051W_1896	10	114	5.1
+2	4	gliotoxin	15.3	µM	66	YLR271W_2431	12	228	4.7
+2	5	hydrogen peroxide	0.03	%	112	YML016C_2626	13	80	8.8
+2	6	hydrogen peroxide	0.0015	%	40	YLR265C_2427	12	225	4.9
+2	7	haloperidol	33.3	µM	55	YML120C_2559	13	9.4	7
+2	8	haloperidol	33.3	µM	72	NBR024W_591	2	159.7	5.1
+2	9	haloperidol	66.6	µM	70	YAR042W_441	1	64	4.5
+2	10	hexylresorcinol	43	µM	44	YML121W_2558	13	9.2	12
+2	11	hinokitiol	60.9	µM	80	YBR008C_551	2	84	8.9
+2	12	hinokitiol	60.9	µM	118	YNL074C_2824	14	162	4.3
+2	13	4'-hydroxychalcone	90	µM	60	YAR031W_434	1	62	4.3
+2	14	4'-hydroxychalcone	90	µM	60	YCL022C_688	3	27	6.2
+2	15	4'-hydroxychalcone	90	µM	60	YGL068W_1310	7	125	4.1
+2	16	ikarugamycin	10.4	µM	40	YML121W_2558	13	9.2	6
+2	17	ketoconazole	0.94	µM	66	YAR042W_441	1	64	5.8
+2	18	lapachone	51.5	µM	52	YCL026C_685	3	25	6.6
+2	19	latrunculin B	12.6	µM	80	NER044C_1075	5	168	4.8
+2	20	LY83583	26.6	µM	48	YOL043C_3020	15	83	8.3
+2	21	lycorine	174	µM	60	YBR156C_618	2	184	4.7
+2	22	lycorine	174	µM	60	gKR07_2160	11	215	5.7
+2	23	lycorine	174	µM	60	NNL035W_2823	14	150	5.6
+2	24	manoalide	60	µM	40	YML121W_2558	13	9.2	7.4
+2	25	manumycin A	9.1	µM	48	YML120C_2561	13	9.6	6.5
+2	26	mastoparan	9.5	µM	48	YML118W_2562	13	11	4.2
+2	27	mastoparan	9.5	µM	48	NOL019C_2995	15	45	4
+2	28	menadione	29	µM	64	YBR147W_616	2	179	5.4
+2	29	menadione	29	µM	80	YER116C_1063	5	132	4
+2	30	menadione	29	µM	112	YCL018W_699	3	31	4.6
+2	31	mepatricin	10	µM	48	YML121W_2558	13	9.2	12
+2	32	mundoserone	73	µM	68	gCL01_689	3	30	6.7
+2	33	nicergoline	103	µM	46	YLR180W_2402	12	172	4.1
+2	34	nicergoline	103	µM	46	YMR326C_2764	13	308	6.6
+2	35	niguldipine	19.3	µM	43	gCL01_689	3	30	44
+2	36	nocodazole	41.5	µM	60	YOL043C_3020	15	83	17
+2	37	nortriptyline	190	µM	80	YNL066W_2825	14	167	4.2
+2	38	nortriptyline	190	µM	118	YIL117C_1702	9	47	4.9
+2	39	parthenolide	50	µM	40	YJL035C_1903	10	126.7	4
+2	40	parthenolide	50	µM	40	YML121W_2558	13	9.2	8.7
+2	41	penitrem A	15.8	µM	40	YGL004C_1350	7	164	5.5
+2	42	pentachlorophenol	31.7	µM	62	YML121W_2558	13	9.2	17
+2	43	PP1	71.2	µM	40	gOL02_3008	15	59	8.5
+2	44	PP2	66.4	µM	52	gOL02_3008	15	59	8
+2	45	1,9-pyrazoloanthrone	11.4	µM	72	YML121W_2558	13	9.2	4.8
+2	46	1,9-pyrazoloanthrone	11.4	µM	72	YOL043C_3020	15	82.9	6
+2	47	rapamycin (CSM media)	0.025	µM	115	NNL035W_2823	14	150	12
+2	48	rapamycin	0.025	µM	132	YCL022C_688	3	27	7
+2	49	RK-682	13.6	µM	40	YML121W_2558	13	9.2	5.1
+2	50	salinomycin	65	µM	44	YMR324C_2763	13	307	11
+2	51	semustine	33.6	µM	52	gCL01_689	3	30	13.6
+2	52	semustine	33.6	µM	78	NBR008W_558	2	111	6.2
+2	53	sertraline	20.9	µM	68	YAL048C_408	1	18	4.7
+2	54	SK&F 96365	12.4	µM	64	YAR042W_441	1	64	7.2
+2	55	staurosporine	4	µM	48	YCL009C_711	3	35	4.6
+3	2	staurosporine	4	µM	48	YNL074C_2824	14	162	4.2
+3	3	tamoxifen	13.5	µM	48	YLR258W_2423	12	221	4.7
+3	4	tamoxifen	13.5	µM	70	YMR067C_2669	13	135	4.1
+3	5	tetrachloroisophthalonitrile	1.9	µM	36	YML121W_2558	13	9.2	26
+3	6	thimerosal	3.3	µM	77	YFR027W_1201	6	69	4.9
+3	7	tomatidine hydrochloride	3.4	µM	68	YML120C_2561	13	9.6	6.8
+3	8	tomatine	15.4	µM	30	YLR265C_2427	12	225	6.6
+3	9	totarol	175	µM	44	YML120C_2561	13	9.6	6
+3	10	totarol	175	µM	52	YNL074C_2824	14	162.3	4.1
+3	11	tunicamycin	0.296	µM	112	NNL035W_2823	14	149.9	5.9
+3	12	tunicamycin	0.592	µM	64	YML120C_2559	13	9.4	6.3
+3	13	tyrothricin	2.5	µM	66	YML121W_2558	13	9.2	7.5
+3	14	valinomycin	2.3	µM	55	YLR265C_2427	12	225	4.3
+3	15	valinomycin	2.3	µM	72	YNL074C_2824	14	162	12
+3	16	wiskostatin	11.7	µM	132	YNL110C_2822	14	139	4.1
+3	17	wiskostatin	23.5	µM	40	YBR144C_615	2	178	4.2
+3	18	YC-1	32.8	µM	40	YML121W_2558	13	9.2	11

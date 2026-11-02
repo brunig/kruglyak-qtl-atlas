@@ -1,0 +1,17 @@
+kind	source	location	quote
+design	article.html	Abstract	we treated 104 genotyped segregants from a cross between two yeast strains with a collection of 100 diverse small molecules
+count	article.html	Abstract	We used linkage analysis to identify 124 distinct linkages between genetic markers and response to 83 compounds
+hotspots	article.html	Abstract	The linked markers clustered at eight genomic locations, or quantitative-trait locus 'hotspots', that contain one or more polymorphisms that affect response to multiple small molecules
+candidate	article.html	Abstract	We also experimentally verified that a deficiency in leucine biosynthesis caused by a deletion of LEU2 underlies sensitivity to niguldipine
+candidate	article.html	Abstract	a natural coding-region polymorphism in the inorganic phosphate transporter PHO84 underlies sensitivity to two polychlorinated phenols that uncouple oxidative phosphorylation
+candidate	raw/41588_2007_BFng1991_MOESM243_ESM.pdf	Supplementary Note	We stress that what follows are associations which must ultimately be verified.
+candidate	raw/41588_2007_BFng1991_MOESM243_ESM.pdf	Supplementary Note	We favor SWH1 and disfavor YAT1 as a candidate for two reasons.
+candidate	raw/41588_2007_BFng1991_MOESM243_ESM.pdf	Supplementary Note	For the QTL hot spots on chromosome 14, there are numerous polymorphic genes
+candidate	raw/41588_2007_BFng1991_MOESM243_ESM.pdf	Supplementary Note	we favor MKS1 (YNL076W)
+candidate	raw/41588_2007_BFng1991_MOESM243_ESM.pdf	Supplementary Note	analogous to PHO84, which we verified as the resistance-conferring polymorphism
+trait	raw/41588_2007_BFng1991_MOESM238_ESM.pdf	Supplementary Table 3 legend	lists individual compound response traits, including SMP concentration
+trait	raw/41588_2007_BFng1991_MOESM238_ESM.pdf	Supplementary Table 3 legend	a time point (in hours) at which an OD600 measurement was taken
+interval	raw/41588_2007_BFng1991_MOESM240_ESM.pdf	Supplementary Table 5 legend	Column D lists chromosomal basepair location.
+interval	raw/41588_2007_BFng1991_MOESM240_ESM.pdf	Supplementary Table 5 legend	Column F lists basepair start of confidence interval
+hotspots	raw/41588_2007_BFng1991_MOESM241_ESM.pdf	Supplementary Table 6 legend	the third number indicates the number of linked SMPs.
+smps	raw/41588_2007_BFng1991_MOESM236_ESM.pdf	Supplementary Table 1 legend	Complete list of SMPs. FDA-approved drugs are highlighted in green.
