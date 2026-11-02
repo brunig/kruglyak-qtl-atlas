@@ -1,0 +1,16 @@
+# source: 41588_2003_BFng1222_MOESM2_ESM.pdf sha256 bd38b44a66ade8f7ffd623e6a7a5ddd6de3b68424934ca748b80a2658bcc1892
+group	n_msgs	common_function	chrom_roman	position	putative_regulator	pct_recapitulated_brem2002	page	printed_line
+1	26	Ribo proteins	II	390000	Unknown	N/A	5	1 26 Ribo proteins II:390000 Unknown N/A
+2	272	DSE	II	560000	AMN1	94	5	2 272 DSE II:560000 AMN1 94
+							5	rRNA processing MAK5
+3	14	Unknown	II	710000	Unknown	N/A	5	3 14 Unknown II:710000 Unknown N/A
+4	100	AA catabolism	III	100000	LEU2	95	5	4 100 AA catabolism III:100000 LEU2 95
+5	36	Mating	III	230000	MAT	89	5	5 36 Mating III:230000 MAT 89
+6	19	Ura catabolism	V	130000	URA3	71	5	6 19 Ura catabolism V:130000 URA3 71
+7	62	Phero response	VIII	130000	GPA1	N/A	5	7 62 Phero response VIII:130000 GPA1 N/A
+8	114	Heme/FA	XII	680000	HAP1	89	5	8 114 Heme/FA XII:680000 HAP1 89
+9	34	Subtelomeric	XII	1070000	SIR3	94	5	9 34 Subtelomeric XII:1070000 SIR3 94
+10	21	Unknown	XIII	70000	Unknown	N/A	5	10 21 Unknown XIII:70000 Unknown N/A
+11	380	Mitochondria	XIV	503000	Unknown	91	5	11 380 Mitochondria XIV:503000 Unknown 91
+12	174	Msn2/4 targets	XV	180000	Unknown	74	5	12 174 Msn2/4 targets XV:180000 Unknown 74
+13	13	Respiration	XV	590000	CAT5	N/A	5	13 13 Respiration XV:590000 CAT5 N/A

@@ -1,0 +1,18 @@
+# source: ../article.html sha256=fa6b7934f742e2aa872e4d5bd5f5d67cf00bf8b31b48e96513e7c42c85acd18b; each quote occurs verbatim in the page text
+kind	quote
+design	Gene expression measurements were obtained for 6,216 open reading frames in 112 haploid segregants, and dichotomous genotypes were identified at 3,312 markers covering 99% of the genome
+design	112 F1 segregants (one from each tetrad) were grown from a cross involving parental strains BY4716, isogenic to the lab strain S288C, and the wild isolate RM11-1a
+result	Pairs of jointly linking quantitative trait loci are identified with high confidence for 170 gene expression traits, where it is expected that both loci are true positives for at least 153 traits
+result	Of these 2,300 traits, 170 can be identified at a FDR of 10%
+result	we estimate that 2,300 traits (approximately 37%) are jointly linked to two loci
+result	Therefore, we expect that at most 17 of these joint linkages include a single false-positive locus, and about zero include two false-positive loci
+result	In total, 58 traits demonstrate a cis linkage
+result	we are able to show that epistatic interactions contribute to gene expression variation for at least 14% of all traits
+result	At FDR cut-offs of 1% and 5%, there are 2,780 and 4,271 significant pair-wise linkages, respectively
+result	At these same cut-offs, the 2D search yielded substantially fewer: 1,715 and 3,540 significant linkages
+cluster	We observed 10 pair-wise bins with three or more traits
+cluster	the 12 traits that jointly link to nearly identical positions on Chromosomes 3 and 8 are predominantly involved in the mating response
+cluster	The linkage peak on Chromosome 3 maps to the precise location of the yeast mating type locus MAT
+cluster	amino acid and mitochondria metabolism (13 traits defined by linkage to regions on Chromosomes 3 and 13), mitochondrial tricarboxylic acid cycle (ten traits defined by linkage to regions on opposite ends of Chromosome 15), and response to stress (five traits defined by linkage to Chromosomes 6 and 10)
+cluster	of the 10 pair-wise bins with three or more linked traits, there are three that share a common linkage to the exact same position on Chromosome 15
+method	The significance of each locus pair selected for linkage was computed using a standard permutation technique against the null hypothesis of no linkage to either locus

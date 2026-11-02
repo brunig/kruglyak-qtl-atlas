@@ -1293,6 +1293,153 @@ Doses from Methods: MMS 0.03%, 4-NQO 0.25 µg/ml (0.30 µg/ml also used), caffei
 10 µg/ml. None matches another dataset's dose (Gou 2019 used MMS 0.01% and 4NQO "0.1 mg/ml"), so
 the condition keys link to no other dataset.
 
+## Foss et al. 2007
+
+Sources: the Supplementary Text and Figures PDF (`sources/foss2007/raw/`) and the Nature article page
+(`sources/foss2007/article.html`, abstract and figure titles only; main text and Online Methods are paywalled;
+the paper is not in PubMed Central). Extracted copies: `extracted/supp_table1.tsv`, `extracted/text_facts.tsv`.
+
+### Q1. Only the six local linkages are tabulated
+Supplementary Table 1 lists the 6 peptides whose linkage marker lies within 20 kb of the encoding gene. The
+genome-wide linkages (93 distinct peptide linkages at LOD > 3 for 71 of 163 peptides; 140 transcript linkages
+for 110 of 163 transcripts, Supplementary Note) are not listed anywhere in the bundle. **Atlas:** the 6 local
+linkages only, in the per-gene "protein, mass spec (pQTL)" track (lazy table `mspqtl`, shared with Foss 2011);
+the counts are in `datasets.notes` and tests.
+
+### Q2. Placement: gene midpoint ± the marker distance
+Markers are named, not positioned (ORF-based such as `YJR103W_1873`, or chromosome-arm segments such as
+`gGR12_1350`), and no marker map is in the bundle. The table's "marker distance from middle of gene" is in base
+pairs (bp-scale and consistent with R64 neighbours: `YLR350W` to `YLR354C` is 8,852.5 in the table and 7,746
+between R64-5-1 gene midpoints). **Atlas (most defensible reading):** each linkage is drawn as the interval gene
+midpoint ± that distance on R64-5-1, with `p` at the gene midpoint. The marker lies at one end; which side is not
+given. This is a placement rule, not a mapped confidence interval.
+
+### Q3. Several markers per row
+Rows 1–3 list two markers, one on the gene's chromosome and one elsewhere (e.g. `YJR104C`: `YJR103W_1873`
+local, `YLR285W_2333` on chrXII). The table's single LOD and distance refer to one linkage; most defensible
+reading: the local marker. The other marker is kept verbatim in the source row and not drawn.
+
+### Q4. Marker `NAL002C_307`
+For `YAL005C` (SSA1, chrI) the second marker `gOL02_2894` names chrXV, so the local marker must be
+`NAL002C_307`, which is neither an SGD name nor an arm marker (perhaps `YAL002W`, VPS8, 2–6 kb away, but that
+is a guess and is not used). Recorded in `mk` as given.
+
+### Q5. Hotspots not tabulated
+"3 out of the 4 hotspots for protein regulation are reflected at the transcript level" (Supplementary Note);
+the hotspots are plotted in main Figure 4 only. No hotspot rows.
+
+### Q6. Supplementary Note wording
+The transcript-overlap sentence reads "17 also linked to the abundance of the corresponding peptide with
+LOD > 3, 31 linked to the abundance of the corresponding transcript with 1 < LOD < 3"; by symmetry with the
+peptide sentence the second clause presumably means the corresponding *peptide*. Counts (17 + 31 + 92 = 140)
+are consistent either way. Similarly, "109 loci detected originally" (covariate analysis) is a different set
+from the 93 distinct linkages of the 163-peptide subset; not treated as a discrepancy.
+
+### Q7. Not in the bundle
+Segregant count, detection statistic, threshold and FDR, and effect directions are in the paywalled main text
+and Online Methods. `crosses.n`, `datasets.fdr` and all effects are null.
+
+## Yvert et al. 2003
+
+Sources: the two supplementary PDFs in `sources/yvert2003/raw/` and the Nature article page
+`sources/yvert2003/article.html` (abstract and citation metadata only: the body and Methods are
+paywalled, and no PMC copy exists). The PDFs are extracted to TSVs by
+`sources/yvert2003/extracted/extract.py`.
+
+### Q1. Individual linkages are not in the bundle
+The paper's linkage results for each transcript (marker, statistic) are in the paywalled main
+text or not published. What the supplements give is Supplementary Table 2: 13 groups of
+messages that link to loci with widespread transcriptional effects, each group's member
+messages, and one linkage-bin label per group. **Atlas:** the 13 groups are qtl rows
+(`k` = "trans-eQTL hotspot (group N; linkage bin as printed)"), and each of the 1,265 member
+messages is a lazy `eqtl` row linking that gene to its group's bin. No LOD, p-value, effect
+or direction exists for either, and none is invented.
+
+### Q2. What the linkage-bin label marks
+The summary prints one position per group (e.g. `II:560000`), but the text says groups merge
+adjacent 20-kb bins (Group 2 four bins, Group 11 three, Groups 3, 7, 8 and 12 two). The labels
+are round numbers (multiples of 10 kb, several not of 20 kb), except `XIV:503000`. The table does not say whether a label is a bin
+start, a bin centre or the strongest bin of a merged group. **Atlas (most defensible
+reading):** the label is drawn as a point (`a = e = p`), with no interval.
+
+### Q3. Genome build
+Not stated (2003). The positions are consistent with R64 at bin resolution: every named
+regulator sits on the bin's chromosome on R64-5-1 within 48 kb of the label (AMN1 1.6 kb,
+LEU2 7.4 kb, URA3 12.9 kb, GPA1 15.0 kb, HAP1 29.1 kb, MAK5 29.1 kb, CAT5 30.2 kb, SIR3
+47.7 kb). Group 9's claim that 32 of 34 genes start in the first or last 2% of their
+chromosome reproduces exactly on R64-5-1 coordinates. Used as given, no transform.
+
+### Q4. Evidence tiers for the named regulators
+The abstract states that "positional cloning and functional assays showed that polymorphisms
+in GPA1 and AMN1" cause the Group 7 and Group 2 effects, and the supplement says "we
+confirmed" each. **Atlas:** AMN1 and GPA1 are tier `x` (experimentally confirmed). MAK5
+("a good candidate"), LEU2 and URA3 (deleted auxotrophic markers in RM), HAP1 (Ty insertion
+in BY), SIR3 (in the linkage region) and CAT5 ("a good candidate") are tier `c`. AGP1 is
+mentioned only as a possible alternative for Group 4 and is not a candidate row. Group 5
+maps to the MAT locus, which is not a single gene, so it has no candidate.
+
+### Q5. Member ORFs missing from the current annotation
+11 of the 1,265 member ORFs (for example YCR103C, YFR024C, YGR272C, YIL080W, YJL113W,
+YJL206C-A, YKL097W-A, YLR391W-A) are not in the SGD R64-5-1 gene table, presumably merged or
+withdrawn since 2003. They are kept with `g = -1` and their printed line is in the verbatim row.
+
+### Q6. "% msgs from Brem et al. recapitulated"
+The summary's last column compares each group with the 40-segregant study (Brem et al. 2002).
+It is kept verbatim but not checked: Brem et al. 2002's linkage lists are not in the atlas.
+
+### Q7. Co-expression clusters
+Supplementary Table 1's 593 clusters (correlation-based, not linkage) are kept verbatim in
+`docs/v/y03_extra.json` and not drawn.
+
+## Storey et al. 2005
+
+Sources: the two supporting tables (`sources/storey2005/raw/journal.pbio.0030267.st001.pdf`,
+`st002.pdf`, PDFs fetched from journals.plos.org with plain requests) and the article page
+`sources/storey2005/article.html`. The tables were turned into TSVs by
+`extracted/extract.py`, which keeps every printed column with its PDF page and line and records
+each PDF's SHA-256; the ingest refuses a TSV whose PDF checksum no longer matches.
+
+### Q1. A locus pair per transcript, not trait-level QTL
+Table S1 gives, for each of 170 expression traits, a primary and a secondary locus that jointly
+link at FDR <= 10%. These are per-transcript linkages. **Atlas:** both loci of every trait go
+into the on-demand `eqtl` table (two rows per trait, `lk` = 1 primary, 2 secondary, each with the
+pair's joint q-value), so they appear in a gene's mRNA (eQTL) track next to Albert 2018 and Foss
+2011. There are no `qtl` rows for this dataset, and the pairing itself is kept in the verbatim
+rows and `s05_extra.json` (the atlas has no table for locus pairs).
+
+### Q2. Points, not intervals; no LOD or effect
+Each locus is one marker position; no LOD, interval, effect size or direction is tabulated.
+**Atlas:** `a = e = p`, `lod` and `ef` null, `datasets.effect` says "not reported".
+
+### Q3. Genome build
+Not stated (2005). Every marker lies inside its R64 chromosome, and the trait genes' printed
+start/stop match their R64-5-1 positions to within the extent of the gene model, with no
+per-chromosome shift. **Atlas (most defensible reading):** positions used as R64, no transform;
+agreement is at gene/marker resolution, not base pair.
+
+### Q4. "FDR <= 10%" with printed q-values above 0.10
+15 of the 170 rows of Table S1 print a joint q-value above 0.10 (largest 0.1049). Most
+defensible reading: the threshold was applied to unrounded or differently computed values.
+Rows are kept as printed (strict xfail `test_all_q_at_most_010`).
+
+### Q5. Three or four bins sharing the chr15 locus
+The text says three of the ten 50-kb pair bins share a linkage to the exact same chr15 position;
+Table S2 has four groups with a locus at chr15 172,654 (groups 3, 4, 6, 7). Not reconciled
+(strict xfail).
+
+### Q6. Table S2's YFL059W row disagrees with Table S1
+Table S2 prints YFL059W's chr6 locus at position 52 with Cis 0; Table S1 prints 5852 with Cis 1.
+Most defensible reading: a truncated number in Table S2. The atlas draws Table S1's value; both
+rows are kept verbatim. Table S2's Cis column is yes/no, Table S1's says which locus is cis.
+
+### Q7. Retired ORFs
+Seven trait ORFs (YDL038C, YDR134C, YFL056C, YIL080W, YIL082W-A, YPL275W, YPL276W) are not in
+the R64-5-1 gene table; their 14 loci keep `g = -1` and cannot be opened from a gene search.
+
+### Q8. Local means the paper's cis flag
+`loc = 1` exactly where Table S1's Cis column marks that locus as cis (58 traits, as the text
+states); every such locus is on the trait's chromosome and within 50 kb of the trait gene.
+
 ## Blocked steps
 
 ### B1. GitHub Pages

@@ -1,0 +1,22 @@
+# source: 41588_2003_BFng1222_MOESM2_ESM.pdf sha256 bd38b44a66ade8f7ffd623e6a7a5ddd6de3b68424934ca748b80a2658bcc1892
+source	quote
+article.html abstract	Most expression differences mapped to trans -acting loci.
+article.html abstract	Positional cloning and functional assays showed that polymorphisms in GPA1 and AMN1 affect expression of genes involved in pheromone response and daughter cell separation, respectively.
+article.html abstract	Notably, transcription factors showed no enrichment
+Supplementary Table 1 p1	List of 593 clusters of genes showing correlated expression in the cross.
+Supplementary Table 1 p1	86 segregants: 1 culture each
+Supplementary Table 2 p1	we divided the genome into 20-kb bins and counted the number of messages linking to each bin (after removing cis-linkages).
+Supplementary Table 2 p1	We empirically computed a significance threshold of 12 messages per bin
+Supplementary Table 2 p1	Twenty-two bins fit this criterion.
+Supplementary Table 2 p1	Group 2 contains linkages from four bins, Group 11 from three bins, and Groups 3, 7, 8, and 12 from two bins each.
+Supplementary Table 2 p1	Group 2 contains the cluster of 12 genes shown in Figure 1 of the main text, whose regulator we confirmed to be Amn1.
+Supplementary Table 2 p3	Group 7 contains the cluster of 7 pheromone response genes shown in Figure 1 of the main text, whose regulator we confirmed to be GPA1.
+Supplementary Table 2 p2	Multiple additional regulators may control subsets of the 197 Group 2 genes
+Supplementary Table 2 p2	Group 4 contains 100 messages linking to a region near the gene LEU2 (an auxotrophic marker deleted in the RM strain).
+Supplementary Table 2 p2	The 36 messages of Group 5 map to the MAT locus.
+Supplementary Table 2 p2	Group 6 contains 19 messages linking to the URA3 locus (another auxotrophic marker deleted in the RM strain).
+Supplementary Table 2 p3	We showed previously that our BY strain carries a Ty insertion in HAP1
+Supplementary Table 2 p3	The messages in Group 9 link to a region on chromosome XII containing SIR3.
+Supplementary Table 2 p3	A good candidate in the linkage region is CAT5
+Supplementary Table 2 p2	A good candidate is the RNA helicase MAK5
+Supplementary Table 2 p4	Group 11 contains 380 messages
